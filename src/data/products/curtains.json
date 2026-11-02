@@ -1,0 +1,562 @@
+{
+  "meta": {
+    "checkedAt": "2026-11-01",
+    "note": "A modellszín a termékfotóból mintavételezve (fényviszonyfüggő közelítés). IKEA: 1 pár; JYSK és Bonami: 1 db (egy ablakhoz kettő kell)."
+  },
+  "items": [
+    {
+      "id": "curtain-ikea-annakajsa-sotetitofugg-bezs",
+      "store": "IKEA",
+      "name": "ANNAKAJSA Sötétítőfüggöny",
+      "colorName": "bézs",
+      "article": "304.627.92",
+      "type": "blackout",
+      "material": "100% poliészter (min. 90% újrahasznosított anyag)",
+      "size": {
+        "w": 145,
+        "l": 300
+      },
+      "pack": "1 pár",
+      "hex": "#A8907A",
+      "hexSource": "photo-sample",
+      "price": "29 990 Ft / 1 pár (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/annakajsa-soetetitofueggoeny-1-par-bezs-fueggoenyrancolo-szalaggal-30462792/",
+      "checkedAt": "2026-11-01",
+      "note": "A lakberendezői konszignáció 10. tétele (nappali, 2 pár). 300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-ikea-annakajsa-sotetitofugg-sarga-barna",
+      "store": "IKEA",
+      "name": "ANNAKAJSA Sötétítőfüggöny",
+      "colorName": "sárga-barna",
+      "article": "606.409.10",
+      "type": "blackout",
+      "material": "Függöny: 100% poliészter (min. 90% újrahasznosított anyag) Pliszírozó szalag: 100 % poliészter (100% újrahasznosított anyag)",
+      "size": {
+        "w": 145,
+        "l": 300
+      },
+      "pack": "1 pár",
+      "hex": "#92754D",
+      "hexSource": "photo-sample",
+      "price": "29 990 Ft / 1 pár (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/annakajsa-soetetitofueggoeny-1-par-sarga-barna-fueggoenyrancolo-szalaggal-60640910/",
+      "checkedAt": "2026-11-01",
+      "note": "300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-ikea-annakajsa-sotetitofugg-feher",
+      "store": "IKEA",
+      "name": "ANNAKAJSA Sötétítőfüggöny",
+      "colorName": "fehér",
+      "article": "806.409.09",
+      "type": "blackout",
+      "material": "Függöny: 100% poliészter (min. 90% újrahasznosított anyag) Pliszírozó szalag: 100 % poliészter (100% újrahasznosított anyag)",
+      "size": {
+        "w": 145,
+        "l": 300
+      },
+      "pack": "1 pár",
+      "hex": "#B3AEA4",
+      "hexSource": "photo-sample",
+      "price": "29 990 Ft / 1 pár (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/annakajsa-soetetitofueggoeny-1-par-feher-fueggoenyrancolo-szalaggal-80640909/",
+      "checkedAt": "2026-11-01",
+      "note": "A fotó árnyékos; a valóságban a szín világosabb a modellnél. 300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-ikea-vilborg-sotetitofuggon-bezs",
+      "store": "IKEA",
+      "name": "VILBORG Sötétítőfüggöny",
+      "colorName": "bézs",
+      "article": "502.975.55",
+      "type": "blackout",
+      "material": "100% poliészter (min. 90% újrahasznosított anyag)",
+      "size": {
+        "w": 145,
+        "l": 300
+      },
+      "pack": "1 pár",
+      "hex": "#C3BCAF",
+      "hexSource": "photo-sample",
+      "price": "29 990 Ft / 1 pár (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/vilborg-soetetitofueggoeny-1-par-bezs-fueggoenyrancolo-szalaggal-50297555/",
+      "checkedAt": "2026-11-01",
+      "note": "300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-ikea-rosenmandel-sotetitofu-sarga-bezs",
+      "store": "IKEA",
+      "name": "ROSENMANDEL Sötétítőfüggöny",
+      "colorName": "sárga-bézs",
+      "article": "805.390.77",
+      "type": "blackout",
+      "material": "Szövet: 100% poliészter (min. 90% újrahasznosított anyag) Hátrész: 100% Poliuretán",
+      "size": {
+        "w": 135,
+        "l": 300
+      },
+      "pack": "1 pár",
+      "hex": "#AD9C88",
+      "hexSource": "photo-sample",
+      "price": "8 990 Ft / 1 pár (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/rosenmandel-soetetitofueggoeny-1-par-sarga-bezs-fueggoenyrancolo-szalaggal-80539077/",
+      "checkedAt": "2026-11-01",
+      "note": "300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-textilbo-kesz-blackout-sotetito-terrakotta",
+      "store": "textilbongesz.hu",
+      "name": "Kész blackout sötétítő függöny terrakotta PR23",
+      "colorName": "terrakotta",
+      "article": "00913",
+      "type": "blackout",
+      "material": "100% poliészter",
+      "size": {
+        "w": 140,
+        "l": 250
+      },
+      "hex": "#AD422A",
+      "hexSource": "photo-sample",
+      "price": "14 800 Ft (textilbongesz.hu, 2026-11-01)",
+      "url": "https://textilbongesz.hu/id/00913_Kesz-blackout-sotetito-fuggony-terrakotta250PR23Cikksz-01210419",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "curtain-jysk-fenyzaro-fuggony-leka-meleg-szurke",
+      "store": "JYSK",
+      "name": "Fényzáró függöny LEKA",
+      "colorName": "meleg szürke",
+      "article": "5080062",
+      "type": "blackout",
+      "material": "100% poliészter (20% újrahasznosított)",
+      "size": {
+        "w": 140,
+        "l": 300
+      },
+      "pack": "1 db",
+      "hex": "#A49E96",
+      "hexSource": "photo-sample",
+      "price": "15 900 Ft / 1 db (JYSK, 2026-11-01)",
+      "url": "https://jysk.hu/fuggonyok/keszfuggonyok/fenyzaro-fuggonyok/fenyzaro-fuggony-leka-140x300-meleg-szurke",
+      "checkedAt": "2026-11-01",
+      "note": "300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-bonami-teglavoros-mikroszalas-teglavoros",
+      "store": "Bonami",
+      "name": "Téglavörös mikroszálas sötétítő függöny",
+      "colorName": "téglavörös",
+      "article": "1634512",
+      "type": "blackout",
+      "material": "100% poliészter, poliuretán réteg (mikroszál)",
+      "size": {
+        "w": 140,
+        "l": 260
+      },
+      "pack": "1 db",
+      "hex": "#A04329",
+      "hexSource": "photo-sample",
+      "price": "6 680 Ft / 1 db (Bonami, 2026-11-01)",
+      "url": "https://www.bonami.hu/p/teglavoros-mikroszalas-sotetito-fuggony-140x260-cm-obscure-douceur-dinterieur",
+      "checkedAt": "2026-11-01",
+      "note": "Karikás felső szél: rúdra való, mennyezeti sínre nem."
+    },
+    {
+      "id": "curtain-bonami-barna-barsony-fuggony-barna",
+      "store": "Bonami",
+      "name": "Barna bársony függöny",
+      "colorName": "barna",
+      "article": "1812416",
+      "type": "blackout",
+      "material": "100% poliészter (bársony)",
+      "size": {
+        "w": 140,
+        "l": 260
+      },
+      "pack": "1 db",
+      "hex": "#82533B",
+      "hexSource": "photo-sample",
+      "price": "14 000 Ft / 1 db (Bonami, 2026-11-01)",
+      "url": "https://www.bonami.hu/p/barna-barsony-fuggony-140x260-cm-olympe-douceur-dinterieur",
+      "checkedAt": "2026-11-01",
+      "note": "Karikás felső szél: rúdra való, mennyezeti sínre nem."
+    },
+    {
+      "id": "curtain-ikea-korgmott-fenyzaro-fugg-bezs",
+      "store": "IKEA",
+      "name": "KORGMOTT Fényzáró függöny",
+      "colorName": "bézs",
+      "article": "505.971.58",
+      "type": "dimout",
+      "material": "Szövet: 100% poliészter (min. 90% újrahasznosított anyag) lemez: 100 % poliészter",
+      "size": {
+        "w": 145,
+        "l": 300
+      },
+      "pack": "1 pár",
+      "hex": "#CDC9B8",
+      "hexSource": "photo-sample",
+      "price": "19 990 Ft / 1 pár (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/korgmott-fenyzaro-fueggoeny-1-par-bezs-fueggoenyrancolo-szalaggal-50597158/",
+      "checkedAt": "2026-11-01",
+      "note": "300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-ikea-korgmott-fenyzaro-fugg-sotetszurke",
+      "store": "IKEA",
+      "name": "KORGMOTT Fényzáró függöny",
+      "colorName": "sötétszürke",
+      "article": "305.971.59",
+      "type": "dimout",
+      "material": "Szövet: 100% poliészter (min. 90% újrahasznosított anyag) lemez: 100 % poliészter",
+      "size": {
+        "w": 145,
+        "l": 300
+      },
+      "pack": "1 pár",
+      "hex": "#404040",
+      "hexSource": "photo-sample",
+      "price": "19 990 Ft / 1 pár (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/korgmott-fenyzaro-fueggoeny-1-par-soetetszuerke-fueggoenyrancolo-szalaggal-30597159/",
+      "checkedAt": "2026-11-01",
+      "note": "300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-ikea-rosenmandel-fenyzaro-f-sotetzold",
+      "store": "IKEA",
+      "name": "ROSENMANDEL Fényzáró függöny",
+      "colorName": "sötétzöld",
+      "article": "705.390.68",
+      "type": "dimout",
+      "material": "Szövet: 100% poliészter (min. 90% újrahasznosított anyag) Hátrész: 100% Poliuretán",
+      "size": {
+        "w": 135,
+        "l": 300
+      },
+      "pack": "1 pár",
+      "hex": "#4C524C",
+      "hexSource": "photo-sample",
+      "price": "8 990 Ft / 1 pár (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/rosenmandel-fenyzaro-fueggoeny-1-par-soetetzoeld-fueggoenyrancolo-szalaggal-70539068/",
+      "checkedAt": "2026-11-01",
+      "note": "300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-ikea-sanela-fuggonypar-sotetbarna",
+      "store": "IKEA",
+      "name": "SANELA Függönypár",
+      "colorName": "sötétbarna",
+      "article": "206.315.64",
+      "type": "dimout",
+      "material": "100% pamut (min. 20% újrahasznosított anyag)",
+      "size": {
+        "w": 140,
+        "l": 300
+      },
+      "pack": "1 pár",
+      "hex": "#3D2D22",
+      "hexSource": "photo-sample",
+      "price": "34 990 Ft / 1 pár (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/sanela-fueggoenypar-soetetbarna-fueggoenyrancolo-szalaggal-20631564/",
+      "checkedAt": "2026-11-01",
+      "note": "300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-ikea-sanela-fuggonypar-vilagosbezs",
+      "store": "IKEA",
+      "name": "SANELA Függönypár",
+      "colorName": "világosbézs",
+      "article": "605.898.79",
+      "type": "dimout",
+      "material": "100% pamut",
+      "size": {
+        "w": 140,
+        "l": 300
+      },
+      "pack": "1 pár",
+      "hex": "#B6A497",
+      "hexSource": "photo-sample",
+      "price": "34 990 Ft / 1 pár (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/sanela-fueggoenypar-vilagosbezs-fueggoenyrancolo-szalaggal-60589879/",
+      "checkedAt": "2026-11-01",
+      "note": "300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-ikea-dytag-fuggonypar-bezs",
+      "store": "IKEA",
+      "name": "DYTÅG Függönypár",
+      "colorName": "bézs",
+      "article": "806.078.20",
+      "type": "dimout",
+      "material": "100% lenvászon",
+      "size": {
+        "w": 145,
+        "l": 300
+      },
+      "pack": "1 pár",
+      "hex": "#B7AD99",
+      "hexSource": "photo-sample",
+      "price": "34 990 Ft / 1 pár (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/dytag-fueggoenypar-bezs-fueggoenyrancolo-szalaggal-80607820/",
+      "checkedAt": "2026-11-01",
+      "note": "300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-ikea-dytag-fuggonypar-szurke-zold",
+      "store": "IKEA",
+      "name": "DYTÅG Függönypár",
+      "colorName": "szürke-zöld",
+      "article": "805.528.89",
+      "type": "dimout",
+      "material": "100% lenvászon",
+      "size": {
+        "w": 145,
+        "l": 300
+      },
+      "pack": "1 pár",
+      "hex": "#696C5B",
+      "hexSource": "photo-sample",
+      "price": "34 990 Ft / 1 pár (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/dytag-fueggoenypar-szuerke-zoeld-fueggoenyrancolo-szalaggal-80552889/",
+      "checkedAt": "2026-11-01",
+      "note": "300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-fuggonyo-sotetito-ada-mustarsar-mustarsarga",
+      "store": "fuggonyoutlet.com",
+      "name": "Sötétítő, Ada, mustársárga ,",
+      "colorName": "mustársárga",
+      "article": "1274608003",
+      "type": "dimout",
+      "size": {
+        "w": 140,
+        "l": 250
+      },
+      "pack": "1 pár (2 db)",
+      "hex": "#AB7528",
+      "hexSource": "photo-sample",
+      "price": "11 990 Ft / 1 pár (2 db) (fuggonyoutlet.com, 2026-11-01)",
+      "url": "https://fuggonyoutlet.com/Kesz-sotetito-ADA-mustar-2-db-140--cm-szeles-250--cm",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "curtain-fuggonyo-sotetito-ada-mohazold-mohazold",
+      "store": "fuggonyoutlet.com",
+      "name": "Sötétítő, Ada, mohazöld ,",
+      "colorName": "mohazöld",
+      "article": "12742027",
+      "type": "dimout",
+      "size": {
+        "w": 140,
+        "l": 250
+      },
+      "pack": "1 pár (2 db)",
+      "hex": "#444838",
+      "hexSource": "photo-sample",
+      "price": "11 990 Ft / 1 pár (2 db) (fuggonyoutlet.com, 2026-11-01)",
+      "url": "https://fuggonyoutlet.com/Sotetito-Ada-Moha-Zold-140x250-cm-2db-os-csomag",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "curtain-jysk-dimout-fuggony-amungen-zold",
+      "store": "JYSK",
+      "name": "Dimout függöny AMUNGEN",
+      "colorName": "zöld",
+      "article": "5080029",
+      "type": "dimout",
+      "material": "100% poliészter (30% újrahasznosított)",
+      "size": {
+        "w": 140,
+        "l": 300
+      },
+      "pack": "1 db",
+      "hex": "#6B6955",
+      "hexSource": "photo-sample",
+      "price": "7 500 Ft / 1 db (JYSK, 2026-11-01)",
+      "url": "https://jysk.hu/fuggonyok/keszfuggonyok/fenyzaro-fuggonyok/dimout-fuggony-amungen-140x300-zold",
+      "checkedAt": "2026-11-01",
+      "note": "300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-jysk-fuggony-austra-vilagosbarna",
+      "store": "JYSK",
+      "name": "Függöny AUSTRA",
+      "colorName": "világosbarna",
+      "article": "5080014",
+      "type": "dimout",
+      "material": "100% poliészter (50% újrahasznosított)",
+      "size": {
+        "w": 140,
+        "l": 300
+      },
+      "pack": "1 db",
+      "hex": "#9D8A7D",
+      "hexSource": "photo-sample",
+      "price": "6 500 Ft / 1 db (JYSK, 2026-11-01)",
+      "url": "https://jysk.hu/fuggonyok/keszfuggonyok/vastag-fuggonyok/fuggony-austra-140x300-barsony-vilagosbarna",
+      "checkedAt": "2026-11-01",
+      "note": "300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-jysk-fuggony-isteren-szurkeskek",
+      "store": "JYSK",
+      "name": "Függöny ISTEREN",
+      "colorName": "szürkéskék",
+      "article": "5080047",
+      "type": "dimout",
+      "material": "88% poliészter (50% újrahasznosított) + 12% poliamid",
+      "size": {
+        "w": 140,
+        "l": 300
+      },
+      "pack": "1 db",
+      "hex": "#3C494F",
+      "hexSource": "photo-sample",
+      "price": "7 990 Ft / 1 db (JYSK, 2026-11-01)",
+      "url": "https://jysk.hu/fuggonyok/keszfuggonyok/vastag-fuggonyok/fuggony-isteren-140x300-szurkeskek",
+      "checkedAt": "2026-11-01",
+      "note": "Karikás felső szél: rúdra való, mennyezeti sínre nem. 300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-ikea-stockholm-2025-attetsz-tortfeher",
+      "store": "IKEA",
+      "name": "STOCKHOLM 2025 Áttetsző függöny",
+      "colorName": "törtfehér",
+      "article": "906.010.02",
+      "type": "sheer",
+      "material": "55% lenvászon, 45% pamut (min. 40% újrahasznosított anyag)",
+      "size": {
+        "w": 300,
+        "l": 300
+      },
+      "pack": "1 db",
+      "hex": "#F0F0EE",
+      "hexSource": "photo-sample",
+      "price": "19 990 Ft / 1 db (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/stockholm-2025-attetszo-fueggoeny-1-db-toertfeher-fueggoenyrancolo-szalaggal-90601002/",
+      "checkedAt": "2026-11-01",
+      "note": "300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-ikea-hallebracka-attetszo-f-vilagosbezs",
+      "store": "IKEA",
+      "name": "HÄLLEBRÄCKA Áttetsző függöny",
+      "colorName": "világosbézs",
+      "article": "005.568.48",
+      "type": "sheer",
+      "material": "100% poliészter (min. 90% újrahasznosított anyag)",
+      "size": {
+        "w": 145,
+        "l": 300
+      },
+      "pack": "1 pár",
+      "hex": "#D5C9BC",
+      "hexSource": "photo-sample",
+      "price": "14 990 Ft / 1 pár (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/haellebraecka-attetszo-fueggoeny-1-par-vilagosbezs-fueggoenyrancolo-szalaggal-00556848/",
+      "checkedAt": "2026-11-01",
+      "note": "300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-ikea-rosenrobinia-attetszo-bezs",
+      "store": "IKEA",
+      "name": "ROSENROBINIA Áttetsző függöny",
+      "colorName": "bézs",
+      "article": "305.648.56",
+      "type": "sheer",
+      "material": "100 % poliészter (100% újrahasznosított anyag)",
+      "size": {
+        "w": 145,
+        "l": 300
+      },
+      "pack": "1 pár",
+      "hex": "#BEAE9B",
+      "hexSource": "photo-sample",
+      "price": "14 990 Ft / 1 pár (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/rosenrobinia-attetszo-fueggoeny-1-par-bezs-fueggoenyrancolo-szalaggal-30564856/",
+      "checkedAt": "2026-11-01",
+      "note": "300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-ikea-silverlonn-attetszo-fu-feher",
+      "store": "IKEA",
+      "name": "SILVERLÖNN Áttetsző függöny",
+      "colorName": "fehér",
+      "article": "204.910.40",
+      "type": "sheer",
+      "material": "100% pamut",
+      "size": {
+        "w": 145,
+        "l": 300
+      },
+      "pack": "1 pár",
+      "hex": "#E1E1E1",
+      "hexSource": "photo-sample",
+      "price": "7 990 Ft / 1 pár (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/silverloenn-attetszo-fueggoeny-1-par-feher-fueggoenyrancolo-szalaggal-20491040/",
+      "checkedAt": "2026-11-01",
+      "note": "300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-jysk-fuggony-unnen-feher",
+      "store": "JYSK",
+      "name": "Függöny UNNEN",
+      "colorName": "fehér",
+      "article": "5099502",
+      "type": "sheer",
+      "material": "100% poliészter (20% újrahasznosított)",
+      "size": {
+        "w": 140,
+        "l": 300
+      },
+      "pack": "1 db",
+      "hex": "#E9E7E3",
+      "hexSource": "photo-sample",
+      "price": "7 990 Ft / 1 db (JYSK, 2026-11-01)",
+      "url": "https://jysk.hu/fuggonyok/keszfuggonyok/vekony-fuggonyok/fuggony-unnen-140x300-feher-lenszeru",
+      "checkedAt": "2026-11-01",
+      "note": "300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-jysk-fuggony-unnen-homokszinu",
+      "store": "JYSK",
+      "name": "Függöny UNNEN",
+      "colorName": "homokszínű",
+      "article": "5099401",
+      "type": "sheer",
+      "material": "100% poliészter (20% újrahasznosított)",
+      "size": {
+        "w": 140,
+        "l": 300
+      },
+      "pack": "1 db",
+      "hex": "#CAC6BB",
+      "hexSource": "photo-sample",
+      "price": "7 990 Ft / 1 db (JYSK, 2026-11-01)",
+      "url": "https://jysk.hu/fuggonyok/keszfuggonyok/vekony-fuggonyok/fuggony-unnen-140x300-vaszonhatasu-homokszinu",
+      "checkedAt": "2026-11-01",
+      "note": "300 cm hosszú – kb. 255 cm-re rövidítendő."
+    },
+    {
+      "id": "curtain-jysk-fuggony-bolmen-tortfeher",
+      "store": "JYSK",
+      "name": "Függöny BOLMEN",
+      "colorName": "törtfehér",
+      "article": "5098602",
+      "type": "sheer",
+      "material": "100% poliészter (20% újrahasznosított)",
+      "size": {
+        "w": 140,
+        "l": 300
+      },
+      "pack": "1 db",
+      "hex": "#D2D2D2",
+      "hexSource": "photo-sample",
+      "price": "6 490 Ft / 1 db (JYSK, 2026-11-01)",
+      "url": "https://jysk.hu/fuggonyok/keszfuggonyok/voile-fuggonyok/fuggony-bolmen-140x300-tortfeher",
+      "checkedAt": "2026-11-01",
+      "note": "300 cm hosszú – kb. 255 cm-re rövidítendő."
+    }
+  ]
+}

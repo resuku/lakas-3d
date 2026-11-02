@@ -1,0 +1,612 @@
+{
+  "id": "nappali",
+  "name": "Nappali",
+  "source": "V14 tervezési napló – 20 Nappali (N-M021–N-M029, N-S001–N-S010); OpenPlan3D szkennelés (2026-11-01, src/data/scans/nappali-kozlekedo.json); fotók: Képek/Nappali képek, Képek/Scan/IMG_0008.HEIC. Bontás utáni állapot: a tükrös szekrény és a hozzá tartozó gipszkarton nélkül (ND-002). Koordináták: x = hosszú fal (kanapéfal) → közlekedő felőli fal, z = dolgozó felőli fal → erkélyfal.",
+  "size": {
+    "x": {
+      "v": 3443,
+      "s": "M",
+      "note": "Erkélyfal teljes hossza faltól falig (N-M021). Korábbi lézeres mérés: 3442 / 3448 mm két ponton (N-M001).",
+      "src": [
+        {
+          "sheet": "20 Nappali",
+          "key": "N-M001",
+          "n": 3442
+        },
+        {
+          "sheet": "20 Nappali",
+          "key": "N-M001",
+          "n": 3448
+        },
+        {
+          "sheet": "20 Nappali",
+          "key": "N-M021",
+          "n": 3443
+        }
+      ]
+    },
+    "z": {
+      "v": 7944,
+      "s": "D",
+      "note": "Dolgozó falától az erkélyfalig, falsíktól falsíkig (a user 2026-11-01-én megerősítette). Két kontrollmérés (7940 / 7948 mm) középértéke. A szkennelés 7859 mm-t ad – lásd ellentmondások.",
+      "src": [
+        {
+          "sheet": "20 Nappali",
+          "key": "N-M002",
+          "n": 7940
+        },
+        {
+          "sheet": "20 Nappali",
+          "key": "N-M002",
+          "n": 7948
+        },
+        {
+          "sheet": "20 Nappali",
+          "key": "N-M029",
+          "n": 7940
+        }
+      ]
+    },
+    "h": {
+      "v": 2611,
+      "s": "D",
+      "note": "Belmagasság két mérés középértéke (2616 / 2606 mm); a szkennelés 2613 mm.",
+      "src": [
+        {
+          "sheet": "20 Nappali",
+          "key": "N-M006",
+          "n": 2616
+        },
+        {
+          "sheet": "20 Nappali",
+          "key": "N-M006",
+          "n": 2606
+        }
+      ]
+    }
+  },
+  "north": {
+    "wall": "z0",
+    "s": "D",
+    "note": "A háló (és a dolgozó) ablaka északra néz (10 Háló); a szkennelés szerint ezek a helyiségek a dolgozó felőli fal mögött, a szemközti homlokzaton vannak. Az erkély így déli tájolású."
+  },
+  "walls": {
+    "z0": {
+      "name": "Dolgozó felőli fal",
+      "t": {
+        "v": 100,
+        "s": "A",
+        "note": "Belső fal; a dolgozó modelljével azonos feltételezés, nem mért."
+      }
+    },
+    "x1": {
+      "name": "Közlekedő felőli fal",
+      "t": {
+        "v": 180,
+        "s": "D",
+        "note": "A szkennelés a mindkét oldalról látott fal síkját a fal belsejébe teszi: nappali felől +104 mm (3547 − 3443), közlekedő felől +75 mm (919 − 844). Összesen kb. 180 mm.",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-S007",
+            "n": 180
+          }
+        ]
+      }
+    },
+    "z1": {
+      "name": "Erkélyfal",
+      "t": {
+        "v": 200,
+        "s": "A",
+        "note": "Külső fal; a többi helyiséggel azonos feltételezés, nem mért."
+      }
+    },
+    "x0": {
+      "name": "Hosszú fal (kanapéfal)",
+      "t": {
+        "v": 200,
+        "s": "A",
+        "note": "Nem mért; a fal szerkezete (külső vagy lakáselválasztó) nincs rögzítve."
+      }
+    }
+  },
+  "openings": [
+    {
+      "id": "ABL-N",
+      "kind": "window",
+      "label": "Erkélyajtó és ablak",
+      "wall": "z1",
+      "offset": {
+        "v": 640,
+        "s": "M",
+        "note": "A hosszú fal síkjától a nyílás kávájáig. Ellenőrzés: 640 + 2153 + 645 = 3438 mm, 5 mm-rel kevesebb a 3443 mm-es falhossznál.",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M024",
+            "n": 640
+          }
+        ]
+      },
+      "width": {
+        "v": 2153,
+        "s": "M",
+        "note": "Kávától káváig (N-M022); a korábbi mérés 2152 mm (N-M007).",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M007",
+            "n": 2152
+          },
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M022",
+            "n": 2153
+          }
+        ]
+      },
+      "height": {
+        "v": 2431,
+        "s": "M",
+        "note": "Teljes nyílásmagasság.",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M009",
+            "n": 2431
+          }
+        ]
+      },
+      "bottom": {
+        "v": 0,
+        "s": "M",
+        "note": "Padlószint; a küszöb kb. 15 mm (N-M025).",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M025",
+            "n": 15
+          }
+        ]
+      },
+      "vsplits": [
+        {
+          "at": 1095,
+          "s": "P"
+        }
+      ],
+      "splits": [
+        {
+          "at": 850,
+          "s": "P"
+        }
+      ],
+      "doorPane": {
+        "index": 1,
+        "hinge": "end",
+        "outward": true,
+        "leaf": {
+          "v": 870,
+          "s": "M",
+          "note": "Az erkélyajtó szárnya (N-M025).",
+          "src": [
+            {
+              "sheet": "20 Nappali",
+              "key": "N-M025",
+              "n": 870
+            }
+          ]
+        }
+      },
+      "note": "Szemből nézve bal oldalon az erkélyajtó: kifelé nyílik, a zsanér a fal felőli oldalon, a kilincs a középső osztásnál (user, IMG_0008.HEIC). Jobb oldalon bukó-nyíló felső szárny és alsó fix mező. Az osztások helye fotóbecslés."
+    },
+    {
+      "id": "AJ-07",
+      "kind": "door",
+      "label": "Átjáró a közlekedőbe (erkély felőli)",
+      "wall": "x1",
+      "offset": {
+        "v": 3348,
+        "s": "D",
+        "note": "7944 − 3710 (erkélyfaltól a nyílás kezdetéig, N-M011) − 886 mm. A szkennelés az erkélyfaltól 3685 mm-t ad.",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M011",
+            "n": 3710
+          },
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M011",
+            "n": 886
+          }
+        ]
+      },
+      "width": {
+        "v": 886,
+        "s": "M",
+        "note": "Szabad nyílás.",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "AJ-07",
+            "n": 886
+          }
+        ]
+      },
+      "height": {
+        "v": 2017,
+        "s": "M",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "AJ-07",
+            "n": 2017
+          }
+        ]
+      },
+      "bottom": {
+        "v": 0,
+        "s": "A",
+        "note": "Padlószint."
+      },
+      "trim": true,
+      "note": "Ajtólap nélkül marad (ND-004)."
+    },
+    {
+      "id": "AJ-08",
+      "kind": "door",
+      "label": "Átjáró a közlekedőbe (dolgozó felőli)",
+      "wall": "x1",
+      "offset": {
+        "v": 590,
+        "s": "D",
+        "note": "7944 − 6572 (erkélyfaltól, N-M012) − 782 mm. A szkennelés az erkélyfaltól 6570 mm-t ad.",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M012",
+            "n": 6572
+          },
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M012",
+            "n": 782
+          }
+        ]
+      },
+      "width": {
+        "v": 782,
+        "s": "M",
+        "note": "Szabad nyílás.",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "AJ-08",
+            "n": 782
+          }
+        ]
+      },
+      "height": {
+        "v": 2015,
+        "s": "M",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "AJ-08",
+            "n": 2015
+          }
+        ]
+      },
+      "bottom": {
+        "v": 0,
+        "s": "A",
+        "note": "Padlószint."
+      },
+      "trim": true,
+      "note": "Ajtólap nélkül marad (ND-004)."
+    },
+    {
+      "id": "AJ-02",
+      "kind": "door",
+      "label": "Dolgozó ajtónyílása",
+      "wall": "z0",
+      "offset": {
+        "v": 1311,
+        "s": "S",
+        "note": "A szkennelt nyílás közepe a hosszú faltól 1704 mm; a mért 785 mm-es szélességgel középre igazítva.",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-S008",
+            "n": 1704
+          }
+        ]
+      },
+      "width": {
+        "v": 785,
+        "s": "M",
+        "note": "Szabad nyílás; a szkennelés 850 mm-t ad.",
+        "src": [
+          {
+            "sheet": "30 Dolgozó",
+            "key": "D-M007",
+            "n": 785
+          }
+        ]
+      },
+      "height": {
+        "v": 1982,
+        "s": "M",
+        "src": [
+          {
+            "sheet": "30 Dolgozó",
+            "key": "D-M008",
+            "n": 1982
+          }
+        ]
+      },
+      "bottom": {
+        "v": 0,
+        "s": "A",
+        "note": "Padlószint."
+      },
+      "leaf": {
+        "width": { "v": 735, "s": "A", "note": "Új ajtólap esetén a nyílásból becsült lapszélesség." },
+        "height": { "v": 1950, "s": "A", "note": "Új ajtólap esetén becsült lapmagasság." },
+        "hinge": "start",
+        "existing": false,
+        "optional": true,
+        "away": true
+      },
+      "trim": true,
+      "note": "A bontandó tükrös szekrény mellett. Az opcionális új ajtólap a dolgozó felé nyílik, ezért a nappali felől csak a csukott lap látszik; a zsanéroldal ebből a nézetből feltételezés."
+    }
+  ],
+  "radiators": [
+    {
+      "id": "RAD-N",
+      "label": "Radiátor",
+      "wall": "x1",
+      "offset": {
+        "v": 7049,
+        "s": "D",
+        "note": "Az erkélyfal sarkától 95 mm (N-M026): 7944 − 95 − 800 mm.",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M026",
+            "n": 95
+          }
+        ]
+      },
+      "width": {
+        "v": 800,
+        "s": "M",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M010",
+            "n": 800
+          }
+        ]
+      },
+      "height": {
+        "v": 900,
+        "s": "M",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M010",
+            "n": 900
+          }
+        ]
+      },
+      "bottom": {
+        "v": 225,
+        "s": "A",
+        "note": "A napló szerint padlótól kb. 200–250 mm.",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M010",
+            "n": 200
+          },
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M010",
+            "n": 250
+          }
+        ]
+      },
+      "gap": {
+        "v": 50,
+        "s": "A",
+        "note": "Fotóbecslés (IMG20260907111349.jpg)."
+      },
+      "depth": {
+        "v": 100,
+        "s": "M",
+        "note": "Radiátor vastagsága.",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M010",
+            "n": 100
+          }
+        ]
+      }
+    }
+  ],
+  "pipes": [],
+  "units": [
+    {
+      "id": "KL-N",
+      "label": "Split klíma beltéri egység",
+      "kind": "ac",
+      "wall": "x0",
+      "offset": {
+        "v": 6857,
+        "s": "D",
+        "note": "Az erkélyfaltól 292 mm (N-M027): 7944 − 292 − 795 mm.",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M027",
+            "n": 292
+          }
+        ]
+      },
+      "width": {
+        "v": 795,
+        "s": "M",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M028",
+            "n": 795
+          }
+        ]
+      },
+      "height": {
+        "v": 285,
+        "s": "M",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M028",
+            "n": 285
+          }
+        ]
+      },
+      "bottom": {
+        "v": 2000,
+        "s": "M",
+        "note": "Kb. 2000 mm a padlótól (N-M027).",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M027",
+            "n": 2000
+          }
+        ]
+      },
+      "depth": {
+        "v": 200,
+        "s": "A",
+        "note": "Kiállás nem mért; ebben a teljesítményosztályban jellemző érték."
+      },
+      "note": "Meglévő Midea egység; csere tervezett, várhatóan ugyanitt (ND-005)."
+    }
+  ],
+  "beds": [],
+  "ceilingLights": [
+    {
+      "id": "L-N1",
+      "label": "Mennyezeti lámpa – nappali zóna",
+      "x": {
+        "v": 1720,
+        "s": "A",
+        "note": "Tervezési helyőrző: jelenleg nincs mennyezeti kiállás (N-M020); az új világítás koncepciója nyitott (ND-001)."
+      },
+      "z": {
+        "v": 5400,
+        "s": "A",
+        "note": "Tervezési helyőrző a kanapé–TV zóna fölött."
+      }
+    },
+    {
+      "id": "L-N2",
+      "label": "Függeszték – étkező zóna",
+      "x": {
+        "v": 1720,
+        "s": "A",
+        "note": "Tervezési helyőrző az étkezőasztal fölött (ND-003)."
+      },
+      "z": {
+        "v": 1700,
+        "s": "A",
+        "note": "Tervezési helyőrző a bontott szekrény helyén kialakuló étkezőnél."
+      }
+    }
+  ],
+  "accentLights": [
+    {
+      "id": "NL-1",
+      "label": "Állólámpa a kanapé mellett",
+      "kind": "floor",
+      "x": 300,
+      "z": 3800,
+      "s": "A",
+      "note": "Tervezési helyőrző – nem kiválasztott termék."
+    }
+  ],
+  "cameras": [
+    {
+      "name": "Dolgozó felől",
+      "pos": [
+        2700,
+        1600,
+        450
+      ],
+      "target": [
+        1400,
+        1100,
+        7944
+      ]
+    },
+    {
+      "name": "Erkély felől",
+      "pos": [
+        1700,
+        1600,
+        7550
+      ],
+      "target": [
+        1700,
+        1000,
+        0
+      ]
+    },
+    {
+      "name": "Kanapéfal felől",
+      "pos": [
+        350,
+        1250,
+        5200
+      ],
+      "target": [
+        3443,
+        1150,
+        5800
+      ]
+    },
+    {
+      "name": "TV-fal felől",
+      "pos": [
+        3150,
+        1500,
+        5600
+      ],
+      "target": [
+        0,
+        1100,
+        5000
+      ]
+    }
+  ],
+  "conflicts": [
+    "Hossz: a teljes hossz (7940 / 7948 mm) a user szerint falsíktól falsíkig mért. A szkennelés 7859 mm-t ad (−85 mm), és a közlekedő felőli fal menti láncméretek is rövidebbek (N-M011: 3710 + 886 + 3229 = 7825 mm, N-M012: 6572 + 782 + 457 = 7811 mm). Mivel a szkennelés az erkélyfaltól mért nyíláspozíciókat 2–25 mm-re adja vissza, az eltérés a dolgozó felőli végen van. Lehet, hogy ez a fal nem sík, például a bontandó szekrény mögött beugrik. A modell 7944 mm-rel számol, a közlekedő felőli nyílásokat az erkélyfaltól méri.",
+    "Radiátor: a napló »oldalfali referencia-távolság 2045 mm« adata (N-M010) nem egyeztethető a 95 mm-es sarokponttal. A modell a 2026-11-01-i saroktávolságot követi."
+  ],
+  "missing": [
+    "Kontrollmérés a dolgozó felőli falig: a közlekedő felőli fal mentén (a radiátoros saroktól) és a hosszú fal mentén, padló közelében.",
+    "Mennyezet: a körbefutó gipszkarton koszorú LED-sávval (ND-001) bontása vizsgálandó; a modell sík mennyezettel számol.",
+    "Klíma kiállása (mélysége) nincs mérve.",
+    "Radiátor falhézaga és csőbekötése fotóbecslés.",
+    "Falvastagságok: a közlekedő felőli kb. 180 mm (szkennelésből levezetve), a többi feltételezés.",
+    "A bontott szekrény és gipszkarton helyén a padló- és mennyezet-helyreállítás a modellben nem jelenik meg.",
+    "Dugaljak és kapcsolók nincsenek modellezve: teljes villamos felújítás lesz (alu → réz)."
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "note": "A 2026-11-01-i nappali–előszoba–közlekedő szkennelés kontrollmérései a V13 tervezési napló lézeres adataiból. tol = elfogadott eltérés (mm).",
+  "checks": [
+    { "label": "Nappali szélesség (W03 ↔ W05)", "type": "between", "from": "W03", "to": "W05", "laser": [3442, 3448], "ref": "20 Nappali N-M001", "note": "W05 a közlekedő felé eső közös fal" },
+    { "label": "Nappali hossz (W00 ↔ W12)", "type": "between", "from": "W00", "to": "W12", "laser": [7940, 7948], "ref": "20 Nappali N-M002/N-M008", "note": "falsík–falsík (user, 2026-11-01)" },
+    { "label": "Belmagasság (falmagasság)", "type": "wallHeight", "wall": "W03", "laser": [2616, 2606], "ref": "20 Nappali N-M006" },
+    { "label": "Előszoba szélesség (W13 ↔ W10)", "type": "between", "from": "W13", "to": "W10", "laser": [1401, 1390], "ref": "40 Előszoba E-M004" },
+    { "label": "Keskeny közlekedő szélesség (W11 ↔ W14)", "type": "between", "from": "W11", "to": "W14", "laser": [844, 836], "ref": "40 Előszoba E-M005", "note": "W14 a nappali felé eső közös fal" },
+    { "label": "Nyílás 1 kezdete az ablakfaltól (O00)", "type": "openingFromWall", "opening": "O00", "wall": "W00", "laser": [3710], "ref": "20 Nappali N-M011" },
+    { "label": "Nyílás 1 szélessége (O00)", "type": "openingWidth", "opening": "O00", "laser": [886], "ref": "20 Nappali / AJ-07" },
+    { "label": "Nyílás 1 magassága (O00)", "type": "openingHeight", "opening": "O00", "laser": [2017], "ref": "20 Nappali / AJ-07" },
+    { "label": "Nyílás 2 kezdete az ablakfaltól (O03)", "type": "openingFromWall", "opening": "O03", "wall": "W00", "laser": [6572], "ref": "20 Nappali N-M012" },
+    { "label": "Nyílás 2 szélessége (O03)", "type": "openingWidth", "opening": "O03", "laser": [782], "ref": "20 Nappali / AJ-08" },
+    { "label": "Dolgozó nyílás szélessége (O01)", "type": "openingWidth", "opening": "O01", "laser": [785], "ref": "30 Dolgozó D-M007" },
+    { "label": "Konyhaajtó szélessége (O02)", "type": "openingWidth", "opening": "O02", "laser": [791], "ref": "40 Előszoba E-M006" },
+    { "label": "Konyhaajtó magassága (O02)", "type": "openingHeight", "opening": "O02", "laser": [2035], "ref": "40 Előszoba E-M006" },
+    { "label": "WC ajtó szélessége (D00)", "type": "openingWidth", "opening": "D00", "laser": [612], "ref": "40 Előszoba E-M008", "note": "lézer: szabad nyílás; a bejárathoz közelebbi ajtó (user, 2026-11-01)" },
+    { "label": "Fürdő ajtó szélessége (D01)", "type": "openingWidth", "opening": "D01", "laser": [612], "ref": "40 Előszoba E-M009", "note": "lézer: szabad nyílás; a hálóhoz közelebbi ajtó (user, 2026-11-01)" },
+    { "label": "Háló ajtó szélessége (D04)", "type": "openingWidth", "opening": "D04", "laser": [815], "ref": "40 Előszoba AJ-01", "note": "lézer: tok külső" },
+    { "label": "Tároló harmonikaajtó (O04)", "type": "openingWidth", "opening": "O04", "laser": [780, 785], "ref": "40 Előszoba E-M007", "note": "tok külső széltől szélig (user, 2026-11-01: 780 mm); a szkennelés a szabad nyílást látja" },
+    { "label": "Erkélyfal hossza (W00)", "type": "wallLength", "wall": "W00", "laser": [3443], "ref": "user 2026-11-01", "note": "a közlekedő felőli fal síkja a fal közepén van, kb. +100 mm várható" },
+    { "label": "Gipszkarton → ablakfal (W00 ↔ W02)", "type": "between", "from": "W02", "to": "W00", "laser": [6300, 6310], "ref": "20 Nappali N-M003" },
+    { "label": "Szekrényes falszakasz (W04)", "type": "wallLength", "wall": "W04", "laser": [1546, 1550], "ref": "20 Nappali N-M005" }
+  ]
+}

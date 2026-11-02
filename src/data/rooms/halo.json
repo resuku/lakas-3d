@@ -1,0 +1,684 @@
+{
+  "id": "halo",
+  "name": "Háló",
+  "source": "V14 tervezési napló – 10 Háló és 40 Előszoba + ajtók; fotók: Képek/Háló képek. Koordináták: x = ágyfal → gardróbfal, z = ajtófal → ablakfal.",
+  "size": {
+    "x": {
+      "v": 3665,
+      "s": "D",
+      "note": "Ágyfal–gardróbfront szabad szélesség 2971 / 3000 mm (M-015) + 680 mm gardróbmélység (M-016). Közvetlen fal–fal mérés nincs (M-002); tartomány 3651–3680 mm.",
+      "src": [
+        {
+          "sheet": "10 Háló",
+          "key": "M-015",
+          "n": 2971
+        },
+        {
+          "sheet": "10 Háló",
+          "key": "M-015",
+          "n": 3000
+        },
+        {
+          "sheet": "10 Háló",
+          "key": "M-016",
+          "n": 680
+        }
+      ]
+    },
+    "z": {
+      "v": 3442,
+      "s": "D",
+      "note": "Ajtófal–ablakfal, két lézeres mérés középértéke (3435 / 3448 mm, 13 mm eltérés).",
+      "src": [
+        {
+          "sheet": "10 Háló",
+          "key": "M-001",
+          "n": 3435
+        },
+        {
+          "sheet": "10 Háló",
+          "key": "M-001",
+          "n": 3448
+        }
+      ]
+    },
+    "h": {
+      "v": 2627,
+      "s": "D",
+      "note": "Belmagasság két mérés középértéke (2623 / 2631 mm).",
+      "src": [
+        {
+          "sheet": "10 Háló",
+          "key": "M-003",
+          "n": 2623
+        },
+        {
+          "sheet": "10 Háló",
+          "key": "M-003",
+          "n": 2631
+        }
+      ]
+    }
+  },
+  "north": {
+    "wall": "z1",
+    "s": "M",
+    "note": "Az ablak északi tájolású (10 Háló – Tájolás, rögzített). A lakberendezői alaprajz északi nyila ennek ellentmond; a felmérés az irányadó."
+  },
+  "walls": {
+    "z0": {
+      "name": "Ajtófal",
+      "t": {
+        "v": 100,
+        "s": "A",
+        "note": "Belső fal; vastagság a lakberendezői alaprajzból (legacy), nem mért."
+      }
+    },
+    "x1": {
+      "name": "Gardróbfal (dolgozó felé)",
+      "t": {
+        "v": 100,
+        "s": "A",
+        "note": "Gipszkarton válaszfal; vastagság a lakberendezői alaprajzból (legacy), nem mért."
+      }
+    },
+    "z1": {
+      "name": "Ablakfal",
+      "t": {
+        "v": 200,
+        "s": "A",
+        "note": "Külső fal; vastagság a lakberendezői alaprajzból (legacy), nem mért."
+      }
+    },
+    "x0": {
+      "name": "Ágyfal",
+      "t": {
+        "v": 200,
+        "s": "A",
+        "note": "Külső fal; vastagság a lakberendezői alaprajzból (legacy), nem mért."
+      }
+    }
+  },
+  "openings": [
+    {
+      "id": "AJ-01",
+      "kind": "door",
+      "label": "Ajtó (közlekedő felé)",
+      "wall": "z0",
+      "offset": {
+        "v": 1700,
+        "s": "M",
+        "note": "Kb. 170 cm az ágyfal (éjjeliszekrény felőli fal) síkjától a tok kezdetéig.",
+        "src": [
+          {
+            "sheet": "10 Háló",
+            "key": "M-027",
+            "n": 1700
+          }
+        ]
+      },
+      "width": {
+        "v": 815,
+        "s": "M",
+        "note": "Tok külső szélessége kb. 815 mm.",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "AJ-01",
+            "n": 815
+          }
+        ]
+      },
+      "height": {
+        "v": 2078,
+        "s": "D",
+        "note": "Tok külső magassága 2075 / 2080 mm.",
+        "src": [
+          {
+            "sheet": "10 Háló",
+            "key": "M-026",
+            "n": 2075
+          },
+          {
+            "sheet": "10 Háló",
+            "key": "M-026",
+            "n": 2080
+          }
+        ]
+      },
+      "bottom": {
+        "v": 0,
+        "s": "A",
+        "note": "Padlószintről indul; a küszöb/szintkülönbség nincs mérve (H-037)."
+      },
+      "leaf": {
+        "width": {
+          "v": 720,
+          "s": "M",
+          "note": "Ajtólap kb. 720 mm.",
+          "src": [
+            {
+              "sheet": "10 Háló",
+              "key": "M-023",
+              "n": 720
+            }
+          ]
+        },
+        "height": {
+          "v": 2030,
+          "s": "M",
+          "note": "Ajtólap kb. 2030 mm.",
+          "src": [
+            {
+              "sheet": "10 Háló",
+              "key": "M-024",
+              "n": 2030
+            }
+          ]
+        },
+        "hinge": "end",
+        "existing": true
+      },
+      "trim": true,
+      "note": "Nyitásirány fotó alapján: befelé, a gardrób felé (IMG20260830165011.jpg). Az ajtó feletti áttört (rácsos) felülvilágító elem bontandó, helyén gipszkarton lesz (user, 2026-11-02) – a modell falfelületként kezeli (a felső éle korábban fotóbecslés szerint kb. 2450 mm volt)."
+    },
+    {
+      "id": "ABL-H",
+      "kind": "window",
+      "label": "Ablak (észak)",
+      "wall": "z1",
+      "offset": {
+        "v": 842,
+        "s": "A",
+        "note": "Az ágyfaltól fotóbecslés (IMG20260830164946.jpg, ±100 mm). A pontos sarokpozíció nincs lezárva (handoff 5.)."
+      },
+      "width": {
+        "v": 1253,
+        "s": "M",
+        "note": "Ablaknyílás teljes szélessége.",
+        "src": [
+          {
+            "sheet": "10 Háló",
+            "key": "M-006",
+            "n": 1253
+          }
+        ]
+      },
+      "height": {
+        "v": 2440,
+        "s": "M",
+        "note": "Teljes ablaknyílás magassága.",
+        "src": [
+          {
+            "sheet": "10 Háló",
+            "key": "M-028",
+            "n": 2440
+          }
+        ]
+      },
+      "bottom": {
+        "v": 0,
+        "s": "A",
+        "note": "A nyílás a padlóig ér; a legalsó üvegmező alja kb. 70 mm (M-029). Belső párkány nincs."
+      },
+      "splits": [
+        {
+          "at": 760,
+          "s": "A"
+        }
+      ],
+      "lowerTint": "#d9a21b",
+      "note": "Felső bukó-nyíló szárny, alsó fix borostyánszínű üveg (fotó). Az osztás magassága fotóbecslés."
+    }
+  ],
+  "radiators": [
+    {
+      "id": "RAD-H",
+      "label": "Radiátor",
+      "wall": "z1",
+      "offset": {
+        "v": 2480,
+        "s": "A",
+        "note": "Az ágyfaltól fotóbecslés (IMG20260830164946.jpg, IMG20260830165332.jpg)."
+      },
+      "width": {
+        "v": 400,
+        "s": "P",
+        "note": "A fotókon álló radiátor látszik (kb. 400 széles × 900 magas). A napló a 900 mm-t vízszintes méretként rögzíti (M-007), orientáció megerősítendő.",
+        "src": [
+          {
+            "sheet": "10 Háló",
+            "key": "M-030",
+            "n": 400
+          }
+        ]
+      },
+      "height": {
+        "v": 900,
+        "s": "P",
+        "note": "Lásd szélesség – orientáció fotó alapján.",
+        "src": [
+          {
+            "sheet": "10 Háló",
+            "key": "M-007",
+            "n": 900
+          }
+        ]
+      },
+      "bottom": {
+        "v": 120,
+        "s": "A",
+        "note": "Fotóbecslés."
+      },
+      "gap": {
+        "v": 50,
+        "s": "M",
+        "note": "Falsík – radiátor hátulja kb. 50 mm.",
+        "src": [
+          {
+            "sheet": "10 Háló",
+            "key": "M-032",
+            "n": 50
+          }
+        ]
+      },
+      "depth": {
+        "v": 95,
+        "s": "D",
+        "note": "Teljes kiállás 145 mm (M-031) − 50 mm falhézag (M-032).",
+        "src": [
+          {
+            "sheet": "10 Háló",
+            "key": "M-031",
+            "n": 145
+          },
+          {
+            "sheet": "10 Háló",
+            "key": "M-032",
+            "n": 50
+          }
+        ]
+      }
+    }
+  ],
+  "pipes": [
+    {
+      "id": "CS-H1",
+      "label": "Fűtéscső – ablakfal",
+      "s": "A",
+      "note": "Nyomvonal fotóról (P-011, P-027); magasság és faltávolság becsült. Nem áthelyezhető.",
+      "wall": "z1",
+      "kind": "h",
+      "from": 0,
+      "to": 2985,
+      "y": 2480,
+      "z": 45,
+      "d": 28
+    },
+    {
+      "id": "CS-H2",
+      "label": "Fűtéscső – ágyfal",
+      "s": "A",
+      "note": "Nyomvonal fotóról (P-011); magasság és faltávolság becsült.",
+      "wall": "x0",
+      "kind": "h",
+      "from": 0,
+      "to": 3442,
+      "y": 2480,
+      "z": 45,
+      "d": 28
+    },
+    {
+      "id": "CS-H3",
+      "label": "Fűtéscső – ajtófal",
+      "s": "A",
+      "note": "Fotó szerint az ajtó feletti elemig fut (IMG20260830165011.jpg).",
+      "wall": "z0",
+      "kind": "h",
+      "from": 0,
+      "to": 1650,
+      "y": 2480,
+      "z": 45,
+      "d": 28
+    }
+  ],
+  "wardrobe": {
+    "id": "GARD",
+    "label": "Beépített gardrób (3 tolóajtó, megtartandó)",
+    "wall": "x1",
+    "from": {
+      "v": 0,
+      "s": "P",
+      "note": "Fotó alapján az ajtófaltól az ablakfalig fut (IMG20260830165252.jpg)."
+    },
+    "to": {
+      "v": 3442,
+      "s": "P",
+      "note": "Fotó alapján az ablakfalig fut."
+    },
+    "depth": {
+      "v": 680,
+      "s": "M",
+      "note": "Gardróbfront – hátfal, mérőszalaggal.",
+      "src": [
+        {
+          "sheet": "10 Háló",
+          "key": "M-016",
+          "n": 680
+        }
+      ]
+    },
+    "height": {
+      "v": 2627,
+      "s": "A",
+      "note": "Mennyezetig érő; a gardrób nyílásmérete nincs mérve (M-011…M-014)."
+    },
+    "doors": 3,
+    "keep": true,
+    "note": "A user szerint (2026-11-02) a frontok cserélhetők; teljes csere szekrénysorra csak erős indokkal, mert alatta is burkolni kellene, és ehhez a teljes szekrénysort bontani kellene."
+  },
+  "beds": [
+    {
+      "id": "AGY",
+      "label": "Meglévő ágykeret (2100 × 2000, 2100 × 2000-es matrachoz)",
+      "keep": true,
+      "x0": {
+        "v": 0,
+        "s": "A",
+        "note": "Fejvég az ágyfalnál."
+      },
+      "z0": {
+        "v": 690,
+        "s": "M",
+        "note": "Ajtófal síkjától az ágy külső keretéig.",
+        "src": [
+          {
+            "sheet": "10 Háló",
+            "key": "M-033",
+            "n": 690
+          }
+        ]
+      },
+      "sx": {
+        "v": 2000,
+        "s": "M",
+        "note": "Ágykeret hossza; ebben a mérési körben közvetlenül nem ellenőrzött.",
+        "src": [
+          {
+            "sheet": "10 Háló",
+            "key": "M-018",
+            "n": 2000
+          }
+        ]
+      },
+      "sz": {
+        "v": 2100,
+        "s": "M",
+        "note": "Ágykeret szélessége; 690 + 2100 + 650 = 3440 mm, konzisztens a szobahosszal.",
+        "src": [
+          {
+            "sheet": "10 Háló",
+            "key": "M-017",
+            "n": 2100
+          }
+        ]
+      },
+      "h": {
+        "v": 300,
+        "s": "A",
+        "note": "Keretmagasság fotóbecslés."
+      },
+      "mattressH": {
+        "v": 220,
+        "s": "A",
+        "note": "Matracvastagság becsült (H-013 nincs mérve)."
+      },
+      "headH": {
+        "v": 850,
+        "s": "A",
+        "note": "Fejvég teteje a padlótól, fotóbecslés."
+      },
+      "frameColor": "#c49a6c",
+      "note": "A user szerint (2026-11-02) nem ragaszkodik a megtartásához: a keret színe fix és a mérete nem szabványos; ha a választott színvilághoz nem illik, egy szabványos 180 × 200-as, más stílusú ágy is szóba jöhet. Egyelőre marad."
+    }
+  ],
+  "ceilingLights": [
+    {
+      "id": "L-H1",
+      "label": "Mennyezeti lámpa",
+      "x": {
+        "v": 1832,
+        "s": "A",
+        "note": "A kiállás helye nincs mérve (H-020); helyiségközép feltételezve."
+      },
+      "z": {
+        "v": 1721,
+        "s": "A",
+        "note": "Helyiségközép feltételezve."
+      }
+    }
+  ],
+  "accentLights": [
+    {
+      "id": "HL-1",
+      "label": "Éjjeli lámpa (ajtó felől)",
+      "kind": "table",
+      "x": 220,
+      "z": 440,
+      "s": "A",
+      "note": "Tervezési helyőrző éjjeliszekrénnyel – nem kiválasztott termék."
+    },
+    {
+      "id": "HL-2",
+      "label": "Éjjeli lámpa (ablak felől)",
+      "kind": "table",
+      "x": 220,
+      "z": 3020,
+      "s": "A",
+      "note": "Tervezési helyőrző éjjeliszekrénnyel – nem kiválasztott termék."
+    }
+  ],
+  "cameras": [
+    {
+      "name": "Ajtóból",
+      "pos": [
+        2250,
+        1600,
+        250
+      ],
+      "target": [
+        1300,
+        1100,
+        3442
+      ]
+    },
+    {
+      "name": "Ablak felől",
+      "pos": [
+        1500,
+        1600,
+        3250
+      ],
+      "target": [
+        2300,
+        1100,
+        0
+      ]
+    },
+    {
+      "name": "Ágy felé",
+      "pos": [
+        2850,
+        1600,
+        1720
+      ],
+      "target": [
+        0,
+        1000,
+        1720
+      ]
+    },
+    {
+      "name": "Gardrób felé",
+      "pos": [
+        250,
+        1700,
+        1720
+      ],
+      "target": [
+        3665,
+        1100,
+        1720
+      ]
+    }
+  ],
+  "conflicts": [
+    "Radiátor orientációja: a napló (M-007) a 900 mm-t vízszintes méretként rögzíti, a fotókon álló (kb. 400 × 900 mm) radiátor látszik. A modell a fotót követi (P).",
+    "Tájolás: a lakberendezői alaprajz északi nyila szerint az ablak keletre néz, a felmérés szerint északra. A modell a felmérést követi."
+  ],
+  "missing": [
+    "Ablak és radiátor saroktól mért pozíciója (fotóbecslés, ±100 mm).",
+    "Ágyfiók teljes kihúzási mélysége (M-021) – a fiókzóna nem ellenőrizhető.",
+    "Mennyezeti lámpa kiállásának helye (H-020).",
+    "Helyi 20–30 mm-es falvastagítás az ágy mellett (M-036) – nincs modellezve.",
+    "Falvastagságok (legacy alaprajzból).",
+    "Klíma helye és mérete: három jelölt modellezve (A: ágyfal az ablak felőli sarokban, B: ablakfal a radiátor fölött, C: ajtófal); döntés, típus és teljesítmény még hiányzik.",
+    "Éjjeliszekrények mérete (a modellben becslés)."
+  ],
+  "units": [
+    {
+      "id": "KL-H-A",
+      "label": "Klíma – A: ágyfal, ablak felőli sarok",
+      "kind": "ac",
+      "wall": "x0",
+      "offset": {
+        "v": 2397,
+        "s": "A",
+        "note": "Az ablakfal sarkától 250 mm (a függöny köteg elfér mellette)."
+      },
+      "width": {
+        "v": 795,
+        "s": "A",
+        "note": "A nappali meglévő beltéri egységének mért méretével (795 × 285 mm); a lakberendezői konszignáció GREE Dark Pro 5,3 kW egysége 1013 mm széles."
+      },
+      "height": {
+        "v": 285,
+        "s": "A",
+        "note": "A nappali meglévő beltéri egységének mért méretével (795 × 285 mm); a lakberendezői konszignáció GREE Dark Pro 5,3 kW egysége 1013 mm széles."
+      },
+      "bottom": {
+        "v": 2100,
+        "s": "A",
+        "note": "A fűtéscső (CS-H1/CS-H2, kb. 2480 mm) alatt, kb. 80 mm szabad hellyel a levegő-beszívásnak."
+      },
+      "depth": {
+        "v": 200,
+        "s": "A",
+        "note": "A nappali egységével azonos mélység (becslés)."
+      },
+      "choice": {
+        "group": "halo-klima",
+        "option": "A"
+      },
+      "note": "Ötlet (user, 2026-11-02), pontos hely nincs. Az ágy feje fölött, a homlokzati fal mellett: rövid csőút a kültéri egységhez, nem ütközik a függönnyel és a radiátorral; a légáram az ágy fölött, a lábvég felé fúj."
+    },
+    {
+      "id": "KL-H-B",
+      "label": "Klíma – B: ablakfal, radiátor fölött",
+      "kind": "ac",
+      "wall": "z1",
+      "offset": {
+        "v": 2170,
+        "s": "A",
+        "note": "Az ablak és a gardrób közti 890 mm-es falszakaszon, a gardróbtól 20 mm-re."
+      },
+      "width": {
+        "v": 795,
+        "s": "A",
+        "note": "A nappali meglévő beltéri egységének mért méretével (795 × 285 mm); a lakberendezői konszignáció GREE Dark Pro 5,3 kW egysége 1013 mm széles."
+      },
+      "height": {
+        "v": 285,
+        "s": "A",
+        "note": "A nappali meglévő beltéri egységének mért méretével (795 × 285 mm); a lakberendezői konszignáció GREE Dark Pro 5,3 kW egysége 1013 mm széles."
+      },
+      "bottom": {
+        "v": 2100,
+        "s": "A",
+        "note": "A fűtéscső (CS-H1/CS-H2, kb. 2480 mm) alatt, kb. 80 mm szabad hellyel a levegő-beszívásnak."
+      },
+      "depth": {
+        "v": 200,
+        "s": "A",
+        "note": "A nappali egységével azonos mélység (becslés)."
+      },
+      "choice": {
+        "group": "halo-klima",
+        "option": "B"
+      },
+      "note": "A napló D-018 iránya (radiátor feletti zóna). A homlokzati falon, a legrövidebb csőúttal; a függöny csak az ablak széléig érhet, mert a 25 cm-es túlnyúlás már a klíma elé futna. Az 1013 mm-es konszignációs egység itt nem fér el."
+    },
+    {
+      "id": "KL-H-C",
+      "label": "Klíma – C: ajtófal, az ágyfal felőli részen",
+      "kind": "ac",
+      "wall": "z0",
+      "offset": {
+        "v": 450,
+        "s": "A",
+        "note": "Az ágyfal sarkától 450 mm-re, az ajtótól (1700 mm) távol."
+      },
+      "width": {
+        "v": 795,
+        "s": "A",
+        "note": "A nappali meglévő beltéri egységének mért méretével (795 × 285 mm)."
+      },
+      "height": {
+        "v": 285,
+        "s": "A",
+        "note": "A nappali meglévő beltéri egységének mért méretével."
+      },
+      "bottom": {
+        "v": 2100,
+        "s": "A",
+        "note": "A fűtéscső (CS-H3, kb. 2480 mm) alatt."
+      },
+      "depth": {
+        "v": 200,
+        "s": "A",
+        "note": "Becslés."
+      },
+      "choice": {
+        "group": "halo-klima",
+        "option": "C"
+      },
+      "note": "Ötlet: a szemközti falon, az ablak felé fúj, az ágyat oldalról éri el. Nem ütközik függönnyel és radiátorral, de a csőút hosszú (kb. 3,5 m a mennyezet mentén az ágyfalon át a homlokzatig, csőtakaróval)."
+    }
+  ],
+  "furniture": [
+    {
+      "id": "EJ-1",
+      "label": "Éjjeliszekrény (ajtó felől)",
+      "kind": "nightstand",
+      "x0": 20,
+      "z0": 220,
+      "sx": 400,
+      "sz": 450,
+      "h": 500,
+      "s": "A",
+      "note": "A jelenlegi éjjeliszekrény helye nagyjából marad (user, 2026-11-02); méret becslés."
+    },
+    {
+      "id": "EJ-2",
+      "label": "Éjjeliszekrény (ablak felől)",
+      "kind": "nightstand",
+      "x0": 20,
+      "z0": 2810,
+      "sx": 400,
+      "sz": 450,
+      "h": 500,
+      "s": "A",
+      "note": "A jelenlegi éjjeliszekrény helye nagyjából marad (user, 2026-11-02); méret becslés."
+    }
+  ]
+}

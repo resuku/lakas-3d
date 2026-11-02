@@ -1,0 +1,107 @@
+// Összeveti a helyiség-adatfájlok (src/data/rooms/*.json) forráshivatkozásait
+// a legfrissebb live tervezési naplóval (Felujítás/Doc, az old mappa nélkül).
+//
+// Futtatás a konténerben:  npm run check-data
+// Adatkönyvtár: FELUJITAS_DIR (alapértelmezés: /data, lásd docker-compose.yml)
+
+import fs from 'node:fs';
+import path from 'node:path';
+import * as XLSX from 'xlsx';
+
+const DATA_DIR = process.env.FELUJITAS_DIR || '/data';
+const DOC_DIR = path.join(DATA_DIR, 'Doc');
+const ROOMS_DIR = path.resolve(import.meta.dirname, '../src/data/rooms');
+const TOLERANCE = 0.051;
+
+function latestPlanningLog() {
+  const files = fs
+    .readdirSync(DOC_DIR)
+    .map((f) => ({ f, m: /^Lakasfelujitas_tervezesi_naplo_v(\d+).*\.xlsx$/.exec(f) }))
+    .filter((x) => x.m)
+    .sort((a, b) => Number(b.m[1]) - Number(a.m[1]));
+  if (!files.length) throw new Error(`Nem található tervezési napló: ${DOC_DIR}`);
+  return { file: files[0].f, version: Number(files[0].m[1]) };
+}
+
+function numbersIn(row) {
+  const out = [];
+  for (const c of row) {
+    if (typeof c === 'number') out.push(c);
+    else if (typeof c === 'string') {
+      for (const m of c.matchAll(/\d+(?:[.,]\d+)?/g)) out.push(Number(m[0].replace(',', '.')));
+    }
+  }
+  return out;
+}
+
+function indexSheets(wb) {
+  const idx = new Map();
+  for (const name of wb.SheetNames) {
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[name], { header: 1, raw: true, defval: null });
+    const byKey = new Map();
+    for (const row of rows) {
+      const first = row.find((c) => c !== null && String(c).trim() !== '');
+      if (first === undefined) continue;
+      const key = String(first).trim();
+      if (!byKey.has(key)) byKey.set(key, []);
+      byKey.get(key).push(row);
+    }
+    idx.set(name, byKey);
+  }
+  return idx;
+}
+
+function* walkVals(node, trail) {
+  if (Array.isArray(node)) {
+    for (let i = 0; i < node.length; i++) yield* walkVals(node[i], `${trail}[${i}]`);
+  } else if (node && typeof node === 'object') {
+    if (typeof node.v === 'number' && typeof node.s === 'string') yield { trail, val: node };
+    for (const [k, v] of Object.entries(node)) yield* walkVals(v, trail ? `${trail}.${k}` : k);
+  }
+}
+
+const { file, version } = latestPlanningLog();
+const wb = XLSX.read(fs.readFileSync(path.join(DOC_DIR, file)));
+const idx = indexSheets(wb);
+
+console.log(`Tervezési napló: ${file}`);
+if (version !== 14) console.log(`FIGYELEM: a modell a V14 alapján készült, most V${version} az aktuális – nézd át a változásokat.`);
+
+let ok = 0;
+const failures = [];
+const statusCount = {};
+
+for (const roomFile of fs.readdirSync(ROOMS_DIR).filter((f) => f.endsWith('.json'))) {
+  const room = JSON.parse(fs.readFileSync(path.join(ROOMS_DIR, roomFile), 'utf8'));
+  for (const { trail, val } of walkVals(room, '')) {
+    statusCount[`${room.id}:${val.s}`] = (statusCount[`${room.id}:${val.s}`] ?? 0) + 1;
+    for (const src of val.src ?? []) {
+      const rows = idx.get(src.sheet)?.get(src.key);
+      if (!idx.has(src.sheet)) {
+        failures.push(`${room.id} ${trail}: nincs ilyen munkalap: "${src.sheet}"`);
+      } else if (!rows) {
+        failures.push(`${room.id} ${trail}: nincs "${src.key}" sor a(z) "${src.sheet}" lapon`);
+      } else if (!rows.some((r) => numbersIn(r).some((n) => Math.abs(n - src.n) < TOLERANCE))) {
+        failures.push(`${room.id} ${trail}: ${src.sheet} / ${src.key} sorában nem szerepel ${src.n} (sor: ${JSON.stringify(rows[0])})`);
+      } else {
+        ok++;
+      }
+    }
+  }
+}
+
+console.log(`\nForráshivatkozások: ${ok} rendben, ${failures.length} eltérés.`);
+for (const f of failures) console.log(`  ELTÉRÉS  ${f}`);
+
+console.log('\nAdatstátuszok helyiségenként:');
+const byRoom = {};
+for (const [k, n] of Object.entries(statusCount)) {
+  const [room, s] = k.split(':');
+  (byRoom[room] ??= {})[s] = n;
+}
+for (const [room, counts] of Object.entries(byRoom)) {
+  const order = ['M', 'D', 'S', 'P', 'A', 'U'];
+  console.log(`  ${room}: ${order.filter((s) => counts[s]).map((s) => `${s}=${counts[s]}`).join(', ')}`);
+}
+
+process.exit(failures.length ? 1 : 0);

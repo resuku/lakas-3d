@@ -1,0 +1,1214 @@
+{
+  "meta": {
+    "checkedAt": "2026-11-01",
+    "note": "Lámpák a magyar kínálatból (IKEA, Bonami, Praktiker, OBI, JYSK, Watt Webshop). Méret, fényáram és színhőmérséklet a termékoldalról; izzó nélküli lámpánál a modell meleg (2700 K) LED izzóval számol: E27 806 lm, E14 470 lm, GU10 345 lm (IKEA SOLHETTA, 1 990 / 1 190 / 1 290 Ft), G9 kb. 280 lm. A test színe a termék színnevéből vagy a termékfotóból becsült."
+  },
+  "items": [
+    {
+      "id": "lamp-ikea-ranarp-fuggolampa-fekete-38-cm",
+      "store": "IKEA",
+      "name": "RANARP függőlámpa, fekete, 38 cm",
+      "article": "203.909.51",
+      "type": "pendant",
+      "shape": "dome",
+      "color": "#262524",
+      "colorName": "fekete",
+      "size": {
+        "d": 380,
+        "drop": 1600
+      },
+      "socket": {
+        "type": "E27",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "down",
+      "hexSource": "color-name",
+      "price": "9 990 Ft (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/ranarp-fueggolampa-fekete-20390951/",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-ikea-skurup-fuggolampa-fekete-38-cm",
+      "store": "IKEA",
+      "name": "SKURUP függőlámpa, fekete, 38 cm",
+      "article": "804.071.14",
+      "type": "pendant",
+      "shape": "cone",
+      "color": "#262524",
+      "colorName": "fekete",
+      "size": {
+        "d": 380,
+        "h": 290,
+        "drop": 1500
+      },
+      "socket": {
+        "type": "E27",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "down",
+      "hexSource": "color-name",
+      "price": "6 990 Ft (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/skurup-fueggolampa-fekete-80407114/",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-ikea-sinnerlig-fuggolampa-bambusz-kezze",
+      "store": "IKEA",
+      "name": "SINNERLIG függőlámpa, bambusz/kézzel készült, 50 cm",
+      "article": "703.116.97",
+      "type": "pendant",
+      "shape": "drum",
+      "color": "#c9a878",
+      "colorName": "natúr bambusz (bézs)",
+      "size": {
+        "d": 500,
+        "h": 540,
+        "drop": 1600
+      },
+      "socket": {
+        "type": "E27",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "diffuse",
+      "hexSource": "photo-sample",
+      "price": "24 990 Ft (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/sinnerlig-fueggolampa-bambusz-kezzel-keszuelt-70311697/",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-ikea-narrkolv-fuggolampa-rattan-56-cm",
+      "store": "IKEA",
+      "name": "NARRKOLV függőlámpa, rattan, 56 cm",
+      "article": "005.943.41",
+      "type": "pendant",
+      "shape": "dome",
+      "color": "#b88a5a",
+      "colorName": "rattan (bézs/barna)",
+      "size": {
+        "d": 560,
+        "h": 140,
+        "drop": 1400
+      },
+      "socket": {
+        "type": "E27",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "diffuse",
+      "hexSource": "photo-sample",
+      "price": "19 990 Ft (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/narrkolv-fueggolampa-rattan-00594341/",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-ikea-sjomakt-fuggolampa-bezs-koris-38-c",
+      "store": "IKEA",
+      "name": "SJÖMAKT függőlámpa, bézs/kőris, 38 cm",
+      "article": "805.956.81",
+      "type": "pendant",
+      "shape": "dome",
+      "color": "#e2d6c2",
+      "colorName": "bézs/kőris",
+      "size": {
+        "d": 380,
+        "h": 210
+      },
+      "socket": {
+        "type": "E27",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "down",
+      "hexSource": "photo-sample",
+      "price": "9 990 Ft (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/sjoemakt-fueggolampa-bezs-koris-80595681/",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-bonami-ano-natur-szinu-fuggolampa-textil",
+      "store": "Bonami",
+      "brand": "Markslöjd",
+      "name": "Ano natúr színű függőlámpa textil-juta búrával, ø 45 cm",
+      "article": "1754624",
+      "type": "pendant",
+      "shape": "drum",
+      "color": "#c4ad8a",
+      "colorName": "natúr",
+      "size": {
+        "d": 450,
+        "h": 500
+      },
+      "socket": {
+        "type": "E27",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "diffuse",
+      "hexSource": "photo-sample",
+      "price": "94 240 Ft (Bonami, 2026-11-01)",
+      "url": "https://www.bonami.hu/p/natur-szinu-fuggolampa-textil-juta-buraval-o-45-cm-ano-markslojd",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-bonami-serene-feher-fuggolampa-uveg-burav",
+      "store": "Bonami",
+      "brand": "Hübsch",
+      "name": "Serene fehér függőlámpa üveg búrával, ø 32 cm",
+      "article": "1727214",
+      "type": "pendant",
+      "shape": "globe",
+      "color": "#f1efea",
+      "colorName": "fehér",
+      "size": {
+        "d": 320,
+        "h": 300,
+        "drop": 2500
+      },
+      "socket": {
+        "type": "E27",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "diffuse",
+      "hexSource": "color-name",
+      "price": "68 470 Ft (Bonami, 2026-11-01)",
+      "url": "https://www.bonami.hu/p/feher-fuggolampa-uveg-buraval-o-32-cm-serene-hubsch",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-bonami-mellow-feher-fuggolampa-textil-bur",
+      "store": "Bonami",
+      "brand": "Candellux Lighting",
+      "name": "Mellow fehér függőlámpa textil búrával, ø 52 cm",
+      "article": "1740814",
+      "type": "pendant",
+      "shape": "globe",
+      "color": "#f1efea",
+      "colorName": "fehér",
+      "size": {
+        "d": 520
+      },
+      "socket": {
+        "type": "E27",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "diffuse",
+      "hexSource": "color-name",
+      "price": "38 790 Ft (Bonami, 2026-11-01)",
+      "url": "https://www.bonami.hu/p/feher-fuggolampa-textil-buraval-o-52-cm-mellow-candellux-lighting",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-bonami-elsa-barna-fuggolampa-fa-buraval-2",
+      "store": "Bonami",
+      "brand": "Opviq lights",
+      "name": "Elsa barna függőlámpa fa búrával, ø 25 cm",
+      "article": "1926860",
+      "type": "pendant",
+      "shape": "dome",
+      "color": "#6b4a33",
+      "colorName": "barna (dió) / fekete",
+      "size": {
+        "d": 250,
+        "h": 190,
+        "drop": 1500
+      },
+      "socket": {
+        "type": "G9",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "down",
+      "hexSource": "photo-sample",
+      "price": "41 530 Ft (Bonami, 2026-11-01)",
+      "url": "https://www.bonami.hu/p/barna-fuggolampa-fa-buraval-o-25-cm-elsa-opviq-lights",
+      "checkedAt": "2026-11-01",
+      "note": "G9 foglalat (a modell egy kb. 280 lm-es G9 LED izzóval számol)."
+    },
+    {
+      "id": "lamp-ikea-bunkeflo-fuggolampa-feher-nyir-36",
+      "store": "IKEA",
+      "name": "BUNKEFLO függőlámpa, fehér/nyír, 36 cm",
+      "article": "604.883.90",
+      "type": "pendant",
+      "shape": "dome",
+      "color": "#f1efea",
+      "colorName": "fehér/nyír",
+      "size": {
+        "d": 360,
+        "drop": 1400
+      },
+      "socket": {
+        "type": "E27",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "down",
+      "hexSource": "color-name",
+      "price": "14 990 Ft (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/bunkeflo-fueggolampa-feher-nyir-60488390/",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-ikea-nymane-led-es-mennyezeti-lampa-ant",
+      "store": "IKEA",
+      "name": "NYMÅNE LED-es mennyezeti lámpa, antracit, 45 cm",
+      "article": "305.266.71",
+      "type": "ceiling",
+      "shape": "disc",
+      "color": "#3a3938",
+      "colorName": "antracit",
+      "size": {
+        "d": 450,
+        "h": 80
+      },
+      "lm": 1900,
+      "K": 2700,
+      "bulbIncluded": true,
+      "emit": "diffuse",
+      "hexSource": "color-name",
+      "price": "15 990 Ft (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/nymane-led-es-mennyezeti-lampa-antracit-30526671/",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-ikea-kabomba-led-es-mennyezeti-lampa-ma",
+      "store": "IKEA",
+      "name": "KABOMBA LED-es mennyezeti lámpa, matt/fekete, 36 cm",
+      "article": "604.852.78",
+      "type": "ceiling",
+      "shape": "disc",
+      "color": "#262524",
+      "colorName": "matt fekete",
+      "size": {
+        "d": 360,
+        "h": 114
+      },
+      "lm": 1600,
+      "K": 2700,
+      "bulbIncluded": true,
+      "emit": "diffuse",
+      "hexSource": "color-name",
+      "price": "29 990 Ft (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/kabomba-led-es-mennyezeti-lampa-matt-fekete-60485278/",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-ikea-barlast-led-mennyezeti-falilampa-f",
+      "store": "IKEA",
+      "name": "BARLAST LED mennyezeti/falilámpa, fehér, 25 cm",
+      "article": "005.259.08",
+      "type": "ceiling",
+      "shape": "disc",
+      "color": "#f1efea",
+      "colorName": "fehér",
+      "size": {
+        "d": 250,
+        "h": 67
+      },
+      "lm": 900,
+      "K": 2700,
+      "bulbIncluded": true,
+      "emit": "diffuse",
+      "hexSource": "color-name",
+      "price": "2 990 Ft (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/barlast-led-mennyezeti-falilampa-feher-00525908/",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-ikea-nosund-mennyezeti-lampa-nyir-44-cm",
+      "store": "IKEA",
+      "name": "NÖSUND mennyezeti lámpa, nyír, 44 cm",
+      "article": "204.048.87",
+      "type": "ceiling",
+      "shape": "drum",
+      "color": "#d8c4a4",
+      "colorName": "nyír",
+      "size": {
+        "d": 440,
+        "h": 130
+      },
+      "socket": {
+        "type": "E27",
+        "count": 3
+      },
+      "bulbIncluded": false,
+      "emit": "diffuse",
+      "hexSource": "photo-sample",
+      "price": "24 990 Ft (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/noesund-mennyezeti-lampa-nyir-20404887/",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-ikea-trubbrufse-mennyezeti-lampa-sas-45",
+      "store": "IKEA",
+      "name": "TRUBBRUFSE mennyezeti lámpa, sás, 45 cm",
+      "article": "906.013.37",
+      "type": "ceiling",
+      "shape": "drum",
+      "color": "#b99a6e",
+      "colorName": "bézs/barna (natúr sás)",
+      "size": {
+        "d": 450,
+        "h": 150
+      },
+      "socket": {
+        "type": "E27",
+        "count": 3
+      },
+      "bulbIncluded": false,
+      "emit": "diffuse",
+      "hexSource": "photo-sample",
+      "price": "9 990 Ft (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/trubbrufse-mennyezeti-lampa-sas-90601337/",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-praktike-rabalux-gonzalo-led-mennyezeti-lam",
+      "store": "Praktiker",
+      "brand": "Rábalux",
+      "name": "Rábalux Gonzalo LED mennyezeti lámpa 36W 2750lm 3000-6000K, fekete, 40 cm",
+      "article": "424576 (Rábalux 71097)",
+      "type": "ceiling",
+      "shape": "disc",
+      "color": "#262524",
+      "colorName": "matt fekete",
+      "size": {
+        "d": 400,
+        "h": 25
+      },
+      "lm": 2750,
+      "K": 3000,
+      "bulbIncluded": true,
+      "emit": "diffuse",
+      "hexSource": "color-name",
+      "price": "14 990 Ft (Praktiker, 2026-11-01)",
+      "url": "https://www.praktiker.hu/lakberendezes-haztartas/vilagitas-lampa/mennyezeti-lampa/rabalux-gonzalo-led-mennyezeti-lampa-36w-2750lm-3000-6000k-ip20-40x2-5cm-fekete/p/424576",
+      "checkedAt": "2026-11-01",
+      "note": "Színhőmérséklete állítható (3000–6000 K); a modell 3000 K-nel számol."
+    },
+    {
+      "id": "lamp-bonami-allan-bezs-textil-mennyezeti-lampa",
+      "store": "Bonami",
+      "brand": "Jotex",
+      "name": "Allan bézs textil mennyezeti lámpa, ø 40 cm",
+      "article": "1942310",
+      "type": "ceiling",
+      "shape": "drum",
+      "color": "#d9cbb5",
+      "colorName": "bézs",
+      "size": {
+        "d": 400,
+        "h": 110
+      },
+      "socket": {
+        "type": "E27",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "diffuse",
+      "hexSource": "photo-sample",
+      "price": "27 798 Ft (Bonami, 2026-11-01)",
+      "url": "https://www.bonami.hu/p/bezs-textil-mennyezeti-lampa-o-40-cm-allan-jotex",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-praktike-eglo-musurita-led-mennyezeti-lampa",
+      "store": "Praktiker",
+      "brand": "Eglo",
+      "name": "Eglo Musurita LED mennyezeti lámpa 18W 1600lm 3000K IP44, 33,6 cm, fehér/natúr",
+      "article": "429364 (Eglo 901126)",
+      "type": "ceiling",
+      "shape": "disc",
+      "color": "#f1efea",
+      "colorName": "fehér, natúr",
+      "size": {
+        "d": 336
+      },
+      "lm": 1600,
+      "K": 3000,
+      "bulbIncluded": true,
+      "emit": "diffuse",
+      "hexSource": "color-name",
+      "price": "18 991 Ft (Praktiker, 2026-11-01)",
+      "url": "https://www.praktiker.hu/lakberendezes-haztartas/vilagitas-lampa/mennyezeti-lampa/eglo-musurita-led-mennyezeti-lampa-18w-1600lm-3000k-ip44-33-6cm-natur/p/429364",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-praktike-rabalux-leana2-led-mennyezeti-lamp",
+      "store": "Praktiker",
+      "brand": "Rábalux",
+      "name": "Rábalux Leana2 LED mennyezeti lámpa 12W 730lm 3000K, 26 cm, bükk",
+      "article": "424318 (Rábalux 71143)",
+      "type": "ceiling",
+      "shape": "disc",
+      "color": "#cfa77a",
+      "colorName": "bükk",
+      "size": {
+        "d": 260,
+        "h": 60
+      },
+      "lm": 730,
+      "K": 3000,
+      "bulbIncluded": true,
+      "emit": "diffuse",
+      "hexSource": "photo-sample",
+      "price": "9 899 Ft (Praktiker, 2026-11-01)",
+      "url": "https://www.praktiker.hu/lakberendezes-haztartas/vilagitas-lampa/mennyezeti-lampa/rabalux-leana2-led-mennyezeti-lampa-12w-730lm-3000k-ip20-26cm-bukkfa/p/424318",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-praktike-eglo-rovito-led-mennyezeti-lampa-1",
+      "store": "Praktiker",
+      "brand": "Eglo",
+      "name": "Eglo Rovito LED mennyezeti lámpa 15,5W 1780lm 2700-6500K IP44, 29x29 cm, fekete",
+      "article": "429413 (Eglo 901442)",
+      "type": "ceiling",
+      "shape": "disc",
+      "color": "#262524",
+      "colorName": "fekete",
+      "size": {
+        "d": 290
+      },
+      "lm": 1780,
+      "K": 2700,
+      "bulbIncluded": true,
+      "emit": "diffuse",
+      "hexSource": "color-name",
+      "price": "13 990 Ft (Praktiker, 2026-11-01)",
+      "url": "https://www.praktiker.hu/lakberendezes-haztartas/vilagitas-lampa/mennyezeti-lampa/eglo-rovito-led-mennyezeti-lampa-15-5w-1780lm-2700-6500k-ip44-29x29cm-fekete/p/429413",
+      "checkedAt": "2026-11-01",
+      "note": "Hosszúkás forma (290 mm); a modell 290 mm-es korongként jeleníti meg. Színhőmérséklete állítható; a modell 2700 K-nel számol."
+    },
+    {
+      "id": "lamp-ikea-nymane-mennyezeti-spot-4-antracit",
+      "store": "IKEA",
+      "name": "NYMÅNE mennyezeti spot, 4, antracit",
+      "article": "804.150.86",
+      "type": "track",
+      "shape": "bar",
+      "color": "#3a3938",
+      "colorName": "antracit",
+      "size": {
+        "h": 120,
+        "l": 730
+      },
+      "heads": 4,
+      "socket": {
+        "type": "GU10",
+        "count": 4
+      },
+      "bulbIncluded": false,
+      "emit": "spot",
+      "hexSource": "color-name",
+      "price": "14 990 Ft (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/nymane-mennyezeti-spot-4-antracit-80415086/",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-ikea-skurup-mennyezeti-sin-3-spot-feket",
+      "store": "IKEA",
+      "name": "SKURUP mennyezeti sín, 3 spot, fekete",
+      "article": "103.959.25",
+      "type": "track",
+      "shape": "rail",
+      "color": "#262524",
+      "colorName": "fekete",
+      "size": {
+        "d": 80,
+        "l": 960
+      },
+      "heads": 3,
+      "socket": {
+        "type": "GU10",
+        "count": 3
+      },
+      "bulbIncluded": false,
+      "emit": "spot",
+      "hexSource": "color-name",
+      "price": "7 990 Ft (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/skurup-mennyezeti-sin-3-spot-fekete-10395925/",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-praktike-eglo-easyt-szpot-szett-gu10-4x10w",
+      "store": "Praktiker",
+      "brand": "Eglo",
+      "name": "Eglo EasyT szpot szett GU10 4x10W 192 cm, fekete",
+      "article": "429659 (Eglo 901652)",
+      "type": "track",
+      "shape": "rail",
+      "color": "#262524",
+      "colorName": "fekete",
+      "size": {
+        "l": 1920
+      },
+      "heads": 4,
+      "socket": {
+        "type": "GU10",
+        "count": 4
+      },
+      "bulbIncluded": false,
+      "emit": "spot",
+      "hexSource": "color-name",
+      "price": "36 990 Ft (Praktiker, 2026-11-01)",
+      "url": "https://www.praktiker.hu/lakberendezes-haztartas/vilagitas-lampa/spot-lampa/eglo-easyt-szpot-szett-gu10-4x10w-ip20-192cm-fekete/p/429659",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-praktike-rabalux-noxelle-mennyezeti-szpot-l",
+      "store": "Praktiker",
+      "brand": "Rábalux",
+      "name": "Rábalux Noxelle mennyezeti szpot lámpa E14 3x10W L41 cm, fekete-tölgy",
+      "article": "440031 (Rábalux 73422)",
+      "type": "track",
+      "shape": "bar",
+      "color": "#262524",
+      "colorName": "matt fekete / tölgy",
+      "size": {
+        "h": 160,
+        "l": 410
+      },
+      "heads": 3,
+      "socket": {
+        "type": "E14",
+        "count": 3
+      },
+      "bulbIncluded": false,
+      "emit": "spot",
+      "hexSource": "color-name",
+      "price": "18 990 Ft (Praktiker, 2026-11-01)",
+      "url": "https://www.praktiker.hu/lakberendezes-haztartas/vilagitas-lampa/spot-lampa/rabalux-noxelle-mennyezeti-szpot-lampa-e14-max-3x10w-l41cm-fekete-tolgy/p/440031",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-praktike-rabalux-rogelio-mennyezeti-lampa-g",
+      "store": "Praktiker",
+      "brand": "Rábalux",
+      "name": "Rábalux Rogelio mennyezeti lámpa GU10 3x5W 43 cm, matt fekete",
+      "article": "424838 (Rábalux 73025)",
+      "type": "track",
+      "shape": "bar",
+      "color": "#262524",
+      "colorName": "matt fekete",
+      "size": {
+        "d": 50,
+        "h": 125,
+        "l": 430
+      },
+      "heads": 3,
+      "socket": {
+        "type": "GU10",
+        "count": 3
+      },
+      "bulbIncluded": false,
+      "emit": "spot",
+      "hexSource": "color-name",
+      "price": "22 990 Ft (Praktiker, 2026-11-01)",
+      "url": "https://www.praktiker.hu/lakberendezes-haztartas/vilagitas-lampa/spot-lampa/rabalux-rogelio-mennyezeti-lampa-gu10-3x5w-ip20-43x5x12-5cm-matt-fekete/p/424838",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-bonami-etna-fekete-spotlampa-8x80-cm",
+      "store": "Bonami",
+      "brand": "Sollux",
+      "name": "Etna fekete spotlámpa 8x80 cm",
+      "article": "990608",
+      "type": "track",
+      "shape": "bar",
+      "color": "#262524",
+      "colorName": "fekete",
+      "size": {
+        "h": 170,
+        "l": 800
+      },
+      "heads": 4,
+      "socket": {
+        "type": "GU10",
+        "count": 4
+      },
+      "bulbIncluded": false,
+      "emit": "spot",
+      "hexSource": "color-name",
+      "price": "40 130 Ft (Bonami, 2026-11-01)",
+      "url": "https://www.bonami.hu/p/fekete-spotlampa-8x80-cm-etna-sollux",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-obi-rabalux-litrack-spot04w-sines-spot",
+      "store": "OBI",
+      "brand": "Rábalux",
+      "name": "Rábalux LiTrack Spot04W sínes spot, cső, fekete, LED 10W",
+      "article": "5287073 (Rábalux 70104)",
+      "type": "track",
+      "shape": "other",
+      "color": "#262524",
+      "colorName": "fekete",
+      "size": {
+        "d": 43,
+        "h": 130,
+        "l": 1000
+      },
+      "heads": 1,
+      "beamDeg": 24,
+      "lm": 800,
+      "K": 3000,
+      "bulbIncluded": true,
+      "emit": "spot",
+      "hexSource": "color-name",
+      "price": "12 490 Ft (OBI, 2026-11-01)",
+      "url": "https://www.obi.hu/led-es-mennyezeti-lampak/rabalux-litrack-spot04w-spot-cso-fekete-led-10w-ip20/p/5287073",
+      "checkedAt": "2026-11-01",
+      "note": "Egy sínes spotfej; a 1000 mm-es mágneses sín (Rábalux 70200) külön kapható, ára nincs benne. Több fej: több lámpaként vehető fel."
+    },
+    {
+      "id": "lamp-bonami-fekete-allolampa-manie-kave-home",
+      "store": "Bonami",
+      "brand": "Kave Home",
+      "name": "Fekete állólámpa Manie – Kave Home",
+      "article": "1827574",
+      "type": "floor",
+      "shape": "spot",
+      "color": "#262524",
+      "colorName": "Fekete",
+      "size": {
+        "d": 70,
+        "h": 1472
+      },
+      "socket": {
+        "type": "E14",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "spot",
+      "hexSource": "color-name",
+      "price": "38 410 Ft (Bonami, 2026-11-01)",
+      "url": "https://www.bonami.hu/p/fekete-allolampa-magassag-147-cm-manie-kave-home",
+      "checkedAt": "2026-11-01",
+      "note": "A lakberendezői konszignáció állólámpája."
+    },
+    {
+      "id": "lamp-ikea-tagarp-allo-mennymegvil-olvasolamp",
+      "store": "IKEA",
+      "name": "TÅGARP Álló mennymegvil/olvasólámpa - fekete/fehér",
+      "article": "404.863.87",
+      "type": "floor",
+      "shape": "uplight",
+      "color": "#262524",
+      "colorName": "fekete/fehér",
+      "size": {
+        "d": 240,
+        "h": 1780
+      },
+      "socket": {
+        "type": "E27",
+        "count": 2
+      },
+      "bulbIncluded": false,
+      "emit": "up",
+      "hexSource": "color-name",
+      "price": "6 990 Ft (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/tagarp-allo-mennymegvil-olvasolampa-fekete-feher-40486387/",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-ikea-kloving-allolampa-antracit",
+      "store": "IKEA",
+      "name": "KLÖVING Állólámpa - antracit",
+      "article": "305.400.16",
+      "type": "floor",
+      "shape": "spot",
+      "color": "#3a3938",
+      "colorName": "antracit",
+      "size": {
+        "d": 140,
+        "h": 1470
+      },
+      "socket": {
+        "type": "E27",
+        "count": 2
+      },
+      "bulbIncluded": false,
+      "emit": "spot",
+      "hexSource": "color-name",
+      "price": "10 990 Ft (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/kloeving-allolampa-antracit-30540016/",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-ikea-kinnahult-allolampa-koris-feher-15",
+      "store": "IKEA",
+      "name": "KINNAHULT Állólámpa - kőris/fehér 150 cm",
+      "article": "105.592.57",
+      "type": "floor",
+      "shape": "drum",
+      "color": "#eeeae2",
+      "colorName": "kőris/fehér",
+      "size": {
+        "d": 370,
+        "h": 1500
+      },
+      "socket": {
+        "type": "E27",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "diffuse",
+      "hexSource": "color-name",
+      "price": "24 990 Ft (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/kinnahult-allolampa-koris-feher-10559257/",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-ikea-skottorp-skaftet-allolampa-ivelt-v",
+      "store": "IKEA",
+      "name": "SKOTTORP / SKAFTET Állólámpa, ívelt - világosszürke",
+      "article": "493.859.87",
+      "type": "floor",
+      "shape": "arc",
+      "color": "#c9c6c0",
+      "colorName": "fekete váz / világosszürke ernyő",
+      "size": {
+        "d": 420,
+        "h": 2140
+      },
+      "socket": {
+        "type": "E27",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "diffuse",
+      "hexSource": "color-name",
+      "price": "33 990 Ft (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/skottorp-skaftet-allolampa-ivelt-vilagosszuerke-s49385987/",
+      "checkedAt": "2026-11-01",
+      "note": "Íves lámpa: a bura kb. 1,9 m-en lóg, a modell egyenes állólámpaként, alacsonyabb burával jeleníti meg."
+    },
+    {
+      "id": "lamp-jysk-allolampa-hugo-ma154-cm-fekete",
+      "store": "JYSK",
+      "name": "Állólámpa HUGO MA154 cm fekete",
+      "article": "4913108",
+      "type": "floor",
+      "shape": "arc",
+      "color": "#262524",
+      "colorName": "fekete",
+      "size": {
+        "h": 1540
+      },
+      "socket": {
+        "type": "E27",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "spot",
+      "hexSource": "color-name",
+      "price": "12 500 Ft (JYSK, 2026-11-01)",
+      "url": "https://jysk.hu/lakberendezes/vilagitas/lampak/allolampa-hugo-ma154-cm-fekete",
+      "checkedAt": "2026-11-01",
+      "note": "Íves lámpa; a modell egyenes állólámpaként jeleníti meg."
+    },
+    {
+      "id": "lamp-bonami-sotetszurke-natur-szinu-allolampa",
+      "store": "Bonami",
+      "brand": "Opviq lights",
+      "name": "Sötétszürke-natúr színű állólámpa textil búrával Tripod – Opviq lights",
+      "article": "1709100",
+      "type": "floor",
+      "shape": "drum",
+      "color": "#4a4746",
+      "colorName": "Sötétszürke-natúr",
+      "size": {
+        "d": 450,
+        "h": 1530
+      },
+      "socket": {
+        "type": "E27",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "diffuse",
+      "hexSource": "photo-sample",
+      "price": "31 660 Ft (Bonami, 2026-11-01)",
+      "url": "https://www.bonami.hu/p/sotetszurke-natur-szinu-allolampa-textil-buraval-magassag-153-cm-tripod-opviq-lights",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-bonami-natur-szinu-allolampa-textil-burav",
+      "store": "Bonami",
+      "brand": "Kave Home",
+      "name": "Natúr színű állólámpa textil búrával Benicarlo – Kave Home",
+      "article": "1587708",
+      "type": "floor",
+      "shape": "cone",
+      "color": "#e3d6bf",
+      "colorName": "Natúr",
+      "size": {
+        "d": 430,
+        "h": 1490
+      },
+      "socket": {
+        "type": "E27",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "diffuse",
+      "hexSource": "photo-sample",
+      "price": "57 240 Ft (Bonami, 2026-11-01)",
+      "url": "https://www.bonami.hu/p/natur-szinu-allolampa-textil-buraval-magassag-149-cm-benicarlo-kave-home",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-bonami-fekete-allolampa-fem-buraval-dione",
+      "store": "Bonami",
+      "brand": "Kave Home",
+      "name": "Fekete állólámpa fém búrával Dione – Kave Home",
+      "article": "912672",
+      "type": "floor",
+      "shape": "cone",
+      "color": "#262524",
+      "colorName": "Fekete",
+      "size": {
+        "d": 205,
+        "h": 2200,
+        "proj": 1000
+      },
+      "socket": {
+        "type": "E14",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "spot",
+      "hexSource": "color-name",
+      "price": "76 450 Ft (Bonami, 2026-11-01)",
+      "url": "https://www.bonami.hu/p/fekete-allolampa-fem-buraval-magassag-220-cm-dione-kave-home",
+      "checkedAt": "2026-11-01",
+      "note": "Gémes olvasólámpa (kb. 1 m-es kinyúlás); a modell egyenes állólámpaként jeleníti meg."
+    },
+    {
+      "id": "lamp-praktike-rabalux-action-allolampa-olvasokar",
+      "store": "Praktiker",
+      "brand": "Rábalux",
+      "name": "Rábalux Action állólámpa olvasókarral fekete E27 max100W + E14 max25W",
+      "article": "287803 (Rábalux 4062)",
+      "type": "floor",
+      "shape": "uplight",
+      "color": "#262524",
+      "colorName": "fekete / fehér búrák",
+      "size": {
+        "h": 1780
+      },
+      "socket": {
+        "type": "E27",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "up",
+      "hexSource": "color-name",
+      "price": "7 999 Ft (Praktiker, 2026-11-01)",
+      "url": "https://www.praktiker.hu/lakberendezes-haztartas/vilagitas-lampa/allolampa/rabalux-action-allolampa-olvasokarral-fekete-e27-max100w-e14-max25w/p/287803",
+      "checkedAt": "2026-11-01",
+      "note": "E27 felfelé világító fej + E14 olvasókar; a modell csak az E27 fejjel számol."
+    },
+    {
+      "id": "lamp-ikea-nymane-fali-olvasolampa-antracit",
+      "store": "IKEA",
+      "name": "NYMÅNE Fali-/olvasólámpa - antracit",
+      "article": "504.152.24",
+      "type": "wall",
+      "shape": "spot",
+      "color": "#3a3938",
+      "colorName": "antracit",
+      "size": {
+        "d": 70,
+        "h": 110,
+        "proj": 150
+      },
+      "socket": {
+        "type": "GU10",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "spot",
+      "hexSource": "color-name",
+      "price": "5 990 Ft (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/nymane-fali-olvasolampa-antracit-50415224/",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-ikea-hektar-fali-csiptetos-spotlampa-so",
+      "store": "IKEA",
+      "name": "HEKTAR Fali/csíptetős spotlámpa - sötétszürke",
+      "article": "802.153.08",
+      "type": "wall",
+      "shape": "spot",
+      "color": "#4e4d4b",
+      "colorName": "sötétszürke",
+      "size": {
+        "d": 110,
+        "h": 150,
+        "proj": 220
+      },
+      "socket": {
+        "type": "E14",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "spot",
+      "hexSource": "color-name",
+      "price": "4 990 Ft (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/hektar-fali-csiptetos-spotlampa-soetetszuerke-80215308/",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-bonami-fekete-fem-fali-lampa-manie-kave-h",
+      "store": "Bonami",
+      "brand": "Kave Home",
+      "name": "Fekete fém fali lámpa Manie – Kave Home",
+      "article": "1827562",
+      "type": "wall",
+      "shape": "spot",
+      "color": "#262524",
+      "colorName": "Fekete",
+      "size": {
+        "d": 70,
+        "h": 125,
+        "proj": 165
+      },
+      "socket": {
+        "type": "E14",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "spot",
+      "hexSource": "color-name",
+      "price": "13 830 Ft (Bonami, 2026-11-01)",
+      "url": "https://www.bonami.hu/p/fekete-fem-fali-lampa-manie-kave-home",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-bonami-fekete-fali-lampa-dione-kave-home",
+      "store": "Bonami",
+      "brand": "Kave Home",
+      "name": "Fekete fali lámpa Dione – Kave Home",
+      "article": "1654460",
+      "type": "wall",
+      "shape": "cone",
+      "color": "#262524",
+      "colorName": "Fekete",
+      "size": {
+        "d": 205,
+        "h": 570,
+        "proj": 350
+      },
+      "socket": {
+        "type": "E14",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "spot",
+      "hexSource": "color-name",
+      "price": "38 410 Ft (Bonami, 2026-11-01)",
+      "url": "https://www.bonami.hu/p/fekete-fali-lampa-dione-kave-home-1",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-bonami-fekete-bezs-konnektorhoz-csatlakoz",
+      "store": "Bonami",
+      "brand": "Markslöjd",
+      "name": "Fekete-bézs konnektorhoz csatlakoztatható fali lámpa Amar – Markslöjd",
+      "article": "1818372",
+      "type": "wall",
+      "shape": "cone",
+      "color": "#ccb7a0",
+      "colorName": "Fekete-bézs",
+      "size": {
+        "h": 310,
+        "proj": 260
+      },
+      "socket": {
+        "type": "E14",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "diffuse",
+      "hexSource": "photo-sample",
+      "price": "28 150 Ft (Bonami, 2026-11-01)",
+      "url": "https://www.bonami.hu/p/fekete-bezs-konnektorhoz-csatlakoztathato-fali-lampa-amar-markslojd",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-bonami-fekete-fali-lampa-peak-markslojd",
+      "store": "Bonami",
+      "brand": "Markslöjd",
+      "name": "Fekete fali lámpa Peak - Markslöjd",
+      "article": "1472748",
+      "type": "wall",
+      "shape": "cone",
+      "color": "#262524",
+      "colorName": "Fekete",
+      "size": {
+        "h": 220
+      },
+      "socket": {
+        "type": "E14",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "spot",
+      "hexSource": "color-name",
+      "price": "20 160 Ft (Bonami, 2026-11-01)",
+      "url": "https://www.bonami.hu/p/fekete-fali-lampa-peak-markslojd",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-watt-web-rabalux-alfons-fali-lampa-fekete",
+      "store": "Watt Webshop",
+      "brand": "Rábalux",
+      "name": "Rábalux Alfons fali lámpa, fekete",
+      "article": "4504 (shop W2022375)",
+      "type": "wall",
+      "shape": "cone",
+      "color": "#262524",
+      "colorName": "fekete-króm",
+      "size": {
+        "d": 120,
+        "h": 280,
+        "proj": 340
+      },
+      "socket": {
+        "type": "E27",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "spot",
+      "hexSource": "color-name",
+      "price": "11 990 Ft (Watt Webshop, 2026-11-01)",
+      "url": "https://wattwebshop.hu/rabalux-alfons-fali-lampa-fekete",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-ikea-tertial-asztali-lampa-sotetszurke",
+      "store": "IKEA",
+      "name": "TERTIAL Asztali lámpa - sötétszürke",
+      "article": "503.553.95",
+      "type": "table",
+      "shape": "cone",
+      "color": "#4e4d4b",
+      "colorName": "sötétszürke",
+      "size": {
+        "d": 170
+      },
+      "socket": {
+        "type": "E27",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "spot",
+      "hexSource": "color-name",
+      "price": "5 990 Ft (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/tertial-asztali-lampa-soetetszuerke-50355395/",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-jysk-asztali-lampa-patrik-atm14xma45cm",
+      "store": "JYSK",
+      "name": "Asztali lámpa PATRIK ÁTM14xMA45cm fekete",
+      "article": "4911413",
+      "type": "table",
+      "shape": "cone",
+      "color": "#262524",
+      "colorName": "fekete",
+      "size": {
+        "d": 140,
+        "h": 450
+      },
+      "socket": {
+        "type": "E14",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "spot",
+      "hexSource": "color-name",
+      "price": "9 990 Ft (JYSK, 2026-11-01)",
+      "url": "https://jysk.hu/lakberendezes/vilagitas/lampak/asztali-lampa-patrik-atm14xma45cm-fekete",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-bonami-fekete-fem-asztali-lampa-manie-kav",
+      "store": "Bonami",
+      "brand": "Kave Home",
+      "name": "Fekete fém asztali lámpa Manie – Kave Home",
+      "article": "1827946",
+      "type": "table",
+      "shape": "spot",
+      "color": "#262524",
+      "colorName": "Fekete",
+      "size": {
+        "d": 70,
+        "h": 486
+      },
+      "socket": {
+        "type": "E14",
+        "count": 1
+      },
+      "emit": "spot",
+      "hexSource": "color-name",
+      "price": "30 730 Ft (Bonami, 2026-11-01)",
+      "url": "https://www.bonami.hu/p/fekete-fem-asztali-lampa-magassag-49-cm-manie-kave-home",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-ikea-tvarhand-asztali-lampa-fekete-bamb",
+      "store": "IKEA",
+      "name": "TVÄRHAND Asztali lámpa - fekete/bambusz",
+      "article": "905.108.94",
+      "type": "table",
+      "shape": "other",
+      "color": "#262524",
+      "colorName": "fekete/bambusz",
+      "size": {
+        "h": 470
+      },
+      "socket": {
+        "type": "E27",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "diffuse",
+      "hexSource": "color-name",
+      "price": "4 990 Ft (IKEA, 2026-11-01)",
+      "url": "https://www.ikea.com/hu/hu/p/tvaerhand-asztali-lampa-fekete-bambusz-90510894/",
+      "checkedAt": "2026-11-01"
+    },
+    {
+      "id": "lamp-bonami-fekete-natur-szinu-asztali-lampa-j",
+      "store": "Bonami",
+      "brand": "Markslöjd",
+      "name": "Fekete-natúr színű asztali lámpa juta búrával Montagna – Markslöjd",
+      "article": "1592166",
+      "type": "table",
+      "shape": "drum",
+      "color": "#b39167",
+      "colorName": "Fekete-natúr",
+      "size": {
+        "d": 180,
+        "h": 325
+      },
+      "socket": {
+        "type": "E14",
+        "count": 1
+      },
+      "bulbIncluded": false,
+      "emit": "diffuse",
+      "hexSource": "photo-sample",
+      "price": "13 720 Ft (Bonami, 2026-11-01)",
+      "url": "https://www.bonami.hu/p/fekete-natur-szinu-asztali-lampa-juta-buraval-magassag-32-5-cm-montagna-markslojd",
+      "checkedAt": "2026-11-01"
+    }
+  ]
+}

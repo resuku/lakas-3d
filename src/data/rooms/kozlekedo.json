@@ -1,0 +1,453 @@
+{
+  "id": "kozlekedo",
+  "name": "Közlekedő",
+  "source": "V14 tervezési napló – 40 Előszoba + ajtók (E-M002–E-M013, E-S002, E-S004); OpenPlan3D szkennelés (2026-11-01); fotók: Képek/Előszoba képek. Koordináták: x = WC és fürdő fala → nappali felőli közös fal, z = előszoba felőli vég → háló felőli fal.",
+  "size": {
+    "x": {
+      "v": 840,
+      "s": "D",
+      "note": "Keskeny közlekedő, két ponton mérve (844 / 836 mm) – átlag. A szkennelés 919 mm-t ad, mert a közös fal síkja a fal belsejébe esik (E-S002).",
+      "src": [
+        {
+          "sheet": "40 Előszoba + ajtók",
+          "key": "E-M005",
+          "n": 844
+        },
+        {
+          "sheet": "40 Előszoba + ajtók",
+          "key": "E-M005",
+          "n": 836
+        }
+      ]
+    },
+    "z": {
+      "v": 3317,
+      "s": "D",
+      "note": "Háló ajtó vonala → konyha ajtó vonala (4718 mm) mínusz az előszoba szélessége (1401 mm). A szkennelés 3264 mm-t ad.",
+      "src": [
+        {
+          "sheet": "40 Előszoba + ajtók",
+          "key": "E-M002",
+          "n": 4718
+        },
+        {
+          "sheet": "40 Előszoba + ajtók",
+          "key": "E-M004",
+          "n": 1401
+        }
+      ]
+    },
+    "h": {
+      "v": 2608,
+      "s": "M",
+      "note": "Belmagasság az előszobában.",
+      "src": [
+        {
+          "sheet": "40 Előszoba + ajtók",
+          "key": "E-M003",
+          "n": 2608
+        }
+      ]
+    }
+  },
+  "north": {
+    "wall": "z1",
+    "s": "D",
+    "note": "A nappali tájolásából, a szkennelés közös koordinátarendszerén át."
+  },
+  "walls": {
+    "z0": {
+      "name": "Előszoba felőli vég (nyitott)",
+      "t": {
+        "v": 100,
+        "s": "A",
+        "note": "Nincs fal: teljes szélességű átjáró az előszobába."
+      }
+    },
+    "x1": {
+      "name": "Nappali felőli közös fal",
+      "t": {
+        "v": 180,
+        "s": "D",
+        "note": "A két oldalról szkennelt közös fal síkjából (E-S002, N-S007).",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "E-S002",
+            "n": 180
+          }
+        ]
+      }
+    },
+    "z1": {
+      "name": "Háló felőli fal",
+      "t": {
+        "v": 100,
+        "s": "A",
+        "note": "Falvastagság nincs mérve."
+      }
+    },
+    "x0": {
+      "name": "WC és fürdő fala",
+      "t": {
+        "v": 100,
+        "s": "A",
+        "note": "Falvastagság nincs mérve."
+      }
+    }
+  },
+  "openings": [
+    {
+      "id": "P-01",
+      "kind": "passage",
+      "label": "Átjáró az előszobába",
+      "wall": "z0",
+      "offset": {
+        "v": 0,
+        "s": "D",
+        "note": "A teljes szélesség."
+      },
+      "width": {
+        "v": 840,
+        "s": "D",
+        "note": "A közlekedő szélessége.",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "E-M005",
+            "n": 844
+          },
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "E-M005",
+            "n": 836
+          }
+        ]
+      },
+      "height": {
+        "v": 2608,
+        "s": "A",
+        "note": "Teljes belmagasság: a fotókon áthidaló nem látszik."
+      },
+      "bottom": {
+        "v": 0,
+        "s": "A",
+        "note": "Padlószint."
+      }
+    },
+    {
+      "id": "AJ-05",
+      "kind": "door",
+      "label": "WC",
+      "wall": "x0",
+      "offset": {
+        "v": 1003,
+        "s": "S",
+        "note": "A szkennelt nyílás közepe az előszoba felőli végtől 1309 mm; a mért 612 mm-es szélességgel középre igazítva."
+      },
+      "width": {
+        "v": 612,
+        "s": "M",
+        "note": "Szabad nyílás; kb. 80 mm-es küszöb.",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "E-M008",
+            "n": 612
+          }
+        ]
+      },
+      "height": {
+        "v": 1940,
+        "s": "M",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "E-M008",
+            "n": 1940
+          }
+        ]
+      },
+      "bottom": {
+        "v": 0,
+        "s": "A",
+        "note": "Padlószint (a küszöb nincs modellezve)."
+      },
+      "leaf": {
+        "width": {
+          "v": 600,
+          "s": "A",
+          "note": "Becsült lapszélesség."
+        },
+        "height": {
+          "v": 1930,
+          "s": "A",
+          "note": "Becsült lapmagasság."
+        },
+        "hinge": "start",
+        "existing": true
+      },
+      "trim": true,
+      "note": "Zsanéroldal és nyitásirány a fotó alapján (a közlekedő felé nyílik, a kilincs a háló felőli oldalon) – nincs felmérve. Az egységes ajtócserébe bevonható."
+    },
+    {
+      "id": "AJ-04",
+      "kind": "door",
+      "label": "Fürdő",
+      "wall": "x0",
+      "offset": {
+        "v": 2186,
+        "s": "S",
+        "note": "A szkennelt nyílás közepe az előszoba felőli végtől 2492 mm; a mért 612 mm-es szélességgel középre igazítva."
+      },
+      "width": {
+        "v": 612,
+        "s": "M",
+        "note": "Szabad nyílás; kb. 80 mm-es küszöb.",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "E-M009",
+            "n": 612
+          }
+        ]
+      },
+      "height": {
+        "v": 1940,
+        "s": "M",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "E-M009",
+            "n": 1940
+          }
+        ]
+      },
+      "bottom": {
+        "v": 0,
+        "s": "A",
+        "note": "Padlószint (a küszöb nincs modellezve)."
+      },
+      "leaf": {
+        "width": {
+          "v": 600,
+          "s": "A",
+          "note": "Becsült lapszélesség."
+        },
+        "height": {
+          "v": 1930,
+          "s": "A",
+          "note": "Becsült lapmagasság."
+        },
+        "hinge": "start",
+        "existing": true
+      },
+      "trim": true,
+      "note": "Zsanéroldal és nyitásirány feltételezés. Az egységes ajtócserébe bevonható."
+    },
+    {
+      "id": "AJ-08",
+      "kind": "door",
+      "label": "Átjáró a nappaliba",
+      "wall": "x1",
+      "offset": {
+        "v": 1943,
+        "s": "S",
+        "note": "A szkennelt nyílás közepe az előszoba felőli végtől 2335 mm; a mért 782 mm-es szélességgel középre igazítva."
+      },
+      "width": {
+        "v": 782,
+        "s": "M",
+        "note": "Szabad nyílás.",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "AJ-08",
+            "n": 782
+          }
+        ]
+      },
+      "height": {
+        "v": 2015,
+        "s": "M",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "AJ-08",
+            "n": 2015
+          }
+        ]
+      },
+      "bottom": {
+        "v": 0,
+        "s": "A",
+        "note": "Padlószint."
+      },
+      "trim": true,
+      "borrowLight": 0.1,
+      "note": "Ajtólap nélkül marad (ND-004). A nappali felől beszűrődő nappali fény egyszerűsítve számolva."
+    },
+    {
+      "id": "AJ-01",
+      "kind": "door",
+      "label": "Háló",
+      "wall": "z1",
+      "offset": {
+        "v": 0,
+        "s": "S",
+        "note": "A szkennelés szerint a nyílás a WC-fal felőli sarokban kezdődik; a mért 815 mm-es tokkal 25 mm marad a közös falig."
+      },
+      "width": {
+        "v": 815,
+        "s": "M",
+        "note": "Tok külső szélessége kb. 815 mm.",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "AJ-01",
+            "n": 815
+          }
+        ]
+      },
+      "height": {
+        "v": 2078,
+        "s": "D",
+        "note": "Tok külső magassága 2075 / 2080 mm.",
+        "src": [
+          {
+            "sheet": "10 Háló",
+            "key": "M-026",
+            "n": 2075
+          },
+          {
+            "sheet": "10 Háló",
+            "key": "M-026",
+            "n": 2080
+          }
+        ]
+      },
+      "bottom": {
+        "v": 0,
+        "s": "A",
+        "note": "Padlószint."
+      },
+      "leaf": {
+        "width": {
+          "v": 720,
+          "s": "M",
+          "note": "Ajtólap kb. 720 mm.",
+          "src": [
+            {
+              "sheet": "10 Háló",
+              "key": "M-023",
+              "n": 720
+            }
+          ]
+        },
+        "height": {
+          "v": 2030,
+          "s": "M",
+          "note": "Ajtólap kb. 2030 mm.",
+          "src": [
+            {
+              "sheet": "10 Háló",
+              "key": "M-024",
+              "n": 2030
+            }
+          ]
+        },
+        "hinge": "start",
+        "existing": true,
+        "away": true
+      },
+      "trim": true,
+      "note": "A hálóba nyílik, ezért a közlekedő felől csak a csukott lap látszik; a zsanéroldal ebből a nézetből feltételezés. Nyitott hálóajtó mellett a háló ablakából beszűrődő nappali fény egyszerűsítve számolva.",
+      "borrowLight": 0.05
+    }
+  ],
+  "radiators": [],
+  "pipes": [],
+  "floor": {
+    "pattern": "tile",
+    "tone": "#CFC6B8",
+    "plank": {
+      "l": 600,
+      "w": 600
+    },
+    "note": "Alternatíva: járólap (pl. semleges, meleg árnyalatú porcelán 60 × 60 cm – szín és méret helyőrző). A meglévő bézsesszürke járólap cserélődik (user, 2026-11-02)."
+  },
+  "beds": [],
+  "ceilingLights": [
+    {
+      "id": "L-K1",
+      "label": "Közlekedő lámpa",
+      "x": {
+        "v": 420,
+        "s": "A",
+        "note": "A közlekedő tengelyében."
+      },
+      "z": {
+        "v": 2490,
+        "s": "A",
+        "note": "A fürdőajtó közelében (E-M011, fotóval dokumentált hely).",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "E-M011",
+            "n": 230
+          }
+        ]
+      }
+    }
+  ],
+  "accentLights": [],
+  "cameras": [
+    {
+      "name": "Előszoba felől",
+      "pos": [
+        420,
+        1600,
+        150
+      ],
+      "target": [
+        420,
+        1250,
+        3317
+      ]
+    },
+    {
+      "name": "Háló felől",
+      "pos": [
+        420,
+        1600,
+        3150
+      ],
+      "target": [
+        420,
+        1250,
+        0
+      ]
+    },
+    {
+      "name": "WC-fal felé",
+      "pos": [
+        800,
+        1600,
+        1500
+      ],
+      "target": [
+        0,
+        1150,
+        1900
+      ]
+    }
+  ],
+  "conflicts": [
+    "Hossz: a napló E-M002 (4718) és E-M004 (1401) különbsége 3317 mm; a szkennelés 3264 mm. A modell a levezetett értéket használja, a nyílások helyét a szkennelésből (S), az előszoba felőli végtől méri – a háló felőli végen ezért kb. 50 mm bizonytalanság van."
+  ],
+  "missing": [
+    "A közlekedő hossza közvetlen méréssel (előszoba vonala → háló felőli fal).",
+    "A WC- és fürdőajtó nyitásiránya és zsanéroldala (fotó alapján közelítve).",
+    "Falvastagságok (WC/fürdő fala, háló felőli fal)."
+  ]
+}

@@ -1,0 +1,459 @@
+{
+  "name": "nappali-kozlekedo",
+  "source": "openplan-1C88D979-9751-4EDA-8FCB-92BC939D6138.json",
+  "importedAt": "2026-11-01",
+  "note": "RoomPlan-szkennelés (S). A falak vastagság nélküli síkok; a mindkét oldalról szkennelt falak síkja a fal belsejébe esik.",
+  "rotationDeg": 2.4,
+  "walls": [
+    {
+      "id": "W00",
+      "a": [
+        2621,
+        0
+      ],
+      "b": [
+        6168,
+        0
+      ],
+      "length": 3547,
+      "height": 2618,
+      "conf": "high"
+    },
+    {
+      "id": "W01",
+      "a": [
+        1702,
+        4561
+      ],
+      "b": [
+        1377,
+        4561
+      ],
+      "length": 325,
+      "height": 2618,
+      "conf": "high"
+    },
+    {
+      "id": "W02",
+      "a": [
+        6168,
+        6180
+      ],
+      "b": [
+        5017,
+        6180
+      ],
+      "length": 1151,
+      "height": 2618,
+      "conf": "high"
+    },
+    {
+      "id": "W03",
+      "a": [
+        6168,
+        0
+      ],
+      "b": [
+        6168,
+        6180
+      ],
+      "length": 6180,
+      "height": 2618,
+      "conf": "high"
+    },
+    {
+      "id": "W04",
+      "a": [
+        6168,
+        6180
+      ],
+      "b": [
+        6168,
+        7859
+      ],
+      "length": 1679,
+      "height": 2618,
+      "conf": "high"
+    },
+    {
+      "id": "W05",
+      "a": [
+        2621,
+        3204
+      ],
+      "b": [
+        2621,
+        0
+      ],
+      "length": 3204,
+      "height": 2618,
+      "conf": "high"
+    },
+    {
+      "id": "W06",
+      "a": [
+        6168,
+        7859
+      ],
+      "b": [
+        5017,
+        7859
+      ],
+      "length": 1151,
+      "height": 2618,
+      "conf": "high"
+    },
+    {
+      "id": "W07",
+      "a": [
+        5017,
+        6180
+      ],
+      "b": [
+        5017,
+        7859
+      ],
+      "length": 1679,
+      "height": 2618,
+      "conf": "high"
+    },
+    {
+      "id": "W08",
+      "a": [
+        0,
+        4595
+      ],
+      "b": [
+        0,
+        3204
+      ],
+      "length": 1391,
+      "height": 2618,
+      "conf": "high"
+    },
+    {
+      "id": "W09",
+      "a": [
+        2621,
+        7859
+      ],
+      "b": [
+        1702,
+        7859
+      ],
+      "length": 919,
+      "height": 2618,
+      "conf": "high"
+    },
+    {
+      "id": "W10",
+      "a": [
+        1527,
+        4595
+      ],
+      "b": [
+        0,
+        4595
+      ],
+      "length": 1527,
+      "height": 2618,
+      "conf": "high"
+    },
+    {
+      "id": "W11",
+      "a": [
+        1702,
+        7859
+      ],
+      "b": [
+        1702,
+        4561
+      ],
+      "length": 3299,
+      "height": 2618,
+      "conf": "high"
+    },
+    {
+      "id": "W12",
+      "a": [
+        5017,
+        7859
+      ],
+      "b": [
+        2621,
+        7859
+      ],
+      "length": 2396,
+      "height": 2618,
+      "conf": "high"
+    },
+    {
+      "id": "W13",
+      "a": [
+        0,
+        3204
+      ],
+      "b": [
+        2621,
+        3204
+      ],
+      "length": 2621,
+      "height": 2618,
+      "conf": "high"
+    },
+    {
+      "id": "W14",
+      "a": [
+        2621,
+        7859
+      ],
+      "b": [
+        2621,
+        3204
+      ],
+      "length": 4655,
+      "height": 2618,
+      "conf": "high"
+    }
+  ],
+  "openings": [
+    {
+      "id": "D00",
+      "kind": "door",
+      "wall": "W11",
+      "width": 678,
+      "height": 2098,
+      "bottom": 0,
+      "a": [
+        1702,
+        6243
+      ],
+      "b": [
+        1702,
+        5565
+      ],
+      "conf": "medium",
+      "offset": 1616
+    },
+    {
+      "id": "D01",
+      "kind": "door",
+      "wall": "W11",
+      "width": 666,
+      "height": 2104,
+      "bottom": 0,
+      "a": [
+        1702,
+        7420
+      ],
+      "b": [
+        1702,
+        6754
+      ],
+      "conf": "high",
+      "offset": 439
+    },
+    {
+      "id": "D02",
+      "kind": "door",
+      "wall": "W07",
+      "width": 1652,
+      "height": 2441,
+      "bottom": 0,
+      "a": [
+        5017,
+        6207
+      ],
+      "b": [
+        5017,
+        7859
+      ],
+      "conf": "high",
+      "offset": 27
+    },
+    {
+      "id": "D03",
+      "kind": "door",
+      "wall": "W08",
+      "width": 834,
+      "height": 2003,
+      "bottom": 0,
+      "a": [
+        0,
+        4418
+      ],
+      "b": [
+        0,
+        3584
+      ],
+      "conf": "high",
+      "offset": 177
+    },
+    {
+      "id": "D04",
+      "kind": "door",
+      "wall": "W09",
+      "width": 787,
+      "height": 2104,
+      "bottom": 0,
+      "a": [
+        2489,
+        7859
+      ],
+      "b": [
+        1702,
+        7859
+      ],
+      "conf": "medium",
+      "offset": 132
+    },
+    {
+      "id": "O00",
+      "kind": "opening",
+      "wall": "W14",
+      "width": 869,
+      "height": 2000,
+      "bottom": 0,
+      "a": [
+        2621,
+        4554
+      ],
+      "b": [
+        2621,
+        3685
+      ],
+      "conf": "high",
+      "offset": 3305
+    },
+    {
+      "id": "O01",
+      "kind": "opening",
+      "wall": "W12",
+      "width": 850,
+      "height": 2020,
+      "bottom": 0,
+      "a": [
+        4889,
+        7859
+      ],
+      "b": [
+        4039,
+        7859
+      ],
+      "conf": "high",
+      "offset": 128
+    },
+    {
+      "id": "O02",
+      "kind": "opening",
+      "wall": "W13",
+      "width": 773,
+      "height": 2040,
+      "bottom": 0,
+      "a": [
+        1075,
+        3204
+      ],
+      "b": [
+        1848,
+        3204
+      ],
+      "conf": "high",
+      "offset": 1075
+    },
+    {
+      "id": "O03",
+      "kind": "opening",
+      "wall": "W14",
+      "width": 719,
+      "height": 2040,
+      "bottom": 0,
+      "a": [
+        2621,
+        7289
+      ],
+      "b": [
+        2621,
+        6570
+      ],
+      "conf": "high",
+      "offset": 570
+    },
+    {
+      "id": "O04",
+      "kind": "opening",
+      "wall": "W10",
+      "width": 552,
+      "height": 2318,
+      "bottom": 0,
+      "a": [
+        1527,
+        4595
+      ],
+      "b": [
+        976,
+        4595
+      ],
+      "conf": "high",
+      "offset": 0
+    }
+  ],
+  "objects": [
+    {
+      "id": "T00",
+      "kind": "chair",
+      "center": [
+        2908,
+        4994
+      ],
+      "size": [
+        505,
+        924,
+        566
+      ],
+      "conf": "low"
+    },
+    {
+      "id": "T01",
+      "kind": "storage",
+      "center": [
+        2266,
+        3422
+      ],
+      "size": [
+        710,
+        1205,
+        435
+      ],
+      "conf": "low"
+    },
+    {
+      "id": "T02",
+      "kind": "chair",
+      "center": [
+        2914,
+        5821
+      ],
+      "size": [
+        547,
+        977,
+        568
+      ],
+      "conf": "low"
+    },
+    {
+      "id": "T03",
+      "kind": "table",
+      "center": [
+        5702,
+        5067
+      ],
+      "size": [
+        1686,
+        838,
+        646
+      ],
+      "conf": "high"
+    }
+  ]
+}

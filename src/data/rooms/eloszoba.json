@@ -1,0 +1,393 @@
+{
+  "id": "eloszoba",
+  "name": "Előszoba",
+  "source": "V14 tervezési napló – 40 Előszoba + ajtók (E-M001–E-M013, E-S001–E-S004); OpenPlan3D szkennelés (2026-11-01); fotók: Képek/Előszoba képek. Koordináták: x = bejárati fal → nappali felőli közös fal, z = konyhafal → tároló és közlekedő felőli fal.",
+  "size": {
+    "x": {
+      "v": 2541,
+      "s": "M",
+      "note": "Bejárati ajtó fala → nappali felőli közös fal. A szkennelés a közös fal felével korrigálva 2530 mm (E-S003).",
+      "src": [
+        {
+          "sheet": "40 Előszoba + ajtók",
+          "key": "E-M001",
+          "n": 2541
+        }
+      ]
+    },
+    "z": {
+      "v": 1396,
+      "s": "D",
+      "note": "Két ponton mérve (1401 / 1390 mm), a falak enyhén nem párhuzamosak – átlag. Szkennelés: 1391 mm (E-S001).",
+      "src": [
+        {
+          "sheet": "40 Előszoba + ajtók",
+          "key": "E-M004",
+          "n": 1401
+        },
+        {
+          "sheet": "40 Előszoba + ajtók",
+          "key": "E-M004",
+          "n": 1390
+        }
+      ]
+    },
+    "h": {
+      "v": 2608,
+      "s": "M",
+      "note": "Belmagasság az előszobában.",
+      "src": [
+        {
+          "sheet": "40 Előszoba + ajtók",
+          "key": "E-M003",
+          "n": 2608
+        }
+      ]
+    }
+  },
+  "north": {
+    "wall": "z1",
+    "s": "D",
+    "note": "A nappali tájolásából (északi fal = dolgozó felőli fal), a szkennelés közös koordinátarendszerén át."
+  },
+  "walls": {
+    "z0": {
+      "name": "Konyhafal",
+      "t": {
+        "v": 100,
+        "s": "A",
+        "note": "Falvastagság nincs mérve."
+      }
+    },
+    "x1": {
+      "name": "Nappali felőli közös fal",
+      "t": {
+        "v": 180,
+        "s": "D",
+        "note": "A két oldalról szkennelt közös fal síkjából (E-S002, N-S007).",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "E-S002",
+            "n": 180
+          }
+        ]
+      }
+    },
+    "z1": {
+      "name": "Tároló és közlekedő felőli fal",
+      "t": {
+        "v": 100,
+        "s": "A",
+        "note": "Falvastagság nincs mérve."
+      }
+    },
+    "x0": {
+      "name": "Bejárati fal",
+      "t": {
+        "v": 200,
+        "s": "A",
+        "note": "Lépcsőházi fal; vastagság nincs mérve."
+      }
+    }
+  },
+  "openings": [
+    {
+      "id": "BE-01",
+      "kind": "door",
+      "label": "Bejárati ajtó",
+      "wall": "x0",
+      "offset": {
+        "v": 380,
+        "s": "S",
+        "note": "Szkennelés (nappali-kozlekedo.json): a nyílás a konyhafaltól 380 mm-re kezdődik."
+      },
+      "width": {
+        "v": 834,
+        "s": "S",
+        "note": "Szkennelt nyílásszélesség; lézeres mérés nincs (±65 mm)."
+      },
+      "height": {
+        "v": 2003,
+        "s": "S",
+        "note": "Szkennelt nyílásmagasság."
+      },
+      "bottom": {
+        "v": 0,
+        "s": "A",
+        "note": "Padlószint."
+      },
+      "leaf": {
+        "width": {
+          "v": 800,
+          "s": "A",
+          "note": "A szkennelt nyílásból becsült lapszélesség."
+        },
+        "height": {
+          "v": 1990,
+          "s": "A",
+          "note": "Becsült lapmagasság."
+        },
+        "hinge": "end",
+        "existing": true,
+        "fixed": {
+          "color": "#392F30",
+          "style": "flat",
+          "note": "Sötétbarna kazettás biztonsági ajtó (fotó, IMG20260908174607.jpg; szín a fotóból). Nem része a beltéri ajtócserének."
+        }
+      },
+      "trim": true,
+      "note": "Zsanéroldal a fotó alapján (a kilincs a konyhafal felőli oldalon); a nyitásirány nincs felmérve."
+    },
+    {
+      "id": "AJ-03",
+      "kind": "door",
+      "label": "Konyha",
+      "wall": "z0",
+      "offset": {
+        "v": 1066,
+        "s": "S",
+        "note": "A szkennelt nyílás közepe a bejárati faltól 1462 mm; a mért 791 mm-es szélességgel középre igazítva."
+      },
+      "width": {
+        "v": 791,
+        "s": "M",
+        "note": "Szabad nyílás.",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "E-M006",
+            "n": 791
+          }
+        ]
+      },
+      "height": {
+        "v": 2035,
+        "s": "M",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "E-M006",
+            "n": 2035
+          }
+        ]
+      },
+      "bottom": {
+        "v": 0,
+        "s": "A",
+        "note": "Padlószint."
+      },
+      "trim": true,
+      "note": "Meglévő tok; a fotón ajtólap nem látszik, ezért lap nincs modellezve. A konyha felújítása parkoltatott. A konyha ablakából a nyitott ajtón át beszűrődő nappali fény egyszerűsítve számolva (a konyha nincs modellezve).",
+      "borrowLight": 0.1
+    },
+    {
+      "id": "AJ-07",
+      "kind": "door",
+      "label": "Átjáró a nappaliba",
+      "wall": "x1",
+      "offset": {
+        "v": 472,
+        "s": "S",
+        "note": "A szkennelt nyílás közepe a konyhafaltól 916 mm; a mért 886 mm-es szélességgel középre igazítva."
+      },
+      "width": {
+        "v": 886,
+        "s": "M",
+        "note": "Szabad nyílás.",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "AJ-07",
+            "n": 886
+          }
+        ]
+      },
+      "height": {
+        "v": 2017,
+        "s": "M",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "AJ-07",
+            "n": 2017
+          }
+        ]
+      },
+      "bottom": {
+        "v": 0,
+        "s": "A",
+        "note": "Padlószint."
+      },
+      "trim": true,
+      "borrowLight": 0.1,
+      "note": "Ajtólap nélkül marad (ND-004). A nappali felől beszűrődő nappali fény egyszerűsítve számolva."
+    },
+    {
+      "id": "AJ-06",
+      "kind": "door",
+      "label": "Tároló",
+      "wall": "z1",
+      "offset": {
+        "v": 976,
+        "s": "S",
+        "note": "A szkennelt szabad nyílás kezdete a bejárati faltól."
+      },
+      "width": {
+        "v": 552,
+        "s": "S",
+        "note": "Szkennelt szabad nyílás; a tok külső szélessége 780 mm (E-M012)."
+      },
+      "height": {
+        "v": 2040,
+        "s": "A",
+        "note": "A tok külső magassága 2085 mm (E-M007); a szabad nyílás becslés."
+      },
+      "bottom": {
+        "v": 0,
+        "s": "A",
+        "note": "Padlószint."
+      },
+      "trim": true,
+      "note": "Külön tárolóhelyiség. A fehér harmonikaajtó megszűnik; a tok a többi ajtóval egyező lesz (user, 2026-11-02). Ajtólap nem kerül ide (keskeny, legfeljebb kifelé nyílhatna); a takarás módja még nyitott – a modellben választható.",
+      "coverGroup": "tarolo-takaras"
+    },
+    {
+      "id": "P-01",
+      "kind": "passage",
+      "label": "Átjáró a közlekedőbe",
+      "wall": "z1",
+      "offset": {
+        "v": 1701,
+        "s": "D",
+        "note": "Az előszoba hossza (2541) mínusz a közlekedő szélessége (840 mm); a szkennelés 1702 mm-t ad."
+      },
+      "width": {
+        "v": 840,
+        "s": "D",
+        "note": "A közlekedő szélessége (E-M005, átlag).",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "E-M005",
+            "n": 844
+          },
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "E-M005",
+            "n": 836
+          }
+        ]
+      },
+      "height": {
+        "v": 2608,
+        "s": "A",
+        "note": "Teljes belmagasság: a fotókon áthidaló nem látszik."
+      },
+      "bottom": {
+        "v": 0,
+        "s": "A",
+        "note": "Padlószint."
+      }
+    }
+  ],
+  "radiators": [],
+  "pipes": [],
+  "floor": {
+    "pattern": "tile",
+    "tone": "#CFC6B8",
+    "plank": {
+      "l": 600,
+      "w": 600
+    },
+    "note": "Alternatíva: járólap (pl. semleges, meleg árnyalatú porcelán 60 × 60 cm – szín és méret helyőrző). A meglévő bézsesszürke járólap cserélődik (user, 2026-11-02)."
+  },
+  "beds": [],
+  "ceilingLights": [
+    {
+      "id": "L-E1",
+      "label": "Előszoba lámpa",
+      "x": {
+        "v": 1400,
+        "s": "A",
+        "note": "Kb. 1400 mm a bejárati ajtótól (E-M010, közelítő).",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "E-M010",
+            "n": 1400
+          }
+        ]
+      },
+      "z": {
+        "v": 698,
+        "s": "A",
+        "note": "A helyiség közepén; a napló 520 mm-es referenciája nem egyértelmű."
+      }
+    }
+  ],
+  "accentLights": [],
+  "cameras": [
+    {
+      "name": "Bejárattól",
+      "pos": [
+        300,
+        1600,
+        760
+      ],
+      "target": [
+        2541,
+        1300,
+        760
+      ]
+    },
+    {
+      "name": "Nappali felől",
+      "pos": [
+        2300,
+        1600,
+        700
+      ],
+      "target": [
+        0,
+        1250,
+        700
+      ]
+    },
+    {
+      "name": "Közlekedő felé",
+      "pos": [
+        500,
+        1600,
+        200
+      ],
+      "target": [
+        2300,
+        1250,
+        1396
+      ]
+    },
+    {
+      "name": "Konyha felé",
+      "pos": [
+        1300,
+        1600,
+        1300
+      ],
+      "target": [
+        1460,
+        1100,
+        0
+      ]
+    }
+  ],
+  "conflicts": [
+    "Hossz: a lézeres E-M001 2541 mm, a szkennelés a közös fal felével korrigálva 2530 mm (E-S003, −11 mm). A modell a lézeres értéket használja."
+  ],
+  "missing": [
+    "Bejárati ajtó lézeres mérete és nyitásiránya (a modell a szkennelt 834 × 2003 mm-es nyílást mutatja).",
+    "Tároló szabad nyílása lézerrel (szkennelés 552 mm; tok külső 780 mm).",
+    "Falvastagságok (konyhafal, tároló fala, bejárati fal).",
+    "Fűtőtest az előszobában (a fotókon nem látszik; nincs felmérve)."
+  ]
+}

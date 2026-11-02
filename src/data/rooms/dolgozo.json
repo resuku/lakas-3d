@@ -1,0 +1,118 @@
+{
+  "id": "dolgozo",
+  "name": "Dolgozó",
+  "source": "V14 tervezési napló – 30 Dolgozó; fotók: Képek/Dolgozó képek. Koordináták: x = háló felőli fal → külső oldalfal, z = ajtófal → ablakfal.",
+  "size": {
+    "x": {
+      "v": 2428,
+      "s": "D",
+      "note": "Szélesség két lézeres mérés középértéke (2426 / 2430 mm).",
+      "src": [
+        { "sheet": "30 Dolgozó", "key": "D-M002", "n": 2426 },
+        { "sheet": "30 Dolgozó", "key": "Szélesség – 2. pont", "n": 2430 }
+      ]
+    },
+    "z": {
+      "v": 3430.8,
+      "s": "M",
+      "note": "Hossz a nyílás falától az ablakfalig, lézeres mérés.",
+      "src": [{ "sheet": "30 Dolgozó", "key": "D-M001", "n": 3430.8 }]
+    },
+    "h": {
+      "v": 2628,
+      "s": "M",
+      "note": "Belmagasság, két pont, 0 mm eltérés.",
+      "src": [{ "sheet": "30 Dolgozó", "key": "D-M003", "n": 2628 }]
+    }
+  },
+  "north": {
+    "wall": "z1",
+    "s": "A",
+    "note": "Az ablakfal a hálóéval azonos homlokzaton van (lakberendezői alaprajz topológiája), ezért északi tájolás feltételezve. Ellenőrzendő."
+  },
+  "walls": {
+    "z0": { "name": "Ajtófal (közlekedő/étkező felé)", "t": { "v": 100, "s": "A", "note": "Belső fal; vastagság a lakberendezői alaprajzból (legacy), nem mért." } },
+    "x1": { "name": "Külső oldalfal", "t": { "v": 200, "s": "A", "note": "Külső fal; vastagság a lakberendezői alaprajzból (legacy), nem mért." } },
+    "z1": { "name": "Ablakfal", "t": { "v": 200, "s": "A", "note": "Külső fal; vastagság a lakberendezői alaprajzból (legacy), nem mért." } },
+    "x0": { "name": "Háló felőli gipszkarton fal", "t": { "v": 100, "s": "A", "note": "Gipszkarton válaszfal, marad; vastagság nem mért." } }
+  },
+  "openings": [
+    {
+      "id": "AJ-02",
+      "kind": "door",
+      "label": "Ajtónyílás (ajtólap nélkül)",
+      "wall": "z0",
+      "offset": { "v": 346, "s": "A", "note": "A háló felőli faltól fotóbecslés (IMG20260905184200.jpg, ±50 mm)." },
+      "width": { "v": 785, "s": "M", "note": "Szabad nyílásszélesség.", "src": [{ "sheet": "30 Dolgozó", "key": "D-M007", "n": 785 }] },
+      "height": { "v": 1982, "s": "M", "note": "A közlekedő járólap síkjától.", "src": [{ "sheet": "30 Dolgozó", "key": "D-M008", "n": 1982 }] },
+      "bottom": { "v": 0, "s": "A", "note": "Padlószint; laminált–járólap átmenet kb. 2–3 mm (D-M009)." },
+      "leaf": {
+        "width": { "v": 735, "s": "A", "note": "Új ajtólap esetén a nyílásból becsült lapszélesség." },
+        "height": { "v": 1950, "s": "A", "note": "Új ajtólap esetén becsült lapmagasság." },
+        "hinge": "start",
+        "existing": false,
+        "optional": true
+      },
+      "trim": true,
+      "note": "Jelenleg nincs ajtólap; új ajtó opcionális (40 Előszoba + ajtók – AJ-02)."
+    },
+    {
+      "id": "ABL-D",
+      "kind": "window",
+      "label": "Ablak",
+      "wall": "z1",
+      "offset": { "v": 565, "s": "A", "note": "A háló felőli faltól fotóbecslés (IMG20260905184303.jpg, ±60 mm)." },
+      "width": { "v": 1261, "s": "M", "note": "Lézeres kontroll; mérőszalaggal kb. 1265–1270 mm.", "src": [{ "sheet": "30 Dolgozó", "key": "D-M004", "n": 1261 }] },
+      "height": { "v": 1520, "s": "M", "note": "Kb. érték; a párkány geometriája miatt korrigált.", "src": [{ "sheet": "30 Dolgozó", "key": "D-M005", "n": 1520 }] },
+      "bottom": { "v": 947, "s": "M", "note": "Padlótól a belső párkány tetejéig.", "src": [{ "sheet": "30 Dolgozó", "key": "D-M006", "n": 947 }] },
+      "sill": { "depth": { "v": 180, "s": "A", "note": "Belső párkány mélysége fotóbecslés." } },
+      "note": "Egyszárnyú bukó-nyíló ablak, belső párkánnyal."
+    }
+  ],
+  "radiators": [
+    {
+      "id": "RAD-D",
+      "label": "Radiátor",
+      "wall": "z1",
+      "offset": { "v": 796, "s": "A", "note": "Az ablak alatt középen feltételezve (fotó: IMG20260905184303.jpg)." },
+      "width": { "v": 800, "s": "M", "src": [{ "sheet": "30 Dolgozó", "key": "D-M010", "n": 800 }] },
+      "height": { "v": 605, "s": "M", "note": "Kb. érték.", "src": [{ "sheet": "30 Dolgozó", "key": "D-M011", "n": 605 }] },
+      "bottom": { "v": 170, "s": "A", "note": "Fotóbecslés." },
+      "gap": { "v": 50, "s": "M", "note": "Falsík – radiátor hátulja kb. 50 mm.", "src": [{ "sheet": "30 Dolgozó", "key": "D-M012", "n": 50 }] },
+      "depth": { "v": 100, "s": "A", "note": "A teljes kiállás nincs mérve." }
+    }
+  ],
+  "pipes": [
+    { "id": "CS-D1", "label": "Fűtéscső – ablakfal felső része", "s": "A", "note": "A háló felől érkezik, az ablakfal felső részén fut (fotó: IMG20260905184324.jpg); magasság becsült.", "wall": "z1", "kind": "h", "from": 0, "to": 2390, "y": 2480, "z": 45, "d": 28 },
+    { "id": "CS-D2", "label": "Fűtéscső – lefelé forduló szakasz", "s": "A", "note": "A fal végén lefelé fordul (30 Dolgozó – Fűtéscső); pontos hely becsült.", "wall": "z1", "kind": "v", "at": 2390, "y0": 0, "y1": 2480, "z": 45, "d": 28 }
+  ],
+  "beds": [],
+  "ceilingLights": [
+    {
+      "id": "L-D1",
+      "label": "Mennyezeti lámpa",
+      "x": {
+        "v": 964,
+        "s": "A",
+        "note": "A geometriai középtől kb. 250 mm-rel a háló felé (szemre becsült).",
+        "src": [{ "sheet": "30 Dolgozó", "key": "D-M018", "n": 250 }]
+      },
+      "z": { "v": 1715, "s": "A", "note": "Helyiségközép feltételezve." }
+    }
+  ],
+  "accentLights": [
+    { "id": "DL-1", "label": "Állólámpa", "kind": "floor", "x": 2180, "z": 2850, "s": "A", "note": "Tervezési helyőrző – nem kiválasztott termék." }
+  ],
+  "cameras": [
+    { "name": "Ajtóból", "pos": [750, 1600, 250], "target": [1300, 1100, 3430] },
+    { "name": "Ablak felől", "pos": [1750, 1600, 3200], "target": [900, 1000, 0] },
+    { "name": "Sarokból", "pos": [2200, 1650, 300], "target": [300, 1000, 3000] }
+  ],
+  "conflicts": [],
+  "missing": [
+    "Ablak és ajtónyílás saroktól mért pozíciója (fotóbecslés).",
+    "Radiátor teljes kiállása és alsó élének magassága.",
+    "Konnektorok nincsenek modellezve: a teljes villamos felújítás miatt nem kötöttek (DD-005).",
+    "Falvastagságok (legacy alaprajzból)."
+  ]
+}
