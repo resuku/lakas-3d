@@ -188,3 +188,54 @@ export function furnitureFit(v: Variant): FurnitureFit {
       : `${badCommon.length ? `A gyakori ${badCommon.join(', ')} ide kevésbé illik; ` : ''}${level === 'nehezebb' ? 'célzottan kell keresni (meleg semleges és fa tónusok).' : 'van választék, de válogatni kell.'}`;
   return { temp, sofa, wood, metal, ease: { level, text } };
 }
+
+/** Tetszőleges termékszín értékelése: a legközelebbi minta (OKLab-távolság) ítélete a megadott listákból. */
+export function nearestFit(lists: FitItem[][], hex: string): FitItem {
+  const ab = (x: string) => {
+    const c = toLch(x);
+    const r = (c.h * Math.PI) / 180;
+    return [c.L, c.C * Math.cos(r), c.C * Math.sin(r)];
+  };
+  const p = ab(hex);
+  const dist = (i: FitItem) => {
+    const q = ab(i.hex);
+    return Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]);
+  };
+  // színtelen (szürke, fehér, fekete) termék csak színtelen mintához: a világosság-közelség miatt különben pl. a szürke
+  // a taupe-hoz kerülne, és „meleg semleges” ítéletet kapna
+  const all = lists.flat();
+  const grey = toLch(hex).C < 0.015 ? all.filter((i) => toLch(i.hex).C < 0.02) : [];
+  return (grey.length ? grey : all).reduce((a, b) => (dist(b) < dist(a) ? b : a));
+}
+
+/** A 3D bútorok színei: szerepenként a legjobb értékelésű, a kínálatban leggyakoribb szín (nem döntés, csak helyőrző). */
+export interface FurniturePalette {
+  /** Kanapé. */
+  upholstery: FitItem;
+  /** Székek, puff: a kanapétól világosságban eltérő, nem kerülendő kárpitszín. */
+  upholstery2: FitItem;
+  /** Natúr fatónus (térelválasztó, ágykeret). */
+  wood: FitItem;
+  /** Bútortest (TV-szekrény, asztallap, éjjeliszekrény): fa, fehér vagy fekete. */
+  body: FitItem;
+  metal: FitItem;
+  /** Szőnyeg: világos, a kanapétól eltérő semleges. */
+  rug: FitItem;
+}
+
+const RANK: Record<Verdict, number> = { good: 2, ok: 1, bad: 0 };
+const best = (list: FitItem[], ok: (i: FitItem) => boolean = () => true) =>
+  list.filter(ok).sort((a, b) => RANK[b.verdict] - RANK[a.verdict] || b.common - a.common)[0] as FitItem | undefined;
+
+export function furniturePalette(fit: FurnitureFit): FurniturePalette {
+  const L = (i: FitItem) => toLch(i.hex).L;
+  const upholstery = best(fit.sofa)!;
+  return {
+    upholstery,
+    upholstery2: best(fit.sofa, (i) => i.id !== upholstery.id && i.verdict !== 'bad' && Math.abs(L(i) - L(upholstery)) > 0.12) ?? upholstery,
+    wood: best(fit.wood, (i) => isWood(toLch(i.hex)))!,
+    body: best(fit.wood)!,
+    metal: best(fit.metal)!,
+    rug: best(fit.sofa, (i) => i.id !== upholstery.id && L(i) > 0.7) ?? fit.sofa[0],
+  };
+}

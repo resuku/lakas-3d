@@ -4,10 +4,11 @@ A program leírása, futtatása, adatmodellje és szkriptjei a `README.md`-ben v
 
 ## Projektkontextus
 
-- A felújítás forrásai a `../Felujítás/Doc` mappában vannak. Először a `00_Lakasfelujitas_CONTEXT.txt`-t, majd a `Lakasfelujitas_handoff_aktualis.txt`-t olvasd el. A 2026-11-02-i felhasználói közlések a handoffban szerepelnek, a V14 naplóba még nem kerültek át (ehhez jóváhagyás kell). Az `old` mappát ne használd forrásként.
+- A felújítás forrásai a `../Felujítás/Doc` mappában vannak. Először a `00_Lakasfelujitas_CONTEXT.txt`-t, majd a `Lakasfelujitas_handoff_aktualis.txt`-t olvasd el. A 2026-11-02-i felhasználói közlések a V15 naplóban és a handoffban szerepelnek. Az `old` mappát ne használd forrásként.
 - Ne találj ki méretet. Minden szám `{v, s, note, src}` formában szerepel, a `src` a live naplóra mutat. Ellenőrzés: `npm run check-data`.
 - A Felújítás live forrásait (napló, CONTEXT, handoff, Konszignáció) csak kifejezett jóváhagyással módosítsd. Döntést ne jelölj véglegesnek. A J-javaslatok és a világítási tervek javaslatok, nem döntések.
-- Bútort csak akkor tervezz, ha a felület- és színirány már eldőlt.
+- A napló szoros megkötései (D-/ND-/DD- döntések) irányelvek, nem minden esetben szabályok. Ha egy megkötés kizárna egy lehetőséget, mutasd meg azt is, és kérdezz rá.
+- Bútornál és dekornál mindig jelöld a méret forrását (`basis`: naplósor, lakberendezői konszignáció vagy feltételezés). A katalógustermék jelölt, nem kiválasztott termék.
 
 ## Parancsok
 
@@ -18,11 +19,12 @@ A program leírása, futtatása, adatmodellje és szkriptjei a `README.md`-ben v
 
 ## Generált fájlok, tárolt állapot
 
+- Kézi adat: a `src/data/furnishing.ts` (bútor-helyőrzők, konszignáció-tervezet), a `src/data/decor.ts` (dekortípusok) és a `src/data/products/furniture.json` (bútorkatalógus). A J-javaslatok bútorai futásidőben számolódnak (`src/lib/furnitureSets.ts`). A `check-data` a javaslat termékhivatkozásait is ellenőrzi.
 - A `src/data/variants.ts` a `scripts/gen/gen_variants.py`, a `src/data/lightPlans.ts` a `scripts/gen/gen_lightplans.py` kimenete. A J-javaslatokat és a hozzájuk tartozó világítást a generátorban módosítsd, utána futtasd.
 - Ha alapváltozat vagy -terv törlődik, illetve a tárolt állapot formája megváltozik, növeld a `STORE_VERSION` értékét, és írj hozzá `migrateState` ágat (`src/store.ts`). A betöltött konfigurációs fájlok is ezen mennek át.
-- Ha a javaslatokról újra képek készülnek, frissítsd a galériát: `scripts/gallery.py --public` (lásd a README-t).
+- Ha a javaslatokról újra képek készülnek, frissítsd a galériát: `scripts/gallery.py --public` (lásd a README-t). A képek bútorokkal készülnek; 16 változat × 5 nézet a fej nélküli böngészőben 20 percnél is tovább tart, ezért két részletben, a háttérben futtasd.
 
 ## Git és kirakás
 
-- A tároló nyilvános (`github.com/resuku/lakas-3d`). Ami a `main` ágra kerül, kb. 1–2 perc múlva megjelenik a <https://resuku.github.io/lakas-3d/> oldalon. Commitot és feltöltést csak kérésre végezz.
+- A tároló nyilvános (`github.com/resuku/lakas-3d`). Ami a `main` ágra kerül, kb. 1–2 perc múlva megjelenik a <https://resuku.github.io/lakas-3d/> oldalon. A user minden változást előbb helyben próbál ki: commitot és feltöltést csak kifejezett kérésre végezz.
 - A commitok a tárolószintű git-identitással (GitHub noreply cím) készülnek. Ezt ne írd át, és a globális git-beállítás címét ne használd. Személyes adat (e-mail-cím, pontos lakcím) nem kerülhet a tárolóba.

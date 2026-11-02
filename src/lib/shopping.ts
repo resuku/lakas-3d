@@ -1,7 +1,10 @@
 import { findCurtain, findDoor, findFloor, findPaint } from '../data/products';
 import { ROOMS } from '../data/rooms';
-import type { LightPlan, Room, Variant } from '../model/types';
+import type { DecorItem, LightPlan, Room, Variant } from '../model/types';
+import { findDecorType } from '../data/decor';
+import { findFurniture } from '../data/products';
 import { curtainLayouts } from './curtain';
+import { activeFurnishing } from './furnish';
 import { FIXTURE_LABEL, findLamp, roomFixtures } from './fixtures';
 import { mm, roomDims, WALL_IDS, wallFrames } from './geom';
 
@@ -49,7 +52,14 @@ function wallAreas(room: Room) {
   return out;
 }
 
-export function shoppingList(v: Variant, plan: LightPlan | undefined, choices: Record<string, string>): ShoppingRow[] {
+/** `furnish`: a választott bútortermékek, ha a bútorok látszanak (különben nincs bútorsor). */
+export function shoppingList(
+  v: Variant,
+  plan: LightPlan | undefined,
+  choices: Record<string, string>,
+  furnish: Record<string, string> | null = null,
+  decor: DecorItem[] = [],
+): ShoppingRow[] {
   const rows: ShoppingRow[] = [];
   const floorRooms = ROOMS.filter((r) => !r.floor || v.floorAll !== false);
   const area = (r: Room) => mm(r.size.x.v) * mm(r.size.z.v);
@@ -193,6 +203,59 @@ export function shoppingList(v: Variant, plan: LightPlan | undefined, choices: R
   for (const [type, n] of Object.entries(bulbs)) {
     const b = BULB[type];
     rows.push({ category: 'Izzó', place: '', product: b ? b[0] : `${type} LED izzó`, store: b ? 'IKEA' : '', spec: type, qty: `${n} db`, unitPrice: b ? ft(b[1]) : '', total: b ? b[1] * n : undefined, note: 'meleg fehér, a lámpa max. teljesítményén belül', url: '' });
+  }
+  // Bútorok: a választott katalógustermékek (az azonos termékhely darabjai összevonva, pl. 4 szék)
+  if (furnish)
+    for (const r of ROOMS) {
+      const bySlot = new Map<string, { n: number; label: string; p: NonNullable<ReturnType<typeof activeFurnishing>[number]['product']> }>();
+      for (const f of activeFurnishing(r.id, choices, furnish))
+        if (f.product && f.slot) {
+          const cur = bySlot.get(f.slot) ?? { n: 0, label: f.label, p: f.product };
+          cur.n++;
+          bySlot.set(f.slot, cur);
+        }
+      for (const { n, label, p } of bySlot.values()) {
+        const sz = p.size;
+        rows.push({
+          category: 'Bútor',
+          place: `${r.name} – ${label}`,
+          product: `${p.brand ? `${p.brand} ` : ''}${p.name}`,
+          store: p.store,
+          spec: [sz.w && sz.d ? `${Math.round(sz.w / 10)} × ${Math.round(sz.d / 10)}${sz.h ? ` × ${Math.round(sz.h / 10)}` : ''} cm` : '', p.article].filter(Boolean).join(', '),
+          qty: `${n} db`,
+          unitPrice: priceText(p.price),
+          total: priceNum(p.price) ? priceNum(p.price)! * n : undefined,
+          note: p.note ?? '',
+          url: p.url,
+        });
+      }
+    }
+  // Akusztikus falpanelek: a dekorelemhez rendelt termék, a szélességhez szükséges lapszámmal (a lap teljes magasságú)
+  const panels = new Map<string, { n: number; places: string[] }>();
+  for (const d of decor) {
+    const p = findFurniture(d.productId);
+    const t = findDecorType(d.type);
+    if (!p || !t || !p.size.w) continue;
+    const n = Math.ceil((d.w ?? t.w) / p.size.w) * (p.size.h ? Math.max(1, Math.ceil((d.h ?? t.h) / p.size.h - 0.05)) : 1);
+    const cur = panels.get(p.id) ?? { n: 0, places: [] };
+    cur.n += n;
+    cur.places.push(`${ROOMS.find((r) => r.id === d.roomId)?.name ?? d.roomId}${d.wall ? ` – ${ROOMS.find((r) => r.id === d.roomId)?.walls[d.wall].name}` : ''}`);
+    panels.set(p.id, cur);
+  }
+  for (const [pid, { n, places }] of panels) {
+    const p = findFurniture(pid)!;
+    rows.push({
+      category: 'Akusztikus falpanel',
+      place: places.join('; '),
+      product: `${p.brand ? `${p.brand} ` : ''}${p.name}`,
+      store: p.store,
+      spec: p.size.w && p.size.h ? `${Math.round(p.size.w / 10)} × ${Math.round(p.size.h / 10)} cm${p.absorption ? `, ${p.absorption}` : ''}` : '',
+      qty: `${n} db`,
+      unitPrice: priceText(p.price),
+      total: priceNum(p.price) ? priceNum(p.price)! * n : undefined,
+      note: 'a falszakasz szélességéhez kerekítve; ragasztó, csavar külön',
+      url: p.url,
+    });
   }
   return rows;
 }

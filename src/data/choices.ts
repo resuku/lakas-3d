@@ -7,6 +7,8 @@ export interface ChoiceGroup {
   label: string;
   options: { id: string; label: string; note?: string }[];
   default: string;
+  /** Berendezési lehetőség: az Anyagok fül bútor-csoportjában jelenik meg, és csak bekapcsolt bútoroknál számít. */
+  furniture?: boolean;
 }
 
 export const CHOICE_GROUPS: ChoiceGroup[] = [
@@ -44,6 +46,102 @@ export const CHOICE_GROUPS: ChoiceGroup[] = [
       { id: 'panel', label: 'falon futó tolólap', note: 'Ajtószínű lap a fal előtt, a bejárat felé eltolva (a tároló bal oldalán kb. 1 m szabad falszakasz van). Nem nyílik ki, nem kell küszöb.' },
     ],
     default: 'open',
+  },
+  {
+    id: 'nappali-kanape',
+    roomId: 'nappali',
+    label: 'Kanapé',
+    furniture: true,
+    options: [
+      {
+        id: 'egyenes',
+        label: 'egyenes + puff',
+        note: 'ND-007 elsődleges irány: egyenes, ágyazható kanapé a hosszú falon, előtte mozgatható puff. Ágyként kinyitva kb. 2 m mély, ilyenkor a puffot el kell tolni.',
+      },
+      {
+        id: 'chaise',
+        label: 'L az erkély felé',
+        note: 'ND-007 alternatíva, a user szerint (2026-11-02) az L alak is befér. Az L ága (chaise) az erkélyfal felé: a hosszú faltól legfeljebb kb. 180 cm-re nyúlhat, különben az erkélyajtó vonalába lóg (az ajtómező a modellben 1735 mm-nél kezdődik, fotóbecslés). Az ellenőrzés és a funkcionális zónák réteg ezt mutatja; a katalógus chaise-es kanapéi felcserélhető oldalúak.',
+      },
+      {
+        id: 'chaise-etk',
+        label: 'L az étkező felé',
+        note: 'Az L ága az étkező (térelválasztó) felé: a kanapé maga is elválasztja a két zónát, ezért a lamellás térelválasztó mögötte elhagyható vagy máshova tehető. Az étkező felől a chaise oldala látszik, a chaise-ről a TV ferdén látszik. Az ág itt hosszabb is lehet (a TV-szekrényig kb. 1,2–1,5 m marad), a közlekedőből (AJ-07) a chaise vége mellett lehet bejutni.',
+      },
+    ],
+    default: 'egyenes',
+  },
+  {
+    id: 'nappali-tv',
+    roomId: 'nappali',
+    label: 'TV alatt',
+    furniture: true,
+    options: [
+      { id: 'alacsony', label: 'alacsony TV-szekrény', note: 'ND-006: falra szerelt TV alatt kb. 180–200 cm széles, 35–45 cm mély alacsony szekrény.' },
+      {
+        id: 'tvfal',
+        label: 'TV-fal (szekrénysor)',
+        note: 'Alacsony pad és falra szerelt vagy magas elemek. A falszakasz a közlekedői átjáró és a radiátor között 281 cm; a radiátortól legalább ~30 cm szabadon marad, ezért a TV-fal legfeljebb kb. 250 cm széles. A napló (ND-006) csak visszafogott, részleges falfelületet javasolt – ezt érdemes a képen megítélni.',
+      },
+    ],
+    default: 'alacsony',
+  },
+  {
+    id: 'nappali-asztal',
+    roomId: 'nappali',
+    label: 'Étkezőasztal',
+    furniture: true,
+    options: [
+      { id: 'kor', label: 'kör ø120, 4 szék', note: 'Napi használat: a kör asztal négy székkel.' },
+      { id: 'bovitett', label: 'bővítve 196 cm', note: 'Vendégség, társasjáték: a toldólappal 196 cm hosszú ovális, a székek a hosszú oldalakon; a két vége szabadon marad, így a dolgozó ajtaja előtt is.' },
+    ],
+    default: 'kor',
+  },
+  {
+    id: 'nappali-terelvalaszto',
+    roomId: 'nappali',
+    label: 'Térelválasztó',
+    furniture: true,
+    options: [
+      { id: 'lamella', label: 'lamellás' },
+      { id: 'none', label: 'nincs' },
+    ],
+    default: 'lamella',
+  },
+  {
+    id: 'halo-agy',
+    roomId: 'halo',
+    label: 'Ágy',
+    furniture: true,
+    options: [
+      {
+        id: 'uj180',
+        label: 'új ágy (legalább 180 × 200)',
+        note: 'A user szerint (2026-11-02, este): az ágy nem kötött, nem kell mindenáron megtartani; legalább 180 × 200-as matrachoz, azon túl szabad a választás (200 × 200 is). A napló még a megtartást írja (D-009, K-011) – a következő naplóverzióban, jóváhagyással frissítendő. Termék nélkül 180 × 200-as helyőrző.',
+      },
+      { id: 'meglevo', label: 'meglévő keret (210 × 200)', note: 'A meglévő egyedi keret (2000 × 2000-es matrachoz); a user szerint nem kötelező megtartani.' },
+    ],
+    default: 'uj180',
+  },
+  {
+    id: 'dolgozo-asztal',
+    roomId: 'dolgozo',
+    label: 'Íróasztal',
+    furniture: true,
+    options: [
+      { id: 'meglevo', label: 'meglévő nagy asztal', note: 'A user szerint (2026-11-02) kb. 3000 × 1030 mm, nem kötelező megtartani. A hely (a külső oldalfal mentén, az ajtó felőli saroktól) a user megerősítésével (DD-007).' },
+      {
+        id: 'sarok',
+        label: 'sarokasztal az ajtó mellett',
+        note: 'Ha asztalcsere, akkor sarokasztal legalább 3 monitorhoz és laptophoz (user, 2026-11-02). A hosszú ág a külső oldalfal mentén, a rövid ág az ajtófal mentén, az ajtónyílás előtt megáll; az ablakos sarokba a radiátor miatt nem kerülhet. A kapható sarokasztalok rövid ága többnyire 135–180 cm – ide csak a legfeljebb ~125 cm-es fér.',
+      },
+      {
+        id: 'sziget',
+        label: 'L félszigetként',
+        note: 'A hosszú ág a külső oldalfal mentén, a rövid ág a szobába nyúlik az ajtó és az ablak között (nem falnak állítva) – így a 140–170 cm-es rövid ágú sarokasztalok is elférnek; a háló felőli fal mentén ~80 cm-es közlekedő marad.',
+      },
+    ],
+    default: 'meglevo',
   },
 ];
 

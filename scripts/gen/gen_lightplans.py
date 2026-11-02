@@ -27,7 +27,8 @@ def fx(id, type, x, z, product=None, y=None, rot=None, label=None):
     if label: o['label'] = label
     return o
 
-# Felmért mennyezeti kiállások: nappali L-N2 (1720, 1700) étkező, L-N1 (1720, 5400) nappali rész;
+# Felmért mennyezeti kiállások: nappali L-N2 (1720, 2050) étkező (a berendezési javaslat asztala fölött), L-N1 (1720, 5400) nappali rész;
+# a nappali állólámpája (300, 7100) a kanapé erkély felőli végénél (data/furnishing.ts);
 # háló L-H1 (1832, 1721); dolgozó L-D1 (964, 1715); előszoba L-E1 (1400, 698); közlekedő L-K1 (420, 2490).
 # Az ágy feje a háló x0 falánál, z = 690–2790 mm; az olvasólámpák az ágy két oldalán.
 PLANS = [
@@ -35,7 +36,7 @@ PLANS = [
         'id': 'v1-tervezoi', 'name': 'V1 – Tervezői koncepció (fekete részletek, sín)',
         'note': 'A lakberendezői műleírás szerint: 2700–3000 K mindenhol; nappali: fekete függeszték az étkezőasztal fölött, fekete sín spotokkal a nappali részen, a konszignáció Manie állólámpája; háló: rattan függeszték és két fekete olvasó falikar; dolgozó: általános LED fény és állítható olvasó állólámpa munkafénynek; előszoba és közlekedő: spotsor.',
         'rooms': {
-            'nappali': [fx('etk', 'pendant', 1720, 1700, RANARP, y=1600, label='Étkező függeszték'), fx('sin', 'track', 1720, 5400, EASYT, rot=90, label='Nappali sín'), fx('allo', 'floor', 300, 3800, MANIE_F, label='Olvasó állólámpa')],
+            'nappali': [fx('etk', 'pendant', 1720, 2050, RANARP, y=1600, label='Étkező függeszték'), fx('sin', 'track', 1720, 5400, EASYT, rot=90, label='Nappali sín'), fx('allo', 'floor', 300, 7100, MANIE_F, label='Olvasó állólámpa')],
             'halo': [fx('fo', 'pendant', 1832, 1721, NARRKOLV, y=2080, label='Általános függeszték'), fx('ol1', 'wall', 120, 470, MANIE_W, y=1150, label='Olvasólámpa (ajtó felől)'), fx('ol2', 'wall', 120, 3010, MANIE_W, y=1150, label='Olvasólámpa (ablak felől)')],
             'dolgozo': [fx('fo', 'ceiling', 964, 1715, NYMANE_C, label='Általános fény'), fx('munka', 'floor', 2180, 2850, KLOVING, label='Munkafény')],
             'eloszoba': [fx('fo', 'track', 1400, 698, NYMANE_T, rot=0, label='Spotsor')],
@@ -46,7 +47,7 @@ PLANS = [
         'id': 'v2-egyszeru', 'name': 'V2 – Egyszerű: LED mennyezeti lámpák',
         'note': 'Minden kiálláson lapos, beépített LED-es mennyezeti lámpa (2700–3000 K), a nappaliban szövetburás állólámpa, a hálóban két éjjeli lámpa. Olcsó, könnyen karbantartható, egyenletes fény; kevésbé hangulatos.',
         'rooms': {
-            'nappali': [fx('etk', 'ceiling', 1720, 1700, NYMANE_C, label='Étkező'), fx('fo', 'ceiling', 1720, 5400, NYMANE_C, label='Nappali rész'), fx('allo', 'floor', 300, 3800, KINNAHULT, label='Állólámpa')],
+            'nappali': [fx('etk', 'ceiling', 1720, 2050, NYMANE_C, label='Étkező'), fx('fo', 'ceiling', 1720, 5400, NYMANE_C, label='Nappali rész'), fx('allo', 'floor', 300, 7100, KINNAHULT, label='Állólámpa')],
             'halo': [fx('fo', 'ceiling', 1832, 1721, KABOMBA, label='Általános fény'), fx('ej1', 'table', 220, 440, MONTAGNA, label='Éjjeli lámpa'), fx('ej2', 'table', 220, 3020, MONTAGNA, label='Éjjeli lámpa')],
             'dolgozo': [fx('fo', 'ceiling', 964, 1715, GONZALO, label='Általános fény'), fx('munka', 'table', 2180, 2850, TERTIAL, label='Munkafény (asztali)')],
             'eloszoba': [fx('fo', 'ceiling', 1400, 698, LEANA, label='Mennyezeti lámpa')],
@@ -57,7 +58,7 @@ PLANS = [
         'id': 'v3-natur', 'name': 'V3 – Hangulatos, natúr anyagok (függesztett)',
         'note': 'Szórt fényű, természetes anyagú burák: bambusz függeszték az étkező fölött, szövetgömb a nappali rész fölött (alsó éle 2,05 m), fa lábú szövetburás állólámpa; a hálóban sás mennyezeti lámpa és szövetburás falikarok; a dolgozóban nyír mennyezeti lámpa és asztali lámpa. Meleg, puha fény; a szórt burák a mennyezetet is megvilágítják.',
         'rooms': {
-            'nappali': [fx('etk', 'pendant', 1720, 1700, SINNERLIG, y=1550, label='Étkező függeszték'), fx('fo', 'pendant', 1720, 5400, MELLOW, y=2050, label='Nappali függeszték'), fx('allo', 'floor', 300, 3800, TRIPOD, label='Állólámpa')],
+            'nappali': [fx('etk', 'pendant', 1720, 2050, SINNERLIG, y=1550, label='Étkező függeszték'), fx('fo', 'pendant', 1720, 5400, MELLOW, y=2050, label='Nappali függeszték'), fx('allo', 'floor', 300, 7100, TRIPOD, label='Állólámpa')],
             'halo': [fx('fo', 'ceiling', 1832, 1721, TRUBB, label='Általános fény'), fx('ol1', 'wall', 120, 470, AMAR, y=1200, label='Olvasólámpa'), fx('ol2', 'wall', 120, 3010, AMAR, y=1200, label='Olvasólámpa')],
             'dolgozo': [fx('fo', 'ceiling', 964, 1715, NOSUND, label='Általános fény'), fx('munka', 'table', 2180, 2850, TVARHAND, label='Asztali lámpa')],
             'eloszoba': [fx('fo', 'ceiling', 1400, 698, ALLAN, label='Mennyezeti lámpa')],
@@ -68,7 +69,7 @@ PLANS = [
         'id': 'v4-sines', 'name': 'V4 – Sínes, modern',
         'note': 'Irányítható spotok: a nappaliban két sín (a nappali részen 4 spot, az átmenetnél 3 spot) és fekete kúpos függeszték az étkező fölött; a hálóban fekete–tölgy spotsor és két fali olvasólámpa; a közlekedőben a teljes hosszon 192 cm-es sín. A spotok a falakat és a képeket emelik ki; egyenletes alapfényhez kevésbé alkalmas.',
         'rooms': {
-            'nappali': [fx('etk', 'pendant', 1720, 1700, SKURUP_P, y=1600, label='Étkező függeszték'), fx('sin1', 'track', 1720, 5400, ETNA, rot=90, label='Sín – nappali rész'), fx('sin2', 'track', 1720, 3300, ROGELIO, rot=0, label='Sín – átmenet'), fx('allo', 'floor', 300, 3800, KLOVING, label='Olvasó állólámpa')],
+            'nappali': [fx('etk', 'pendant', 1720, 2050, SKURUP_P, y=1600, label='Étkező függeszték'), fx('sin1', 'track', 1720, 5400, ETNA, rot=90, label='Sín – nappali rész'), fx('sin2', 'track', 1720, 3300, ROGELIO, rot=0, label='Sín – átmenet'), fx('allo', 'floor', 300, 7100, KLOVING, label='Olvasó állólámpa')],
             'halo': [fx('fo', 'track', 1832, 1721, NOXELLE, rot=0, label='Spotsor'), fx('ol1', 'wall', 120, 470, NYMANE_W, y=1150, label='Olvasólámpa'), fx('ol2', 'wall', 120, 3010, NYMANE_W, y=1150, label='Olvasólámpa')],
             'dolgozo': [fx('fo', 'track', 964, 1715, ROGELIO, rot=90, label='Spotsor'), fx('munka', 'table', 2180, 2850, MANIE_T, label='Asztali lámpa')],
             'eloszoba': [fx('fo', 'track', 1400, 698, SKURUP_T, rot=0, label='Sín')],
@@ -93,9 +94,9 @@ def jplan(jid, name, note, dining, lounge, floor, halo_main, halo_read, dol_main
         return fx(id, t, x, z, p, label=label, **extra)
     rooms = {
         'nappali': [
-            main('etk', (1720, 1700), dining, 'Étkező', 1580),
+            main('etk', (1720, 2050), dining, 'Étkező', 1580),
             main('fo', (1720, 5400), lounge, 'Nappali rész', 2050),
-            fx('allo', 'floor', 300, 3800, floor, label='Állólámpa'),
+            fx('allo', 'floor', 300, 7100, floor, label='Állólámpa'),
         ],
         'halo': [main('fo', (1832, 1721), halo_main, 'Általános fény', 2080)]
         + ([fx('ol1', 'wall', 120, 470, halo_read[1], y=1150, label='Olvasólámpa'), fx('ol2', 'wall', 120, 3010, halo_read[1], y=1150, label='Olvasólámpa')]

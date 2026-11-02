@@ -1,9 +1,10 @@
-import type { ColorSource, CurtainProduct, DoorProduct, DoorStyle, FloorProduct, PaintFamily, PaintProduct, Variant } from '../model/types';
+import type { ColorSource, CurtainProduct, DoorProduct, DoorStyle, FloorProduct, FurnitureProduct, PaintFamily, PaintProduct, Variant } from '../model/types';
 import paints from './products/paints.json';
 import floors from './products/floors.json';
 import doors from './products/doors.json';
 import curtains from './products/curtains.json';
 import panels from './products/panels.json';
+import furniture from './products/furniture.json';
 
 // Valós termékek a magyar kínálatból (lásd products/*.json `meta` mezője: forrás és ellenőrzés dátuma).
 // A képernyőszín közelítés marad: végső döntés előtt fizikai minta kell.
@@ -14,7 +15,8 @@ export const FLOOR_PRODUCTS = floors.items as FloorProduct[];
 export const WALL_PANELS = panels.items as PaintProduct[];
 export const DOOR_PRODUCTS = doors.items as DoorProduct[];
 export const CURTAIN_PRODUCTS = curtains.items as CurtainProduct[];
-export const CATALOG_CHECKED = { paints: paints.meta.checkedAt, floors: floors.meta.checkedAt, doors: doors.meta.checkedAt, curtains: curtains.meta.checkedAt };
+export const FURNITURE_PRODUCTS = furniture.items as FurnitureProduct[];
+export const CATALOG_CHECKED = { paints: paints.meta.checkedAt, floors: floors.meta.checkedAt, doors: doors.meta.checkedAt, curtains: curtains.meta.checkedAt, furniture: furniture.meta.checkedAt };
 
 export const PAINT_FAMILIES: { id: PaintFamily; label: string }[] = [
   { id: 'warmWhite', label: 'Meleg fehérek' },
@@ -49,6 +51,10 @@ export function findFloor(id: string | undefined) {
 
 export function findDoor(id: string | undefined) {
   return id ? DOOR_PRODUCTS.find((p) => p.id === id) : undefined;
+}
+
+export function findFurniture(id: string | undefined) {
+  return id ? FURNITURE_PRODUCTS.find((p) => p.id === id) : undefined;
 }
 
 export function findCurtain(id: string | undefined) {

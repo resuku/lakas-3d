@@ -17,7 +17,10 @@ export function BottomPanel() {
   const room = getRoom(roomId);
   const variant = useVariant(activeId);
   const choices = useStore((s) => s.choices);
-  const findings = useMemo(() => runChecks(room, variant, choices), [room, variant, choices]);
+  const furnishOn = useStore((s) => s.layers.furniture);
+  const picks = useStore((s) => s.furniturePicks);
+  const furnish = furnishOn ? picks : null;
+  const findings = useMemo(() => runChecks(room, variant, choices, furnish), [room, variant, choices, furnish]);
   const rows = useMemo(() => collectVals(room), [room]);
   const warnCount = findings.filter((f) => f.level === 'warn').length;
   const used = useMemo(() => usedProducts(variant, Object.fromEntries(ROOMS.map((r) => [r.id, r]))), [variant]);
@@ -32,8 +35,11 @@ export function BottomPanel() {
     [plan, light],
   );
 
-  const shopping = useMemo(() => shoppingList(variant, plan, choices), [variant, plan, choices]);
+  const decorOn = useStore((s) => s.layers.decor);
+  const decorItems = useStore((s) => s.decor);
+  const shopping = useMemo(() => shoppingList(variant, plan, choices, furnish, decorOn ? decorItems : []), [variant, plan, choices, furnish, decorOn, decorItems]);
   const total = shoppingTotal(shopping);
+  const furniture = shopping.filter((r) => r.category === 'Bútor' || r.category === 'Akusztikus falpanel');
   const saveCsv = () => {
     const title = `Lakás 3D – bevásárlólista: ${variant.name}${plan ? `, ${plan.name}` : ''} (${new Date().toISOString().slice(0, 10)}, becslés)`;
     const a = document.createElement('a');
@@ -57,7 +63,7 @@ export function BottomPanel() {
           </>
         )}
         <button className={tab === 'products' ? 'on' : ''} onClick={() => setTab('products')}>
-          Termékek ({used.length + lamps.length})
+          Termékek ({used.length + lamps.length + furniture.length})
         </button>
         <button onClick={saveCsv} title="Az aktuális változat és világítás termékei becsült mennyiséggel és összeggel, Excelben megnyitható CSV-ben">
           Bevásárlólista (CSV)
@@ -190,8 +196,40 @@ export function BottomPanel() {
               </tbody>
             </table>
           )}
+          {furniture.length > 0 && (
+            <table>
+              <thead>
+                <tr>
+                  <th>Bútor (berendezési javaslat)</th>
+                  <th>Termék</th>
+                  <th>Méret</th>
+                  <th>Db</th>
+                  <th>Ár</th>
+                  <th>Link</th>
+                </tr>
+              </thead>
+              <tbody>
+                {furniture.map((r) => (
+                  <tr key={r.place}>
+                    <td>{r.place}</td>
+                    <td>
+                      {r.store}: {r.product}
+                    </td>
+                    <td>{r.spec}</td>
+                    <td>{r.qty}</td>
+                    <td>{r.unitPrice || '–'}</td>
+                    <td>
+                      <a href={r.url} target="_blank" rel="noreferrer">
+                        megnyitás
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
           <p className="note" style={{ padding: '6px 10px' }}>
-            Katalógus ellenőrizve: festékek {CATALOG_CHECKED.paints}, padlók {CATALOG_CHECKED.floors}, ajtók {CATALOG_CHECKED.doors}, függönyök {CATALOG_CHECKED.curtains}, lámpák {LAMPS_CHECKED}. Az árak és az elérhetőség változhat; a képernyőszín közelítés, végső döntés előtt fizikai minta kell.
+            Katalógus ellenőrizve: festékek {CATALOG_CHECKED.paints}, padlók {CATALOG_CHECKED.floors}, ajtók {CATALOG_CHECKED.doors}, függönyök {CATALOG_CHECKED.curtains}, lámpák {LAMPS_CHECKED}, bútorok {CATALOG_CHECKED.furniture}. Az árak és az elérhetőség változhat; a képernyőszín közelítés, végső döntés előtt fizikai minta kell.
           </p>
         </div>
       )}

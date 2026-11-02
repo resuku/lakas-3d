@@ -2,12 +2,16 @@ import * as THREE from 'three';
 import { useEffect, useMemo, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
-import type { Bed as BedT, Room, Variant } from '../model/types';
-import type { Layers } from '../store';
+import type { Bed as BedT, FurnColor, FurnSpec, Room, Val, Variant } from '../model/types';
+import { COLOR_SOURCE_LABEL } from '../data/products';
+import { useStore, type Layers } from '../store';
 import { makeFloorTexture } from '../lib/floorTexture';
+import { activeFurnishing, furnishGaps, replacedIds, type ResolvedSpec } from '../lib/furnish';
+import { furnitureFit, furniturePalette, type FurniturePalette } from '../lib/furnitureFit';
 import { mm, roomDims } from '../lib/geom';
 import { STATUS_INFO, worst } from '../lib/status';
 import { Box } from './Box';
+import { FurnitureModel } from './FurnitureModels';
 import { setGhost } from './ghost';
 import { ceilingInfo, floorInfo, info } from '../lib/inspect';
 
@@ -70,11 +74,101 @@ export function Bed({ b, textile, tint }: { b: BedT; textile: string; tint: stri
 /** Éjjeliszekrény semleges színben (a meglévő darabok cseréje valószínű, 10 Háló). */
 const NIGHTSTAND = '#cfc8bd';
 
-export function Furniture({ room, variant, layers }: { room: Room; variant: Variant; layers: Layers }) {
-  const { W } = roomDims(room);
+const COLOR_ROLE: Record<FurnColor, keyof FurniturePalette | null> = {
+  upholstery: 'upholstery',
+  upholstery2: 'upholstery2',
+  wood: 'wood',
+  body: 'body',
+  rug: 'rug',
+  black: null,
+};
+
+/** A berendezési javaslat bútorai (data/furnishing.ts); a szín a változat bútor-színvilágából. */
+function Furnishing({ room, specs, variant, layers }: { room: Room; specs: ResolvedSpec[]; variant: Variant; layers: Layers }) {
+  const pal = useMemo(() => furniturePalette(furnitureFit(variant)), [variant]);
+  const gaps = useMemo(() => (layers.dims ? furnishGaps(room.id, specs) : []), [layers.dims, room.id, specs]);
   return (
     <>
-      {(room.furniture ?? []).map((n) => (
+      {specs.map((f) => {
+        const role = COLOR_ROLE[f.color];
+        const item = role ? pal[role] : null;
+        const p = f.product;
+        const tint = layers.status ? STATUS_INFO[f.s].color : null;
+        const c = { main: tint ?? p?.hex ?? item?.hex ?? '#1a1b1d', metal: tint ?? pal.metal.hex };
+        const ud = p
+          ? info(
+              `${room.name} – ${f.label}`,
+              `${p.store}: ${p.brand ? `${p.brand} ` : ''}${p.name}${p.price ? ` · ${p.price}` : ''}`,
+              `${f.w} × ${f.d} × ${f.h} mm (a termékoldal szerint; ami ott nincs, a helyőrzőé)`,
+              `Szín: ${p.colorName ?? p.hex} (${COLOR_SOURCE_LABEL[p.hexSource]})`,
+              p.note,
+            )
+          : info(
+              `${room.name} – ${f.label}`,
+              `${f.w} × ${f.d} × ${f.h} mm, befoglaló méret (${f.s} – ${STATUS_INFO[f.s].label.toLowerCase()})`,
+              !!item && `Szín: ${item.label} – a változat bútor-színvilágából, helyőrző${f.kind === 'table' || f.kind === 'chair' || f.kind === 'tvUnit' ? `; fém: ${pal.metal.label}` : ''}`,
+              f.basis,
+              f.note,
+            );
+        if (f.kind === 'bed')
+          return (
+            <group key={f.id} userData={ud}>
+              <Bed b={bedFromSpec(f, c.main)} textile={variant.textile} tint={tint} />
+            </group>
+          );
+        return (
+          <group key={f.id} position={[mm(f.x), mm(f.y ?? 0), mm(f.z)]} rotation={[0, ((f.rot ?? 0) * Math.PI) / 180, 0]} userData={ud}>
+            <FurnitureModel f={f} c={c} />
+          </group>
+        );
+      })}
+      {gaps.map((g) => {
+        const [x0, z0] = g.from;
+        const [x1, z1] = g.to;
+        const along = Math.abs(x1 - x0) > Math.abs(z1 - z0);
+        return (
+          <group key={`gap-${g.a}-${g.b}`}>
+            <Box x={along ? [x0, x1] : [x0 - 0.01, x0 + 0.01]} y={[0.02, 0.027]} z={along ? [z0 - 0.01, z0 + 0.01] : [z0, z1]} color={g.gap * 1000 < g.min ? '#c62828' : '#1565c0'} noShadow />
+            <Html position={[(x0 + x1) / 2, 0.08, (z0 + z1) / 2]} center distanceFactor={6}>
+              <div className="dim-label" title={g.label}>
+                köz ~{Math.round(g.gap * 1000)} mm<span>A</span>
+              </div>
+            </Html>
+          </group>
+        );
+      })}
+    </>
+  );
+}
+
+/** Az új ágy a meglévő ágy modelljével: fej a −x oldalon (rot = 90), keret 30, matrac 22 cm (feltételezés). */
+function bedFromSpec(f: FurnSpec, color: string): BedT {
+  const a = (v: number): Val => ({ v, s: f.s });
+  return {
+    id: f.id,
+    label: f.label,
+    keep: false,
+    x0: a(f.x - f.d / 2),
+    z0: a(f.z - f.w / 2),
+    sx: a(f.d),
+    sz: a(f.w),
+    h: a(300),
+    mattressH: a(220),
+    headH: a(f.h),
+    frameColor: color,
+  };
+}
+
+export function Furniture({ room, variant, layers }: { room: Room; variant: Variant; layers: Layers }) {
+  const { W } = roomDims(room);
+  const choices = useStore((s) => s.choices);
+  const picks = useStore((s) => s.furniturePicks);
+  const specs = useMemo(() => (layers.furniture ? activeFurnishing(room.id, choices, picks) : []), [layers.furniture, room.id, choices, picks]);
+  const hidden = useMemo(() => replacedIds(specs), [specs]);
+  return (
+    <>
+      <Furnishing room={room} specs={specs} variant={variant} layers={layers} />
+      {(room.furniture ?? []).filter((n) => !hidden.has(n.id)).map((n) => (
         <group key={n.id} userData={info(`${room.name} – ${n.label}`, `${n.sx} × ${n.sz} × ${n.h} mm (${n.s})`, n.note)}>
         <Box
           x={[mm(n.x0), mm(n.x0 + n.sx)]}
@@ -85,7 +179,7 @@ export function Furniture({ room, variant, layers }: { room: Room; variant: Vari
         />
         </group>
       ))}
-      {room.beds.map((b) => (
+      {room.beds.filter((b) => !hidden.has(b.id)).map((b) => (
         <group key={b.id} userData={info(`${room.name} – ${b.label}`, `${b.sz.v} × ${b.sx.v} mm, magasság ${b.h.v} mm`, b.note)}>
         <Bed
           b={b}
@@ -96,7 +190,7 @@ export function Furniture({ room, variant, layers }: { room: Room; variant: Vari
       ))}
       {layers.dims &&
         room.wardrobe?.wall === 'x1' &&
-        room.beds.map((b) => {
+        room.beds.filter((b) => !hidden.has(b.id)).map((b) => {
           const xb = mm(b.x0.v + b.sx.v);
           const xw = W - mm(room.wardrobe!.depth.v);
           const zc = mm(b.z0.v + b.sz.v / 2);

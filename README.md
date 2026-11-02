@@ -1,7 +1,7 @@
 # Lakás 3D – berendezés- és színtervező
 
 Helyben futó webes 3D nézet a lakásfelújításhoz. Az üres helyiségeket a felmérésből
-(V14 tervezési napló) építi fel, és ezekben lehet falszínt, padlót, ajtót, szegélyt,
+(V15 tervezési napló) építi fel, és ezekben lehet falszínt, padlót, ajtót, szegélyt,
 függönyt, gardróbfrontot és textilt próbálni, többféle fényjelenetben.
 
 A projekt forrásadatai a `../Felujítás` mappában vannak; ez a program csak olvassa őket.
@@ -27,9 +27,10 @@ Git Bash alatt a konténeren belüli abszolút útvonalakhoz (`/data`) `MSYS_NO_
 docker compose exec dev npm run check-data
 ```
 
-Ez a legfrissebb live tervezési naplót keresi meg (`Felujítás/Doc`, az `old` mappa nélkül).
+Ez a legfrissebb live tervezési naplót keresi meg (`Felujítás/Doc`, az `old` mappa nélkül). A berendezési javaslat
+termékhivatkozásait is ellenőrzi a bútorkatalógusban.
 Minden helyiségadatnál ellenőrzi, hogy a hivatkozott sorban szerepel-e a modellben használt
-szám, és státuszonként összesíti az adatokat. Ha a napló új verziója jelenik meg (V14…),
+szám, és státuszonként összesíti az adatokat. Ha a napló új verziója jelenik meg (V16…),
 erre külön figyelmeztet.
 
 ## Szkennelés beolvasása (OpenPlan3D / RoomPlan)
@@ -63,6 +64,11 @@ A `src/data/products/` mappában valós, Magyarországon kapható termékek vann
 - `doors.json`: 22 beltéri ajtó (Ajtógyár Pascal Optima dekorok, OBI, Praktiker, Porta, AjtóMester), sima, marással díszített és üvegbetétes.
 - `curtains.json`: 28 függöny (IKEA, JYSK, Bonami és kisebb hazai webshopok): sötétítő, fényszűrő és áttetsző.
 - `panels.json`: fa falpanel kiemelt falra (a lakberendezői tervben szereplő Okapi dió).
+- `furniture.json`: 190 tétel (IKEA, JYSK, Bútor1, Bonami, Beliani, DIEGO, kisebb webshopok és a Biano piactér eladói; ellenőrzés: 2026-11-02):
+  ágyazható kanapé, L alakú (chaise-es és sarok-) kanapé, puff, TV-szekrény, TV-fal (elemlistával), étkezőasztal, szék, térelválasztó,
+  szőnyeg (nappali és háló), ágy (180 és 200 × 200), éjjeliszekrény, sarok íróasztal és akusztikus falpanel. Méret és ár a
+  termékoldalról (ami ott nincs, hiányzik); a szín fehér hátterű termékfotóból, ha az a színnévhez közeli, egyébként a színnévből becsült.
+  Az XXXLutz, a Möbelix és a mömax oldalai a gyűjtéskor 403-at adtak, ezért tőlük nincs termék.
 - `lamps.json`: 49 lámpa (IKEA, Bonami, Praktiker, OBI, JYSK, Watt Webshop): függeszték, mennyezeti lámpa, sín / spotsor, álló-, fali és asztali lámpa, köztük a konszignáció Manie állólámpája. Izzó nélküli lámpánál a modell meleg LED izzóval számol (E27 806 lm, E14 470 lm, GU10 345 lm, G9 kb. 280 lm).
 
 A modellszín eredete minden terméknél jelölve van:
@@ -87,9 +93,10 @@ MSYS_NO_PATHCONV=1 docker run --rm -v "$(pwd -W):/w" -w /w python:3.12-slim \
   sh -c "pip -q install pillow && python scripts/gallery.py"
 ```
 
-Az eredmény: `screenshots/javaslatok.html` (böngészőben megnyitható). A bútor-színvilág a
-`{"dumpEval":["furniture_fit.json","…window.__lakas.furnitureFit…"]}` lépéssel kerül a galériába
-(csak fejlesztői szerveren érhető el).
+Az eredmény: `screenshots/javaslatok.html` (böngészőben megnyitható). A bútor-színvilág és a bútorjavaslat a
+`{"dumpEval":["furniture_fit.json","…window.__lakas.furnitureFit…"]}` és a `furniture_sets.json`
+(`window.__lakas.suggestFurniture`) lépéssel kerül a galériába (csak fejlesztői szerveren érhető el). A nézetek kamerái:
+nappali – Kanapéfal felől / Dolgozó felől / Erkély felől, háló – Ágy felé / Gardrób felé; a képek bútorokkal készülnek.
 
 ## Adatmodell
 
@@ -113,6 +120,10 @@ Koordináták: minden helyiségnek saját x/z tengelye van. Ennek leírása a JS
 mezőjében és az Adatok fülön olvasható. A falon mért pozíció mindig a kisebb koordinátájú
 saroktól értendő.
 
+A berendezési javaslat (`src/data/furnishing.ts`, kézzel karbantartva) bútor-specifikációkat tartalmaz: típus, befoglaló méret,
+hely és elforgatás a helyiség rendszerében (mm), státusz (`s`), valamint a méret forrása (`basis`: naplósor, lakberendezői
+konszignáció vagy feltételezés). A felmérés JSON-jába nem kerül, és a `check-data` sem ellenőrzi.
+
 A `src/data/variants.ts` (J-javaslatok) és a `src/data/lightPlans.ts` (világítási tervek) generált fájl.
 A forrásuk a `scripts/gen/gen_variants.py` és a `scripts/gen/gen_lightplans.py`; a futtatás módja a
 szkriptek fejlécében olvasható.
@@ -134,6 +145,10 @@ szkriptek fejlécében olvasható.
   kerülendő, indoklással), és becsli a beszerezhetőséget. Minden színváltoztatásra újraszámol.
 - A J-javaslatokhoz illesztett világítási tervek (LJ1–LJ18); a javaslat választásakor a hozzá illő
   világítás bekapcsol (kikapcsolható).
+- Bútorjavaslat változatonként (`src/lib/furnitureSets.ts`): termékhelyenként a katalógusból a méretkeretbe férő, a változat
+  bútor-színvilágához legjobban illő termék (a kerülendő szín kiesik; a változat kárpit-, bútortest-, fa- és szőnyegszínéhez való közelség,
+  a konszignáció-tervezet, az ellenőrzött ár és a kör, bővíthető asztal számít). A J6 a lakberendező termékeit kapja, ahol beleférnek
+  (`FURNITURE_OVERRIDES`). A javaslat választásakor a bútorok is cserélődnek (Javaslat fül, kikapcsolható); a választóban ◆ jelöli.
 - Egyszerű és részletes nézet (fejléc): az egyszerű a családnak szól – a rétegek, az ellenőrzések, a források és a lámpaszerkesztés rejtve.
   Első megnyitáskor rövid súgó (újra: Súgó gomb); telefonon figyelmeztetés és könnyített megjelenítés.
 - Könnyített megjelenítés (Nézet): árnyéktérképek nélkül, 1-es pixelaránnyal, gyengébb gépekre.
@@ -144,6 +159,25 @@ szkriptek fejlécében olvasható.
   könnyített megjelenítés, súgó) nem kerülnek a fájlba.
 - Bevásárlólista (Termékek fül, CSV, Excelhez pontosvesszővel): az aktív változat és világítási terv termékei becsült
   mennyiséggel és összeggel (`src/lib/shopping.ts`: padló +10 %, festék 2 réteg / 12 m²/l, függöny kétszeres ráncolás, izzók foglalat szerint).
+- Berendezési javaslat (`src/data/furnishing.ts`, `src/lib/furnish.ts`): a nappaliban kanapé (egyenes ágyazható + puff, vagy L alakú:
+  a chaise az erkély felé – legfeljebb kb. 180 cm-es ággal, az ellenőrzés méri az erkélyajtó vonalához – vagy az étkező felé; sarokkanapénál a rövid ágnak is van háttámlája), a falra szerelt TV alatt alacsony TV-szekrény vagy TV-fal (az elemek
+  jelzésszerű elrendezésével), szőnyeg, lamellás térelválasztó és étkező
+  (kör ø120-as asztal 4 székkel vagy bővítve 196 cm-re); a hálóban szőnyeg, éjjeliszekrények és új, legalább 180 × 200-as ágy (alapból; a meglévő keret választható);
+  a dolgozóban a meglévő kb. 300 × 103 cm-es asztal, sarokasztal az ajtó melletti sarokban (rövid ág ≤ 125 cm) vagy félszigetként, 3 monitorral és laptoppal.
+  Paraméteres modellek befoglaló mérettel, nem termékek; a szín a változat bútor-színvilágából jön (`furniturePalette`).
+  A lehetőségek az Anyagok → Bútor csoportban, a megjelenítés a Nézet fülön kapcsolható. Termékhelyenként (pl. a 4 szék egy hely)
+  katalógusbútor választható a méretkeret szerint szűrve („belefér” / „kilóg”); ekkor a termék mérete és színe látszik, a fal mellé állított
+  bútor háta a falnál marad, a székek az asztalhoz, az éjjeliszekrények az ágyhoz igazodnak. A panel jelzi, hogyan illik a termék színe
+  az aktív változathoz (a legközelebbi bútor-színvilág minta ítélete). A „Javasolt termékek (★)” gomb a konszignáció-tervezetet tölti be
+  (`FURNITURE_PROPOSAL`: termékhelyenként javasolt termék, alternatívák és indoklás) – javaslat, nem döntés; a V15 napló Konszignáció lapján
+  „Jelölt – 3D-tervezet (nem jóváhagyott)” sorokként is szerepel. A választott bútorok a Termékek fülön és a bevásárlólistában is megjelennek. Az ellenőrzések jelzik a radiátor előtti
+  zónába, az erkélyajtó megközelítésébe és az ajtólap ívébe lógó bútort, mérik az ajtók előtti szabad helyet és a fontosabb közöket
+  (Méretek rétegen is).
+- Dekorelemek (`src/data/decor.ts`, `src/scene/DecorModels.tsx`, `src/scene/placement.ts`; alapból rejtve): 30 jelzésszerű elem – növények,
+  képek és tükrök, dekortárgyak, akusztikus falpanelek (lamellás, hatszög, filc; katalógustermék rendelhető hozzájuk, a bevásárlólistában
+  lapszámmal). Az Anyagok → Dekor csoportban típust választva a 3D nézetben a falra, a padlóra vagy egy bútor tetejére kattintva kerül
+  a helyére (Esc: mégse); a 3D-ben rákattintva kijelölhető, majd 5 cm-es lépésekkel mozgatható, forgatható, átméretezhető, áthelyezhető,
+  másolható és törölhető. A konfigurációs fájlba is bekerül.
 - Gyorsinfó: Alt nyomva tartva (vagy I-vel rögzítve) az egér alatti elem – fal, padló, mennyezet, ajtó,
   ablak, függöny, radiátor, klíma, cső, lámpa, bútor – leírása buborékban (termék, kód, szín, ár).
 - Világítási terv (lakásszintű, a színváltozattól független; `src/data/lightPlans.ts`): helyiségenként lámpák
@@ -180,7 +214,7 @@ scripts/shot.sh '[{"shot":"start"},{"click":"Dolgozó"},{"shot":"dolgozo"}]'
 
 Fej nélküli Chromium fut Playwright-konténerben, a képek a `screenshots/` mappába kerülnek.
 A lépések: `click` (gombfelirat), `toggle` (jelölőnégyzet felirata), `select` (`[sorszám, felirat]` vagy `["auto", felirat]`), `wait` (ms),
-`shot` (fájlnév), `eval` (kifejezés kiértékelése a böngészőben), `dump` (a mentett állapot
+`shot` (fájlnév), `eval` (kifejezés kiértékelése a böngészőben; fejlesztői szerveren a `window.__lakas.store` a tárolt állapot), `dump` (a mentett állapot
 kiírása fájlba), `hold` (billentyű nyomva tartása, pl. `["w",1500]`), `drag` (egérhúzás a 3D
 nézetben, pl. `[200,0]`) `clickAt` (kattintás oldalkoordinátán, pl. `[969,107]`) `mouse` (egér mozgatása, pl. `[900,400]`), `download` (`[gombfelirat, fájlnév]`), `upload` (`[fájlmező-szelektor, fájlnév]`), `fill` (`[helykitöltő szöveg, érték]`) és `dumpEval` (`[fájlnév, kifejezés]`). Ha az első lépés `{"helpShot":"név"}`, a nyitó súgóról is kép készül; a súgót a szkript utána bezárja.
 
@@ -201,6 +235,5 @@ A tároló commitjai a GitHub noreply címével készülnek (tárolószintű `gi
 
 1. Beépített LED-sávok (médiafal, polcok, mennyezeti koszorú) a bútorokkal együtt; a kiválasztott festékek, padló- és ajtódekorok fizikai mintáinak fotója szürkekártyával.
 2. A közlekedő hosszának közvetlen mérése; a WC- és fürdőajtó nyitásiránya; falvastagságok (lásd a helyiségek „missing” listáját).
-3. Bútor-specifikációk (típus, maximális befoglaló méret, szín), paraméteres bútormodellekkel.
-4. Bútorkatalógus a beszerzési forrásokból, specifikáció szerinti szűréssel.
-5. Dekorelemek: szőnyeg, növény, térelválasztó.
+3. A dolgozó berendezése (a nagy tervezőasztal mérete még hiányzik); a bútor-konszignáció átvezetése a naplóba jóváhagyás után.
+4. Dekorelemek húzással mozgatva; ütközésjelzés a dekor és a bútorok között.

@@ -525,9 +525,9 @@
         "note": "Tervezési helyőrző az étkezőasztal fölött (ND-003)."
       },
       "z": {
-        "v": 1700,
+        "v": 2050,
         "s": "A",
-        "note": "Tervezési helyőrző a bontott szekrény helyén kialakuló étkezőnél."
+        "note": "Tervezési helyőrző a bontott szekrény helyén kialakuló étkezőnél, a berendezési javaslat asztala fölött (data/furnishing.ts). A korábbi z = 1700 alatt az asztal dolgozó felőli széke mögött csak kb. 630 mm maradt volna a dolgozó ajtaja előtt."
       }
     }
   ],
@@ -537,9 +537,9 @@
       "label": "Állólámpa a kanapé mellett",
       "kind": "floor",
       "x": 300,
-      "z": 3800,
+      "z": 7100,
       "s": "A",
-      "note": "Tervezési helyőrző – nem kiválasztott termék."
+      "note": "Tervezési helyőrző – nem kiválasztott termék. A kanapé erkély felőli végénél (a korábbi z = 3800 a térelválasztóba esne)."
     }
   ],
   "cameras": [

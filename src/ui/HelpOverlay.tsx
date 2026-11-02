@@ -12,7 +12,7 @@ export function HelpOverlay() {
     <div className="help-backdrop" onClick={close}>
       <div className="help" onClick={(e) => e.stopPropagation()}>
         <h2>Lakás 3D – így használd</h2>
-        <p>A lakás felújítási terveinek 3D-s nézete: falszínek, padló, ajtók, függönyök és világítás valós termékekkel. Nincs még berendezve – a bútorok helyét később tervezzük.</p>
+        <p>A lakás felújítási terveinek 3D-s nézete: falszínek, padló, ajtók, függönyök, világítás és berendezés valós termékekkel. A bútorok javaslatok, nem kiválasztott darabok.</p>
         <h3>Nézelődés</h3>
         <ul>
           <li>
@@ -31,13 +31,22 @@ export function HelpOverlay() {
         <h3>Javaslatok</h3>
         <ul>
           <li>
-            Az oldalsáv <b>Javaslat</b> fülén a <b>J</b> szín- és anyagjavaslatok; a hozzájuk illő világítás magától bekapcsol. Az esti hatást a <b>Világítás</b> fül fényjeleneteivel nézd meg.
+            Az oldalsáv <b>Javaslat</b> fülén a <b>J</b> szín- és anyagjavaslatok; a hozzájuk illő világítás és bútorok magától betöltődnek. Az esti hatást a <b>Világítás</b> fül fényjeleneteivel nézd meg.
           </li>
           <li>
             Ugyanott a <b>Bútorok színvilága</b> mutatja, milyen színű kanapé és bútor illik az adott javaslathoz.
           </li>
           <li>
             Bátran kísérletezz: a <b>Másolat</b> gombbal saját változatot készíthetsz, a színeket az <b>Anyagok</b> fülön állíthatod.
+          </li>
+        </ul>
+        <h3>Berendezés és dekor</h3>
+        <ul>
+          <li>
+            Az <b>Anyagok</b> fül <b>Bútor</b> csoportjában választható a kanapé (egyenes vagy L alakú), a TV alatti szekrény vagy TV-fal, az asztal és az ágy, hozzájuk valós termék is (<b>◆</b> a javaslathoz illő, <b>★</b> a tervezet).
+          </li>
+          <li>
+            A <b>Dekor</b> csoportban növény, kép, tükör vagy akusztikus panel tehető ki: válaszd ki, majd kattints a 3D nézetben a falra vagy a padlóra (Esc: mégse).
           </li>
         </ul>
         <h3>Véleményezés</h3>

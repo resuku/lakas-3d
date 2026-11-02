@@ -15,6 +15,8 @@ import { CurtainCatalog, DoorCatalog, FloorCatalog, PaintCatalog, ProductInfo } 
 import { LightPlanEditor } from './LightPlanEditor';
 import { FurnitureFitPanel } from './FurnitureFitPanel';
 import { CHOICE_GROUPS } from '../data/choices';
+import { FurnishingPanel, hasFurnishing, VariantFurniture } from './FurnishingPanel';
+import { DecorPanel } from './DecorPanel';
 
 const MONTHS = ['jan.', 'febr.', 'márc.', 'ápr.', 'máj.', 'jún.', 'júl.', 'aug.', 'szept.', 'okt.', 'nov.', 'dec.'];
 
@@ -316,8 +318,9 @@ function SurfaceEditor({ v, roomId }: { v: Variant; roomId: string }) {
         )}
       </Field>
       </Sub>
-      {(room.wardrobe || room.beds.length > 0) && (
+      {(room.wardrobe || room.beds.length > 0 || hasFurnishing(roomId)) && (
       <Sub title={`Bútor – ${room.name.toLowerCase()}`}>
+      {hasFurnishing(roomId) && <FurnishingPanel v={v} roomId={roomId} />}
       {room.wardrobe && (
         <Field label="Gardróbfront (megtartott korpusz)">
           <Segmented
@@ -339,7 +342,20 @@ function SurfaceEditor({ v, roomId }: { v: Variant; roomId: string }) {
       )}
       </Sub>
       )}
+      <DecorSub roomId={roomId} />
     </>
+  );
+}
+
+/** Dekor alcsoport: kijelöléskor vagy elhelyezés közben nyitva. */
+function DecorSub({ roomId }: { roomId: string }) {
+  const selected = useStore((s) => s.decor.some((d) => d.id === s.selectedDecor && d.roomId === roomId));
+  const placing = useStore((s) => !!s.placing);
+  const n = useStore((s) => s.decor.filter((d) => d.roomId === roomId).length);
+  return (
+    <Sub key={selected || placing ? 'open' : 'auto'} title="Dekor és akusztikus panel" open={selected || placing} hint={n ? `${n} elem` : 'nincs'}>
+      <DecorPanel roomId={roomId} />
+    </Sub>
   );
 }
 
@@ -554,6 +570,8 @@ export function Sidebar() {
           ]}
           onChange={(m) => s.setWhole(m === 'whole')}
         />
+        <Toggle checked={s.layers.furniture} onChange={(b) => s.setLayer('furniture', b)} label="Bútorok (berendezési javaslat; lehetőségek: Anyagok → Bútor)" />
+        <Toggle checked={s.layers.decor} onChange={(b) => s.setLayer('decor', b)} label="Dekorelemek (elhelyezés: Anyagok → Dekor)" />
         {s.whole && <p className="note">A kiválasztott helyiség a szerkesztett; a gombjai oda viszik a kamerát. A konyha, a fürdő, a WC, a tároló és az erkély nincs modellezve (szürke helyőrző).</p>}
         <div className="cam-buttons">
           {room.cameras.map((c, i) => (
@@ -639,6 +657,10 @@ export function Sidebar() {
         <FurnitureFitPanel v={active} />
       </Section>
 
+      <Section title="Bútorjavaslat ehhez a változathoz">
+        <VariantFurniture v={active} />
+      </Section>
+
         </>
       )}
       {tab === 'materials' && (
@@ -702,7 +724,7 @@ export function Sidebar() {
         <>
       <Section title="Nyitott lehetőségek">
         <p className="note">Még eldöntetlen műszaki megoldások, a színváltozattól függetlenül kapcsolhatók.</p>
-        {CHOICE_GROUPS.map((g) => {
+        {CHOICE_GROUPS.filter((g) => !g.furniture).map((g) => {
           const val = s.choices[g.id] ?? g.default;
           const opt = g.options.find((o) => o.id === val);
           return (

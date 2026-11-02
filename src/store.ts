@@ -5,7 +5,8 @@ import { SCENES } from './data/scenes';
 import { DEFAULT_VARIANTS } from './data/variants';
 import { DEFAULT_LIGHT_PLANS } from './data/lightPlans';
 import { DEFAULT_CHOICES } from './data/choices';
-import type { LightPlan, LightSettings, Variant } from './model/types';
+import { suggestFurniture } from './lib/furnitureSets';
+import type { DecorItem, LightPlan, LightSettings, Variant } from './model/types';
 
 export type ViewMode = 'single' | 'compare';
 export type SidebarTab = 'view' | 'variant' | 'materials' | 'light' | 'more';
@@ -15,6 +16,10 @@ export interface Layers {
   zones: boolean;
   dims: boolean;
   doorsOpen: boolean;
+  /** Berendezési javaslat (kanapé, asztal, szőnyeg stb., data/furnishing.ts). */
+  furniture: boolean;
+  /** Elhelyezett dekorelemek (növények, képek, akusztikus panelek); alapból rejtve. */
+  decor: boolean;
 }
 
 export interface CamPose {
@@ -50,6 +55,16 @@ interface State {
   sidebarTab: SidebarTab;
   /** Nyitott műszaki lehetőségek választása (data/choices.ts). */
   choices: Record<string, string>;
+  /** Berendezés: termékhelyenként (FurnSpec.slot) a választott katalógusbútor (products/furniture.json); hiányában helyőrző. */
+  furniturePicks: Record<string, string>;
+  /** A J-javaslat (változat) kiválasztásakor a hozzá illő bútorok is betöltődnek (lib/furnitureSets.ts). */
+  furnitureFollowsVariant: boolean;
+  /** Elhelyezett dekorelemek (minden helyiségben, a színváltozattól függetlenül). */
+  decor: DecorItem[];
+  /** Elhelyezés kattintással: új elem típusa vagy áthelyezendő elem; nem mentődik. */
+  placing: { typeId?: string; moveId?: string } | null;
+  /** A kijelölt dekorelem; nem mentődik. */
+  selectedDecor: string | null;
   /** Gyorsinfó (Alt nyomva tartva vagy I-vel rögzítve): az egér alatti elem leírása; nem mentődik. */
   inspect: { on: boolean; sticky: boolean; info: { title: string; lines: string[] } | null; x: number; y: number };
   /** Kameraváltási kérés: preset index vagy 'overview'. */
@@ -80,7 +95,17 @@ interface State {
   deletePlan(id: string): void;
   toggleLamp(key: string): void;
   setChoice(group: string, option: string): void;
+  /** Bútortermék egy termékhelyre (undefined: vissza a helyőrzőre). */
+  setFurniturePick(slot: string, id: string | undefined): void;
+  /** Több termékhely egyszerre (pl. a javasolt bútorok betöltése). */
+  setFurniturePicks(picks: Record<string, string>): void;
+  addDecor(item: DecorItem): void;
+  updateDecor(id: string, patch: Partial<DecorItem>): void;
+  removeDecor(id: string): void;
+  setPlacing(p: State['placing']): void;
+  selectDecor(id: string | null): void;
   setPlanFollowsVariant(on: boolean): void;
+  setFurnitureFollowsVariant(on: boolean): void;
   setViewer(patch: Partial<Pick<State, 'viewerName' | 'details' | 'lowQuality' | 'helpSeen' | 'sidebarTab'>>): void;
   /** A saját visszajelzés (viewerName néven) az adott változathoz. */
   setFeedback(variantId: string, patch: { fav?: boolean; note?: string }): void;
@@ -106,18 +131,21 @@ function initialSettings() {
     compareId: DEFAULT_VARIANTS[1].id,
     sceneId: SCENES[0].id,
     light: clone(SCENES[0].settings),
-    layers: { status: false, zones: false, dims: false, doorsOpen: false },
+    layers: { status: false, zones: false, dims: false, doorsOpen: false, furniture: true, decor: false },
     lightPlans: clone(DEFAULT_LIGHT_PLANS),
     // az első javaslat saját világítása (ha van)
     activePlanId: DEFAULT_LIGHT_PLANS.find((p) => p.id === DEFAULT_VARIANTS[0].lightPlanId)?.id ?? DEFAULT_LIGHT_PLANS[0].id,
     lampsOff: {} as Record<string, boolean>,
     choices: { ...DEFAULT_CHOICES },
+    furniturePicks: suggestFurniture(DEFAULT_VARIANTS[0]).picks,
+    furnitureFollowsVariant: true,
+    decor: [] as DecorItem[],
     planFollowsVariant: true,
   };
 }
 
 /** A mentett állapot verziója (localStorage és konfigurációs fájl). */
-export const STORE_VERSION = 6;
+export const STORE_VERSION = 9;
 
 /** A v6-ban törölt alapváltozatok (halszálkás J3, J12; termék nélküli A/B/C koncepciók) és terveik. */
 const REMOVED_VARIANTS = ['v-meleg', 'v-japandi', 'v-zsalya', 'j3-homok-agyag', 'j12-mediterran'];
@@ -137,6 +165,9 @@ const PERSISTED_KEYS = [
   'activePlanId',
   'lampsOff',
   'choices',
+  'furniturePicks',
+  'furnitureFollowsVariant',
+  'decor',
   'planFollowsVariant',
 ] as const;
 type Persisted = Pick<State, (typeof PERSISTED_KEYS)[number]>;
@@ -165,8 +196,25 @@ export function smallDevice() {
 // v4: világítási tervek – a hiányzó alapértelmezett tervek hozzáadása
 // v5: a J-javaslatok saját világítási tervei (lj1–lj18) és a változatok hivatkozása rájuk
 // v6: a halszálkás J3 és J12, valamint az A/B/C koncepciópéldák törlése (a többi J száma marad)
+// v7: berendezési javaslat (layers.furniture, alapból be; furniturePicks: választott bútortermékek, alapból üres);
+//     a nappali étkező-függesztéke az asztal fölé (z 1700 → 2050), az állólámpa a kanapé erkély felőli végéhez
+//     (z 3800 → 7100) – a tervekben ott, ahol még a régi helyőrzőn áll
+// v8: dekorelemek (decor, layers.decor – alapból rejtve)
+// v9: a változathoz illő bútorok (furnitureFollowsVariant, alapból be); üres választásnál az aktív változat bútorai
+const MOVED_FIXTURES: { id: string; from: [number, number]; to: [number, number] }[] = [
+  { id: 'etk', from: [1720, 1700], to: [1720, 2050] },
+  { id: 'allo', from: [300, 3800], to: [300, 7100] },
+];
 function migrateState(persisted: unknown, version: number) {
-  const s = persisted as { variants?: Variant[]; lightPlans?: LightPlan[] };
+  const s = persisted as {
+    variants?: Variant[];
+    lightPlans?: LightPlan[];
+    layers?: Partial<Layers>;
+    decor?: DecorItem[];
+    activeId?: string;
+    furniturePicks?: Record<string, string>;
+    furnitureFollowsVariant?: boolean;
+  };
   if (version < 3 && s.variants) {
     const fresh = new Map(DEFAULT_VARIANTS.filter((v) => v.id.startsWith('j')).map((v) => [v.id, v]));
     s.variants = s.variants.map((v) => (fresh.has(v.id) ? clone(fresh.get(v.id)!) : v));
@@ -194,6 +242,23 @@ function migrateState(persisted: unknown, version: number) {
       if (!st.lightPlans.some((p) => p.id === st.activePlanId)) st.activePlanId = st.lightPlans[0]?.id;
     }
   }
+  if (version < 7) {
+    if (s.layers && s.layers.furniture === undefined) s.layers = { ...s.layers, furniture: true };
+    for (const p of s.lightPlans ?? [])
+      for (const f of p.rooms.nappali ?? []) {
+        const m = MOVED_FIXTURES.find((m) => m.id === f.id && m.from[0] === f.x && m.from[1] === f.z);
+        if (m) [f.x, f.z] = m.to;
+      }
+  }
+  if (version < 8) {
+    if (s.layers && s.layers.decor === undefined) s.layers = { ...s.layers, decor: false };
+    s.decor = s.decor ?? [];
+  }
+  if (version < 9) {
+    s.furnitureFollowsVariant = s.furnitureFollowsVariant ?? true;
+    const v = s.variants?.find((x) => x.id === s.activeId) ?? s.variants?.[0];
+    if (v && !Object.keys(s.furniturePicks ?? {}).length) s.furniturePicks = suggestFurniture(v).picks;
+  }
   return s;
 }
 
@@ -219,6 +284,8 @@ export const useStore = create<State>()(
       camRequest: { key: '0', n: 0 },
       camSync: { pos: [0, 0, 0], target: [0, 0, 0], from: '', n: 0 },
       walk: false,
+      placing: null,
+      selectedDecor: null,
       inspect: { on: false, sticky: false, info: null, x: 0, y: 0 },
       viewerName: '',
       details: false,
@@ -231,9 +298,14 @@ export const useStore = create<State>()(
       setWhole: (on) => set((s) => ({ whole: on, camRequest: { key: on ? 'overview' : '0', n: s.camRequest.n + 1 } })),
       setActive: (id) =>
         set((s) => {
-          const plan = s.variants.find((v) => v.id === id)?.lightPlanId;
+          const v = s.variants.find((x) => x.id === id);
+          const plan = v?.lightPlanId;
           const follow = s.planFollowsVariant && plan && s.lightPlans.some((p) => p.id === plan);
-          return follow ? { activeId: id, activePlanId: plan, lampsOff: {} } : { activeId: id };
+          return {
+            activeId: id,
+            ...(follow ? { activePlanId: plan, lampsOff: {} } : {}),
+            ...(s.furnitureFollowsVariant && v ? { furniturePicks: suggestFurniture(v).picks } : {}),
+          };
         }),
       setCompare: (id) => set({ compareId: id }),
       updateVariant: (id, fn) => set((s) => ({ variants: s.variants.map((v) => (v.id === id ? fn(clone(v)) : v)) })),
@@ -279,7 +351,21 @@ export const useStore = create<State>()(
         }),
       toggleLamp: (key) => set((s) => ({ lampsOff: { ...s.lampsOff, [key]: !s.lampsOff[key] } })),
       setChoice: (group, option) => set((s) => ({ choices: { ...s.choices, [group]: option } })),
+      setFurniturePick: (slot, id) =>
+        set((s) => {
+          const furniturePicks = { ...s.furniturePicks };
+          if (id) furniturePicks[slot] = id;
+          else delete furniturePicks[slot];
+          return { furniturePicks };
+        }),
+      setFurniturePicks: (picks) => set({ furniturePicks: { ...picks } }),
+      addDecor: (item) => set((s) => ({ decor: [...s.decor, item], selectedDecor: item.id, layers: { ...s.layers, decor: true } })),
+      updateDecor: (id, patch) => set((s) => ({ decor: s.decor.map((d) => (d.id === id ? { ...d, ...patch } : d)) })),
+      removeDecor: (id) => set((s) => ({ decor: s.decor.filter((d) => d.id !== id), selectedDecor: s.selectedDecor === id ? null : s.selectedDecor })),
+      setPlacing: (p) => set((s) => ({ placing: p, layers: p ? { ...s.layers, decor: true } : s.layers })),
+      selectDecor: (id) => set({ selectedDecor: id }),
       setPlanFollowsVariant: (on) => set({ planFollowsVariant: on }),
+      setFurnitureFollowsVariant: (on) => set({ furnitureFollowsVariant: on }),
       setViewer: (patch) => set(patch),
       setFeedback: (variantId, patch) =>
         set((s) => {

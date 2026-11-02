@@ -146,7 +146,7 @@ function WallContent({ room, f, variant, layers, connected }: { room: Room; f: W
 
   return (
     <>
-      <mesh geometry={geom} position={[0, 0, -f.t]} castShadow receiveShadow userData={wallInfo(room, id, variant)}>
+      <mesh geometry={geom} position={[0, 0, -f.t]} castShadow receiveShadow userData={{ ...wallInfo(room, id, variant), wallId: id }}>
         {woodTex ? <meshStandardMaterial key="wood" map={woodTex} roughness={0.85} /> : <meshStandardMaterial key="paint" color={wallColor} roughness={rough} />}
       </mesh>
       {openings.map((o) =>

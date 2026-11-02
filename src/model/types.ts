@@ -102,6 +102,172 @@ export interface FurnitureItem {
   note?: string;
 }
 
+/** Bútortermék-kategóriák a katalógusban (products/furniture.json). */
+export type FurnCategory =
+  | 'sofa'
+  | 'sofaChaise'
+  | 'ottoman'
+  | 'tvUnit'
+  | 'tvWall'
+  | 'nightstand'
+  | 'diningTable'
+  | 'chair'
+  | 'rugLiving'
+  | 'rugBedroom'
+  | 'divider'
+  | 'bed'
+  | 'deskCorner'
+  | 'acousticPanel';
+
+/** TV-fal (szekrénysor) eleme: alacsony pad, falra szerelt szekrény, magas oldalszekrény vagy nyitott polc (mm). */
+export interface FurnPart {
+  kind: 'low' | 'wall' | 'tall' | 'shelf';
+  w: number;
+  d: number;
+  h: number;
+  /** Alsó él a padló fölött (falra szerelt elem). */
+  y?: number;
+  side?: 'left' | 'right' | 'center';
+  qty?: number;
+}
+
+/** Valós bútortermék a magyar kínálatból; a méret mm-ben, a termékoldal szerint (ami ott nincs, hiányzik). */
+export interface FurnitureProduct {
+  id: string;
+  category: FurnCategory;
+  store: string;
+  brand?: string;
+  name: string;
+  article?: string;
+  /** w = szélesség (szőnyegnél a hosszabb oldal, asztalnál a zárt hossz vagy átmérő), d = mélység, h = magasság;
+   *  ext = bővített hossz, sleep = fekvőfelület, openD = kinyitott mélység, chaise = a chaise szélessége / mélysége,
+   *  pile = szálmagasság, headH = fejvég magassága. */
+  size: {
+    w?: number;
+    d?: number;
+    h?: number;
+    seatH?: number;
+    sleepW?: number;
+    sleepL?: number;
+    openD?: number;
+    chaiseW?: number;
+    chaiseD?: number;
+    ext?: number;
+    pile?: number;
+    headH?: number;
+    frameH?: number;
+    /** Sarokasztal: a rövid ág teljes hossza (a hosszú ág hátsó élétől) és mélysége. */
+    legL?: number;
+    legD?: number;
+    hMin?: number;
+    hMax?: number;
+    /** Akusztikus panel: léc szélessége és köze, hatszög elem szélessége. */
+    slatW?: number;
+    slatGap?: number;
+    tileW?: number;
+  };
+  /** L alakú kanapé: chaise (récamié) vagy valódi sarokkanapé (a rövid ágnak is van háttámlája). */
+  lType?: 'chaise' | 'corner';
+  /** TV-fal elemei, ha a termékoldal felsorolja. */
+  parts?: FurnPart[];
+  heightAdjustable?: boolean;
+  panelType?: 'slat' | 'hexagon' | 'felt';
+  absorption?: string;
+  feltColor?: string;
+  shape?: 'round' | 'oval' | 'rect';
+  sleeper?: boolean;
+  storage?: string;
+  chaiseSide?: 'left' | 'right' | 'reversible';
+  mattress?: string;
+  dividerType?: 'slatKit' | 'screen' | 'shelf';
+  base?: string;
+  material?: string;
+  colorName?: string;
+  hex: string;
+  hexSource: ColorSource;
+  variants?: string[];
+  price?: string;
+  url: string;
+  imageUrl?: string;
+  checkedAt: string;
+  note?: string;
+}
+
+/** A berendezési javaslat bútortípusai (data/furnishing.ts). */
+export type FurnKind = 'sofa' | 'ottoman' | 'tvUnit' | 'tvWall' | 'tv' | 'table' | 'chair' | 'divider' | 'rug' | 'bed' | 'nightstand' | 'desk' | 'officeChair';
+/** A bútor színszerepe: a szín a változat bútor-színvilágából jön (lib/furnitureFit.ts – furniturePalette). */
+export type FurnColor = 'upholstery' | 'upholstery2' | 'wood' | 'body' | 'rug' | 'black';
+
+/**
+ * Bútor-specifikáció: típus, befoglaló méret és hely a helyiség saját rendszerében (mm), paraméteres modellel.
+ * Nem kiválasztott termék; a méret forrása a `basis`-ban (naplósor, lakberendezői konszignáció vagy feltételezés).
+ */
+export interface FurnSpec {
+  id: string;
+  kind: FurnKind;
+  label: string;
+  /** Termékhely: az azonos helyen álló darabok (pl. a 4 szék) egy terméket kapnak (store.furniturePicks). */
+  slot?: string;
+  /** Milyen katalógustermék kerülhet ide (products/furniture.json); hiányában nem választható (pl. a meglévő TV). */
+  category?: FurnCategory;
+  /** Alaprajzi középpont. */
+  x: number;
+  z: number;
+  /** Elforgatás fokban: 0 = az eleje +z felé néz, 90 = +x felé, −90 = −x felé, 180 = −z felé. */
+  rot?: number;
+  /** Befoglaló méret: szélesség (a bútor saját vízszintes tengelye), mélység (előre), magasság. */
+  w: number;
+  d: number;
+  h: number;
+  /** Alsó él a padló fölött (falra szerelt TV). */
+  y?: number;
+  /**
+   * L alak: kanapénál a chaise / sarokrész, sarokasztalnál a rövid ág. `side`: a bútor helyi −x (right) vagy +x (left) végén
+   * (kanapén ülve nézve jobb / bal); `d` a teljes mélység a háttól; `corner`: a rövid ágnak is van háttámlája.
+   */
+  chaise?: { side: 'left' | 'right'; w: number; d: number; corner?: boolean };
+  /** TV-fal: az elemek (helyőrzőnél is). */
+  parts?: FurnPart[];
+  /** Íróasztal: monitorok száma (jelzésszerű, 27 colos) és laptop. */
+  monitors?: number;
+  /** Asztallap: kör, ovális (bővített) vagy téglalap. */
+  shape?: 'round' | 'oval' | 'rect';
+  color: FurnColor;
+  /** Rögzített szín (meglévő bútor, pl. a dolgozó asztala) – a változat színvilága helyett. */
+  hex?: string;
+  s: Status;
+  basis: string;
+  note?: string;
+  /** Csak akkor jelenik meg, ha a választásban (data/choices.ts) ez az opció él. */
+  choice?: { group: string; option: string };
+  /** Megjelenésekor elrejti a helyiség felmért elemeit (ágy, éjjeliszekrény azonosítója). */
+  replaces?: string[];
+}
+
+/**
+ * Elhelyezett dekorelem (data/decor.ts típusai), a helyiség saját rendszerében (mm). Falra kerülő elemnél `wall` és `a`
+ * (a középpont a fal mentén) adja a helyet, `y` az alsó él; padlón vagy bútoron álló elemnél `x`, `z` a középpont,
+ * `y` az alap magassága (0 = padló), `rot` az elforgatás fokban.
+ */
+export interface DecorItem {
+  id: string;
+  type: string;
+  roomId: string;
+  wall?: WallId;
+  a?: number;
+  x?: number;
+  z?: number;
+  y: number;
+  rot?: number;
+  /** Méret felülírása (akusztikus panel szélessége, magassága). */
+  w?: number;
+  h?: number;
+  /** Szín- vagy mintaváltozat (a típus `variants` listájából). */
+  variant?: string;
+  /** Akusztikus panelnél a katalógustermék (products/furniture.json, acousticPanel). */
+  productId?: string;
+}
+
 export interface Radiator {
   id: string;
   label: string;

@@ -65,7 +65,8 @@ const wb = XLSX.read(fs.readFileSync(path.join(DOC_DIR, file)));
 const idx = indexSheets(wb);
 
 console.log(`Tervezési napló: ${file}`);
-if (version !== 14) console.log(`FIGYELEM: a modell a V14 alapján készült, most V${version} az aktuális – nézd át a változásokat.`);
+// A modell legutóbb a V15-tel összevetve (2026-11-02: berendezési sorok, a geometria nem változott)
+if (version !== 15) console.log(`FIGYELEM: a modell a V15 alapján készült, most V${version} az aktuális – nézd át a változásokat.`);
 
 let ok = 0;
 const failures = [];
@@ -104,4 +105,13 @@ for (const [room, counts] of Object.entries(byRoom)) {
   console.log(`  ${room}: ${order.filter((s) => counts[s]).map((s) => `${s}=${counts[s]}`).join(', ')}`);
 }
 
-process.exit(failures.length ? 1 : 0);
+// Bútorkatalógus: a berendezési javaslat (data/furnishing.ts) termékhivatkozásai léteznek-e
+const furniture = JSON.parse(fs.readFileSync(path.resolve(import.meta.dirname, '../src/data/products/furniture.json'), 'utf8'));
+const furnIds = new Set(furniture.items.map((i) => i.id));
+const furnRefs = [...fs.readFileSync(path.resolve(import.meta.dirname, '../src/data/furnishing.ts'), 'utf8').matchAll(/'(furn-[^']+)'/g)].map((m) => m[1]);
+const missingFurn = furnRefs.filter((id) => !furnIds.has(id));
+console.log(`
+Bútorkatalógus: ${furniture.items.length} termék; a javaslat ${furnRefs.length} hivatkozásából ${missingFurn.length} hiányzik.`);
+for (const id of missingFurn) console.log(`  HIÁNYZÓ TERMÉK  ${id}`);
+
+process.exit(failures.length || missingFurn.length ? 1 : 0);

@@ -7,6 +7,8 @@ import { fixtureOutput, fixtureSpec, type FixtureSpec } from '../lib/fixtures';
 import { mm, roomDims } from '../lib/geom';
 import { Box } from './Box';
 import { lampInfo } from '../lib/inspect';
+import { activeFurnishing, standTop } from '../lib/furnish';
+import { useStore } from '../store';
 
 // Lámpák egyszerűsített, jelzésszerű formában. Kattintásra az adott lámpa ki- és bekapcsol.
 
@@ -45,10 +47,20 @@ function DownSpot({ position, lm, color, angleDeg, shadow, aim = [0, -1, 0] }: {
   );
 }
 
+/** A látható berendezés felső síkja egy pont fölött (m), vagy null. */
+function useFurnishTop(roomId: string, x: number, z: number) {
+  const on = useStore((s) => s.layers.furniture);
+  const choices = useStore((s) => s.choices);
+  const picks = useStore((s) => s.furniturePicks);
+  return useMemo(() => (on ? standTop(activeFurnishing(roomId, choices, picks), x, z) : null), [on, roomId, choices, picks, x, z]);
+}
+
 /** A lámpa megjelenítése; a fény a lámpa saját helyén. */
 export function FixtureMesh({ f, room, ls, off, shadows, onToggle }: { f: Fixture; room: Room; ls: LightSettings; off: boolean; shadows: boolean; onToggle: () => void }) {
   // asztali lámpa alatti bútor (pl. éjjeliszekrény), ha van
   const stand = (room.furniture ?? []).find((n) => f.x >= n.x0 && f.x <= n.x0 + n.sx && f.z >= n.z0 && f.z <= n.z0 + n.sz);
+  // a berendezési javaslat bútora (asztal, éjjeliszekrény), ha látszik
+  const furnTop = useFurnishTop(room.id, f.x, f.z);
   const { H } = roomDims(room);
   const spec: FixtureSpec = fixtureSpec(f, ls);
   const out = fixtureOutput(f, spec, ls, off);
@@ -61,6 +73,8 @@ export function FixtureMesh({ f, room, ls, off, shadows, onToggle }: { f: Fixtur
   const events = {
     userData: lampInfo(room, f, ls, off),
     onClick: (e: ThreeEvent<MouseEvent>) => {
+      // dekor elhelyezésekor a kattintás a helyiségé
+      if (useStore.getState().placing) return;
       e.stopPropagation();
       // forgatás / körbenézés közbeni egérhúzás nem kapcsol
       if (e.delta > 4) return;
@@ -222,7 +236,7 @@ export function FixtureMesh({ f, room, ls, off, shadows, onToggle }: { f: Fixtur
 
   // állólámpa és asztali lámpa
   const table = f.type === 'table';
-  const baseY = table ? (stand ? mm(stand.h) : 0.5) : 0;
+  const baseY = table ? (furnTop ?? (stand ? mm(stand.h) : 0.5)) : 0;
   // íves és gémes lámpák egyenes állólámpaként, legfeljebb 1,85 m-es burával
   const total = table ? spec.h : Math.min(Math.max(spec.h, 0.6), 1.85);
   const shadeH = Math.min(spec.d * 0.65, 0.3);
@@ -232,7 +246,7 @@ export function FixtureMesh({ f, room, ls, off, shadows, onToggle }: { f: Fixtur
   const up = spec.emit === 'up';
   return (
     <group {...events}>
-      {table && !stand && <Box x={[x - 0.2, x + 0.2]} y={[0, 0.5]} z={[z - 0.18, z + 0.18]} color="#d3cec5" rough={0.8} />}
+      {table && !stand && furnTop === null && <Box x={[x - 0.2, x + 0.2]} y={[0, 0.5]} z={[z - 0.18, z + 0.18]} color="#d3cec5" rough={0.8} />}
       <Box x={[x - 0.008, x + 0.008]} y={[baseY, shadeY - shadeH / 2 + 0.02]} z={[z - 0.008, z + 0.008]} color={directional || up ? housing : '#3c3a37'} metal={0.4} rough={0.5} />
       <mesh position={[x, baseY + 0.01, z]}>
         <cylinderGeometry args={[table ? 0.07 : 0.14, table ? 0.08 : 0.15, 0.02, 24]} />

@@ -1,6 +1,7 @@
 import type { Room, Variant } from '../model/types';
 import { CHOICE_GROUPS, DEFAULT_CHOICES } from '../data/choices';
 import { curtainLayouts } from './curtain';
+import { activeFurnishing, furnishChecks, replacedIds } from './furnish';
 import { mm, roomDims, toRoom, wallFrames } from './geom';
 import { collectVals, worst } from './status';
 
@@ -10,7 +11,8 @@ export interface Finding {
 }
 
 /** Funkcionális és adatbiztonsági ellenőrzések az aktuális helyiségre és változatra. */
-export function runChecks(room: Room, v: Variant, choices: Record<string, string> = DEFAULT_CHOICES): Finding[] {
+/** `furnish`: a választott bútortermékek (store.furniturePicks), ha a bútorok látszanak; null, ha nem. */
+export function runChecks(room: Room, v: Variant, choices: Record<string, string> = DEFAULT_CHOICES, furnish: Record<string, string> | null = {}): Finding[] {
   const out: Finding[] = [];
   const { W } = roomDims(room);
 
@@ -87,7 +89,7 @@ export function runChecks(room: Room, v: Variant, choices: Record<string, string
         });
     }
   }
-  for (const g of CHOICE_GROUPS.filter((g) => g.roomId === room.id)) {
+  for (const g of CHOICE_GROUPS.filter((g) => g.roomId === room.id && (furnish || !g.furniture))) {
     const opt = g.options.find((o) => o.id === (choices[g.id] ?? g.default));
     if (opt?.note) out.push({ level: 'info', text: `${g.label} – ${opt.label}: ${opt.note}` });
   }
@@ -106,9 +108,10 @@ export function runChecks(room: Room, v: Variant, choices: Record<string, string
       });
   }
 
-  // Közlekedősáv az ágy lábvége és a gardróbfront között
+  // Közlekedősáv az ágy lábvége és a gardróbfront között (a javaslatban lecserélt ágyat a berendezési ellenőrzés méri)
+  const replaced = furnish ? replacedIds(activeFurnishing(room.id, choices, furnish)) : new Set<string>();
   if (room.wardrobe && room.wardrobe.wall === 'x1') {
-    for (const b of room.beds) {
+    for (const b of room.beds.filter((b) => !replaced.has(b.id))) {
       const gap = W - mm(room.wardrobe.depth.v) - mm(b.x0.v + b.sx.v);
       const s = worst(room.size.x, room.wardrobe.depth, b.x0, b.sx);
       const g = Math.round(gap * 1000);
@@ -118,6 +121,8 @@ export function runChecks(room: Room, v: Variant, choices: Record<string, string
       });
     }
   }
+
+  if (furnish) out.push(...furnishChecks(room, choices, furnish));
 
   for (const t of room.conflicts) out.push({ level: 'warn', text: `Ellentmondás: ${t}` });
   for (const t of room.missing) out.push({ level: 'info', text: `Hiányzó / lezáratlan adat: ${t}` });

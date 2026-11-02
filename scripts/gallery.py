@@ -29,6 +29,9 @@ plans = {p['id']: p for p in state.get('lightPlans', [])}
 # bútor-színvilág a programból (shot.mjs „dumpEval”: window.__lakas.furnitureFit), ha van
 fit_path = os.path.join(SHOTS, 'furniture_fit.json')
 fits = json.load(open(fit_path, encoding='utf-8')) if os.path.exists(fit_path) else {}
+# bútorjavaslat változatonként (shot.mjs „dumpEval”: window.__lakas.suggestFurniture), ha van
+sets_path = os.path.join(SHOTS, 'furniture_sets.json')
+furn_sets = {x['id']: x for x in json.load(open(sets_path, encoding='utf-8'))} if os.path.exists(sets_path) else {}
 ROOM_NAME = {'nappali': 'Nappali', 'halo': 'Háló', 'dolgozo': 'Dolgozó', 'eloszoba': 'Előszoba', 'kozlekedo': 'Közlekedő'}
 prod = {}
 for name in ('paints', 'floors', 'doors', 'curtains', 'panels', 'lamps'):
@@ -100,16 +103,28 @@ for v in variants:
     if fit:
         def chips(items, vd):
             return ''.join(f'<span class="chip" title="{html.escape("; ".join(i["reasons"]))}"><i style="background:{i["hex"]}"></i>{html.escape(i["label"])}</span>' for i in items if i['verdict'] == vd)
-        rows = ''.join(
+        fit_rows = ''.join(
             f'<tr><th>{lbl}</th><td class="good">{chips(fit[k], "good")}</td><td>{chips(fit[k], "ok")}</td><td class="bad">{chips(fit[k], "bad")}</td></tr>'
             for k, lbl in (('sofa', 'Kanapé, kárpit'), ('wood', 'Bútortest'), ('metal', 'Fém'))
         )
         fit_html = (f'<h3>Bútorok színvilága</h3><p class="pn">Beszerezhetőség: <b>{fit["ease"]["level"]}</b> – {html.escape(fit["ease"]["text"])}</p>'
-                    f'<table class="fit"><tr><th></th><th>✓ jól megy</th><th>≈ elmegy</th><th>✕ kerülendő</th></tr>{rows}</table>')
+                    f'<table class="fit"><tr><th></th><th>✓ jól megy</th><th>≈ elmegy</th><th>✕ kerülendő</th></tr>{fit_rows}</table>')
+    fs = furn_sets.get(v['id'])
+    furn_html = ''
+    if fs:
+        frows = ''.join(
+            f'<li><span class="sw" style="background:{l["hex"]}"></span><b>{html.escape(l["label"])}</b> '
+            f'<a href="{html.escape(l["url"])}" target="_blank" rel="noreferrer">{html.escape(l["name"])}</a>'
+            f'{f" <small>{html.escape(l["price"].split(" (")[0])}</small>" if l.get("price") else ""}'
+            f' <small class="{"good" if l["verdict"] == "good" else ""}">{"✓" if l["verdict"] == "good" else "≈"} {html.escape(l["why"])}</small></li>'
+            for l in fs['lines']
+        )
+        furn_html = (f'<h3>Bútorjavaslat</h3><p class="pn">A katalógusból a méretkeretbe férő, a változat színeihez legjobban illő termék termékhelyenként (heurisztika, nem döntés); '
+                     f'a képeken az alapértelmezett lehetőségek látszanak (egyenes kanapé, alacsony TV-szekrény, kör asztal, új ágy). {html.escape(fs.get("note") or "")}</p><ul class="prods">{frows}</ul>')
     figs = ''.join(f'<figure><img src="{s}" loading="lazy" alt="{html.escape(l)}"><figcaption>{html.escape(l)}</figcaption></figure>' for s, l in imgs)
     cards.append(
         f'<section id="{v["id"]}"><h2>{html.escape(v["name"])}</h2>'
-        f'<p>{html.escape(v.get("note", ""))}</p><div class="shots">{figs}</div><ul class="prods">{"".join(rows)}</ul>{lamps_html}{fit_html}</section>'
+        f'<p>{html.escape(v.get("note", ""))}</p><div class="shots">{figs}</div><ul class="prods">{"".join(rows)}</ul>{lamps_html}{furn_html}{fit_html}</section>'
     )
 
 toc = ''.join(f'<a href="#{v["id"]}">{html.escape(v["name"].split(" – ")[0])}</a>' for v in variants)
@@ -128,7 +143,7 @@ h2{{margin:0 0 4px;font-size:20px}} section>p{{margin:0 0 12px;color:#5b5249;max
 .shots{{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px}}
 figure{{margin:0}} figure img{{width:100%;display:block;border-radius:6px}} figcaption{{font-size:12px;color:#7d746a;margin-top:2px}}
 .prods{{list-style:none;padding:0;margin:12px 0 0;columns:2 420px;font-size:13.5px}} .prods li{{margin:3px 0;break-inside:avoid}}
-.prods a{{color:#2b2622}} .prods small{{color:#8a7f73}}
+.prods a{{color:#2b2622}} .prods small{{color:#8a7f73}} .prods small.good{{color:#2e6b30}}
 h3{{font-size:15px;margin:14px 0 2px}} .pn{{margin:0 0 6px;color:#5b5249;font-size:13.5px;max-width:1100px}}
 table.fit{{border-collapse:collapse;font-size:13px}} table.fit th,table.fit td{{text-align:left;padding:3px 10px 3px 0;vertical-align:top}}
 table.fit td.good{{color:#2e6b30}} table.fit td.bad{{color:#9a4a10}}
@@ -136,9 +151,9 @@ table.fit td.good{{color:#2e6b30}} table.fit td.bad{{color:#9a4a10}}
 .sw{{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid #0002;vertical-align:-2px;margin-right:6px}}
 footer{{color:#8a7f73;font-size:13px;max-width:1100px}}
 </style>
-<header><h1>Szín- és anyagjavaslatok – berendezetlen, „kész” állapot</h1><nav>{back}{toc}</nav></header>
+<header><h1>Szín-, anyag- és bútorjavaslatok</h1><nav>{back}{toc}</nav></header>
 <main>{"".join(cards)}
-<footer><p>A képek a lakas-3d modellből készültek („Nappal – derült” fényjelenet, okt. 15. 13:00). A színek képernyős közelítések: a festékeknél a gyártói képernyőszín, a padló-, ajtó- és függönytermékeknél a termékfotóból vett átlagszín. A modell égboltfénye a vöröses barnákat és taupe-okat a képen kissé lilásabbnak mutatja; a termékek valódi színe a listában lévő színmintán látszik. Végső döntés előtt teszter, padló- és dekorminta kell, nappali és esti fényben.</p></footer>
+<footer><p>A bútorok befoglaló méretű, jelzésszerű modellek a választott termék méretével és színével (a szín a termékfotóból vagy a színnévből becsült). A képek a lakas-3d modellből készültek („Nappal – derült” fényjelenet, okt. 15. 13:00). A színek képernyős közelítések: a festékeknél a gyártói képernyőszín, a padló-, ajtó- és függönytermékeknél a termékfotóból vett átlagszín. A modell égboltfénye a vöröses barnákat és taupe-okat a képen kissé lilásabbnak mutatja; a termékek valódi színe a listában lévő színmintán látszik. Végső döntés előtt teszter, padló- és dekorminta kell, nappali és esti fényben.</p></footer>
 </main></html>'''
 open(HTML, 'w', encoding='utf-8', newline='\n').write(page)
 print(len(variants), 'változat,', sum(len(c) for c in cards) // 1024, 'kB HTML')
