@@ -194,7 +194,27 @@ export interface FurnitureProduct {
 }
 
 /** A berendezési javaslat bútortípusai (data/furnishing.ts). */
-export type FurnKind = 'sofa' | 'ottoman' | 'tvUnit' | 'tvWall' | 'tv' | 'table' | 'chair' | 'divider' | 'rug' | 'bed' | 'nightstand' | 'desk' | 'officeChair';
+export type FurnKind =
+  | 'sofa'
+  | 'ottoman'
+  | 'tvUnit'
+  | 'tvWall'
+  | 'tv'
+  | 'table'
+  | 'chair'
+  | 'divider'
+  | 'rug'
+  | 'bed'
+  | 'nightstand'
+  | 'desk'
+  | 'officeChair'
+  | 'sideboard'
+  | 'shoeCabinet'
+  | 'bookcase'
+  | 'bench'
+  | 'cart'
+  | 'console'
+  | 'armchair';
 /** A bútor színszerepe: a szín a változat bútor-színvilágából jön (lib/furnitureFit.ts – furniturePalette). */
 export type FurnColor = 'upholstery' | 'upholstery2' | 'wood' | 'body' | 'rug' | 'black';
 
@@ -240,6 +260,10 @@ export interface FurnSpec {
   note?: string;
   /** Csak akkor jelenik meg, ha a választásban (data/choices.ts) ez az opció él. */
   choice?: { group: string; option: string };
+  /** További feltételek (mind teljesüljön), pl. az étkezőpad csak bővített asztalnál. */
+  when?: { group: string; option: string }[];
+  /** Nem jelenik meg, ha ez az opció él (pl. a hosszú oldali szék, ha ott pad van). */
+  unless?: { group: string; option: string };
   /** Megjelenésekor elrejti a helyiség felmért elemeit (ágy, éjjeliszekrény azonosítója). */
   replaces?: string[];
 }
@@ -266,6 +290,8 @@ export interface DecorItem {
   variant?: string;
   /** Akusztikus panelnél a katalógustermék (products/furniture.json, acousticPanel). */
   productId?: string;
+  /** Aljavaslatból betöltött elem (pl. 'sub:j5-a'): aljavaslat-váltáskor cserélődik; a saját elemeknél hiányzik. */
+  origin?: string;
 }
 
 export interface Radiator {

@@ -8,7 +8,7 @@ import { furnitureFit, furniturePalette, nearestFit, toLch, type FitItem, type F
 // Heurisztika, nem döntés: a méretkeretbe férő termékek közül a színvilág ítélete (jól megy / elmegy; kerülendő kiesik),
 // a változat bútor-színeihez való közelség, a konszignáció-tervezet (★ / ☆), az ellenőrzött ár és a fotóból vett szín számít.
 
-/** Kézi felülírás változatonként (pl. a lakberendező eredeti termékei a J6-ban, ahol a méretkeretbe férnek). */
+/** Kézi felülírás változatonként (pl. a lakberendező eredeti termékei a J7-ben – j6-tervezoi –, ahol a méretkeretbe férnek). */
 export const FURNITURE_OVERRIDES: Record<string, { picks: Record<string, string>; note: string }> = {
   'j6-tervezoi': {
     picks: {
@@ -70,28 +70,33 @@ function target(cat: FurnCategory, kind: FurnSpec['kind'], fit: FurnitureFit, pa
   }
 }
 
-/** Termékhelyenként egy termék a változathoz (minden helyiség, minden lehetőség termékhelye). */
-export function suggestFurniture(v: Variant): { picks: Record<string, string>; lines: FurnitureLine[]; note?: string } {
-  const fit = furnitureFit(v);
-  const pal = furniturePalette(fit);
-  const over = FURNITURE_OVERRIDES[v.id];
+/** Az összes termékhely (minden helyiség, minden lehetőség), helyenként az első elemével. */
+export function slotSpecs(): Map<string, FurnSpec> {
   const slots = new Map<string, FurnSpec>();
   for (const specs of Object.values(FURNISHING)) for (const f of specs) if (f.slot && f.category && !slots.has(f.slot)) slots.set(f.slot, f);
-  const picks: Record<string, string> = {};
-  const lines: FurnitureLine[] = [];
-  for (const [slot, spec] of slots) {
-    const t = target(spec.category!, spec.kind, fit, pal);
-    const prop = FURNITURE_PROPOSAL.find((x) => x.slot === slot);
-    const cands = FURNITURE_PRODUCTS.filter((p) => p.category === spec.category && !outOfLimits(slot, p).length);
-    const prices = cands.map(price).filter((x): x is number => !!x).sort((a, b) => a - b);
-    const median = prices[Math.floor(prices.length / 2)] ?? 0;
-    let best: { p: FurnitureProduct; s: number; nf: FitItem } | null = null;
-    const forced = over?.picks[slot] ? findFurniture(over.picks[slot]) : undefined;
-    for (const p of forced ? [forced] : cands) {
+  return slots;
+}
+
+export interface RankedProduct {
+  p: FurnitureProduct;
+  s: number;
+  nf: FitItem;
+}
+
+/** A termékhely termékei a változathoz illés szerint rangsorolva (a kerülendő színűek nélkül). */
+export function rankSlot(v: Variant, slot: string, fit = furnitureFit(v), pal = furniturePalette(fit)): RankedProduct[] {
+  const spec = slotSpecs().get(slot);
+  if (!spec) return [];
+  const t = target(spec.category!, spec.kind, fit, pal);
+  const prop = FURNITURE_PROPOSAL.find((x) => x.slot === slot);
+  const cands = FURNITURE_PRODUCTS.filter((p) => p.category === spec.category && !outOfLimits(slot, p).length);
+  const prices = cands.map(price).filter((x): x is number => !!x).sort((a, b) => a - b);
+  const median = prices[Math.floor(prices.length / 2)] ?? 0;
+  return cands
+    .map((p) => {
       const nf = nearestFit(t.lists, p.hex);
       const pr = price(p);
       const s =
-        (forced ? 1000 : 0) +
         VERDICT_SCORE[nf.verdict] +
         2 * Math.max(0, 1 - dist(p.hex, t.hex) / 0.15) +
         (prop?.pick === p.id ? 1.5 : prop?.alt.includes(p.id) ? 0.8 : 0) +
@@ -99,17 +104,44 @@ export function suggestFurniture(v: Variant): { picks: Record<string, string>; l
         // ND-003: körből oválissá bővíthető asztal az elsődleges irány
         (spec.kind === 'table' && p.shape === 'round' && p.size.ext ? 1 : 0) -
         (pr ? (median && pr > median * 1.6 ? 1 : 0) : 1.5);
-      if (!best || s > best.s) best = { p, s, nf };
-    }
-    if (!best || best.s < -50) continue;
-    picks[slot] = best.p.id;
-    lines.push({
-      slot,
-      label: SLOT_LABEL[slot] ?? spec.label.replace(/\s*\(.*\)$/, ''),
-      product: best.p,
-      fit: best.nf,
-      why: forced ? 'a lakberendező eredeti terméke' : best.nf.reasons[0] ?? `${best.nf.label} – ${best.nf.verdict === 'good' ? 'jól megy' : 'elmegy'} a változathoz`,
-    });
+      return { p, s, nf };
+    })
+    .filter((r) => r.s > -50)
+    .sort((a, b) => b.s - a.s);
+}
+
+const labelOf = (slot: string, spec: FurnSpec) => SLOT_LABEL[slot] ?? spec.label.replace(/\s*\(.*\)$/, '');
+
+/** A megadott termékek sorai a változat színvilágának ítéletével (megjelenítéshez, figyelmeztetéshez). */
+export function furnitureLines(v: Variant, picks: Record<string, string>, why: Record<string, string> = {}): FurnitureLine[] {
+  const fit = furnitureFit(v);
+  const pal = furniturePalette(fit);
+  const out: FurnitureLine[] = [];
+  for (const [slot, spec] of slotSpecs()) {
+    const p = findFurniture(picks[slot]);
+    if (!p) continue;
+    const nf = nearestFit(target(spec.category!, spec.kind, fit, pal).lists, p.hex);
+    out.push({ slot, label: labelOf(slot, spec), product: p, fit: nf, why: why[slot] ?? nf.reasons[0] ?? `${nf.label} – ${nf.verdict === 'good' ? 'jól megy' : nf.verdict === 'ok' ? 'elmegy' : 'kerülendő'} a változathoz` });
   }
-  return { picks, lines, note: over?.note };
+  return out;
+}
+
+/** Termékhelyenként egy termék a változathoz (minden helyiség, minden lehetőség termékhelye). */
+export function suggestFurniture(v: Variant): { picks: Record<string, string>; lines: FurnitureLine[]; note?: string } {
+  const fit = furnitureFit(v);
+  const pal = furniturePalette(fit);
+  const over = FURNITURE_OVERRIDES[v.id];
+  const picks: Record<string, string> = {};
+  const why: Record<string, string> = {};
+  for (const slot of slotSpecs().keys()) {
+    const forced = over?.picks[slot] ? findFurniture(over.picks[slot]) : undefined;
+    if (forced) {
+      picks[slot] = forced.id;
+      why[slot] = 'a lakberendező eredeti terméke';
+      continue;
+    }
+    const best = rankSlot(v, slot, fit, pal)[0];
+    if (best) picks[slot] = best.p.id;
+  }
+  return { picks, lines: furnitureLines(v, picks, why), note: over?.note };
 }

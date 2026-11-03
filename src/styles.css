@@ -700,6 +700,27 @@ button.danger {
   color: var(--warn);
 }
 
+.ok-text {
+  color: var(--ok);
+}
+
+.clash-box {
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: #fbeadb;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.clash-box ul {
+  margin: 4px 0;
+  padding-left: 16px;
+}
+
+.clash-box small {
+  color: var(--muted);
+}
+
 .title-row {
   display: flex;
   align-items: center;

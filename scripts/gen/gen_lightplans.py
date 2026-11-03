@@ -1,6 +1,8 @@
 # V0–V4 és LJ világítási tervek → src/data/lightPlans.ts (a termékazonosítók a lamps.json-ból ellenőrizve)
 # Futtatás: MSYS_NO_PATHCONV=1 docker run --rm -v "$(pwd -W):/w" -w /w python:3.12-slim python -X utf8 scripts/gen/gen_lightplans.py
-import json, os
+import json, os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from numbering import NUM, key, label
 os.chdir(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # a tároló gyökere
 L = {p['id']: p for p in json.load(open('src/data/products/lamps.json', encoding='utf-8'))['items']}
 
@@ -111,7 +113,7 @@ def jplan(jid, name, note, dining, lounge, floor, halo_main, halo_read, dol_main
         rooms['nappali'][1]['rot'] = 90
     if hall[0] == 'track':
         rooms['eloszoba'][0]['rot'] = 0
-    return {'id': f'l{jid}', 'name': f'{jid.upper()} – {name}', 'note': note, 'rooms': rooms}
+    return {'id': f'l{jid}', 'name': f'{label(jid)} – {name}', 'note': note, 'rooms': rooms}
 
 C, P, T = 'ceiling', 'pendant', 'track'
 JPLANS = [
@@ -148,7 +150,8 @@ JPLANS = [
     jplan('j18', 'kakaó és bambusz', 'Bambusz függeszték az étkező fölött, szövetgömb a nappali részen, sötétszürke–natúr állólámpa; a hálóban rattan függeszték és szövet falikarok. A kakaó TV-fal és a karamell bársony mellé meleg, fonott anyagok.',
           (P, SINNERLIG), (P, MELLOW), TRIPOD, (P, NARRKOLV), ('wall', AMAR), (C, NYMANE_C), ('floor', KLOVING), (C, ALLAN), (C, LEANA)),
 ]
-PLANS += JPLANS
+# a megjelenített szám és a sorrend: numbering.py (elöl a kiemelt javaslatok)
+PLANS += sorted(JPLANS, key=lambda p: NUM[key(p['id'])])
 
 def lit(v, ind):
     # TypeScript-literál a projekt stílusában (egyszeres idézőjel, idézőjel nélküli kulcsok)

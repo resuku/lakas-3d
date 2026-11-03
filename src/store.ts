@@ -6,6 +6,8 @@ import { DEFAULT_VARIANTS } from './data/variants';
 import { DEFAULT_LIGHT_PLANS } from './data/lightPlans';
 import { DEFAULT_CHOICES } from './data/choices';
 import { suggestFurniture } from './lib/furnitureSets';
+import { findSubVariant } from './data/subVariants';
+import { isSubDecor, subChoices, subDecor, subPicks } from './lib/subs';
 import type { DecorItem, LightPlan, LightSettings, Variant } from './model/types';
 
 export type ViewMode = 'single' | 'compare';
@@ -59,6 +61,8 @@ interface State {
   furniturePicks: Record<string, string>;
   /** A J-javaslat (változat) kiválasztásakor a hozzá illő bútorok is betöltődnek (lib/furnitureSets.ts). */
   furnitureFollowsVariant: boolean;
+  /** Az aktív aljavaslat (data/subVariants.ts, pl. 'j5-b'); null: az alapjavaslat. */
+  activeSubId: string | null;
   /** Elhelyezett dekorelemek (minden helyiségben, a színváltozattól függetlenül). */
   decor: DecorItem[];
   /** Elhelyezés kattintással: új elem típusa vagy áthelyezendő elem; nem mentődik. */
@@ -105,6 +109,8 @@ interface State {
   setFurniturePick(slot: string, id: string | undefined): void;
   /** Több termékhely egyszerre (pl. a javasolt bútorok betöltése). */
   setFurniturePicks(picks: Record<string, string>): void;
+  /** Aljavaslat betöltése (bútorlehetőségek, termékek, dekor); null: vissza az alapjavaslatra. A saját dekor marad. */
+  applySub(id: string | null): void;
   addDecor(item: DecorItem): void;
   updateDecor(id: string, patch: Partial<DecorItem>): void;
   removeDecor(id: string): void;
@@ -148,13 +154,14 @@ function initialSettings() {
     choices: { ...DEFAULT_CHOICES },
     furniturePicks: suggestFurniture(DEFAULT_VARIANTS[0]).picks,
     furnitureFollowsVariant: true,
+    activeSubId: null as string | null,
     decor: [] as DecorItem[],
     planFollowsVariant: true,
   };
 }
 
 /** A mentett állapot verziója (localStorage és konfigurációs fájl). */
-export const STORE_VERSION = 9;
+export const STORE_VERSION = 11;
 
 /** A v6-ban törölt alapváltozatok (halszálkás J3, J12; termék nélküli A/B/C koncepciók) és terveik. */
 const REMOVED_VARIANTS = ['v-meleg', 'v-japandi', 'v-zsalya', 'j3-homok-agyag', 'j12-mediterran'];
@@ -176,6 +183,7 @@ const PERSISTED_KEYS = [
   'choices',
   'furniturePicks',
   'furnitureFollowsVariant',
+  'activeSubId',
   'decor',
   'planFollowsVariant',
 ] as const;
@@ -210,10 +218,30 @@ export function smallDevice() {
 //     (z 3800 → 7100) – a tervekben ott, ahol még a régi helyőrzőn áll
 // v8: dekorelemek (decor, layers.decor – alapból rejtve)
 // v9: a változathoz illő bútorok (furnitureFollowsVariant, alapból be); üres választásnál az aktív változat bútorai
+// v10: aljavaslatok (activeSubId, alapból nincs); a dekorelem `origin` mezője jelöli az aljavaslatból betöltöttet
+// v11: átszámozás (scripts/gen/numbering.py: elöl a kiemelt, aljavaslatos javaslatok). Az azonosítók maradnak; a mentett
+//      J-változatok és -tervek (és másolataik) neve az új számot kapja, ha még a régi „Jn – cím” kezdetű; a J-változatok
+//      leírása a friss; a sorrend az alapé, a saját változatok és tervek a végén
 const MOVED_FIXTURES: { id: string; from: [number, number]; to: [number, number] }[] = [
   { id: 'etk', from: [1720, 1700], to: [1720, 2050] },
   { id: 'allo', from: [300, 3800], to: [300, 7100] },
 ];
+/** v11: a régi „Jn – cím” névkezdet új számra; az alapelemek régi száma az azonosítóban (j5-melyzold, lj5). */
+function renumber<T extends { id: string; name: string }>(items: T[], defaults: T[], oldNum: (id: string) => string | undefined): T[] {
+  const map = defaults.flatMap((d) => {
+    const old = oldNum(d.id);
+    const [now, ...title] = d.name.split(' – ');
+    return old && title.length ? [{ from: `J${old} – ${title.join(' – ')}`, old: `J${old}`, now }] : [];
+  });
+  const order = new Map(defaults.map((d, i) => [d.id, i]));
+  return items
+    .map((x) => {
+      const m = map.find((m) => x.name.startsWith(m.from));
+      return m ? { ...x, name: m.now + x.name.slice(m.old.length) } : x;
+    })
+    .sort((a, b) => (order.get(a.id) ?? 1e4) - (order.get(b.id) ?? 1e4));
+}
+
 function migrateState(persisted: unknown, version: number) {
   const s = persisted as {
     variants?: Variant[];
@@ -223,6 +251,7 @@ function migrateState(persisted: unknown, version: number) {
     activeId?: string;
     furniturePicks?: Record<string, string>;
     furnitureFollowsVariant?: boolean;
+    activeSubId?: string | null;
   };
   if (version < 3 && s.variants) {
     const fresh = new Map(DEFAULT_VARIANTS.filter((v) => v.id.startsWith('j')).map((v) => [v.id, v]));
@@ -267,6 +296,14 @@ function migrateState(persisted: unknown, version: number) {
     s.furnitureFollowsVariant = s.furnitureFollowsVariant ?? true;
     const v = s.variants?.find((x) => x.id === s.activeId) ?? s.variants?.[0];
     if (v && !Object.keys(s.furniturePicks ?? {}).length) s.furniturePicks = suggestFurniture(v).picks;
+  }
+  if (version < 10) s.activeSubId = s.activeSubId ?? null;
+  if (version < 11) {
+    if (s.variants) {
+      const fresh = new Map(DEFAULT_VARIANTS.map((v) => [v.id, v]));
+      s.variants = renumber(s.variants, DEFAULT_VARIANTS, (id) => id.match(/^j(\d+)-/)?.[1]).map((v) => (fresh.has(v.id) ? { ...v, note: fresh.get(v.id)!.note } : v));
+    }
+    if (s.lightPlans) s.lightPlans = renumber(s.lightPlans, DEFAULT_LIGHT_PLANS, (id) => id.match(/^lj(\d+)$/)?.[1]);
   }
   return s;
 }
@@ -313,10 +350,13 @@ export const useStore = create<State>()(
           const v = s.variants.find((x) => x.id === id);
           const plan = v?.lightPlanId;
           const follow = s.planFollowsVariant && plan && s.lightPlans.some((p) => p.id === plan);
+          // az aljavaslat a saját J-javaslatához tartozik: váltáskor a lehetőségei és a dekorja kikerül
+          const leave = s.activeSubId ? { activeSubId: null, choices: subChoices(s.choices, null), decor: s.decor.filter((d) => !isSubDecor(d)), selectedDecor: null } : {};
           return {
             activeId: id,
             ...(follow ? { activePlanId: plan, lampsOff: {} } : {}),
             ...(s.furnitureFollowsVariant && v ? { furniturePicks: suggestFurniture(v).picks } : {}),
+            ...leave,
           };
         }),
       setCompare: (id) => set({ compareId: id }),
@@ -371,6 +411,22 @@ export const useStore = create<State>()(
           return { furniturePicks };
         }),
       setFurniturePicks: (picks) => set({ furniturePicks: { ...picks } }),
+      applySub: (id) =>
+        set((s) => {
+          const sub = findSubVariant(id);
+          const v = s.variants.find((x) => x.id === (sub?.parent ?? s.activeId)) ?? s.variants[0];
+          const choices = subChoices(s.choices, sub);
+          const furniturePicks = sub ? subPicks(v, sub) : s.furnitureFollowsVariant ? suggestFurniture(v).picks : s.furniturePicks;
+          const own = s.decor.filter((d) => !isSubDecor(d));
+          return {
+            activeSubId: sub?.id ?? null,
+            choices,
+            furniturePicks,
+            decor: sub ? [...own, ...subDecor(v, sub, choices, furniturePicks)] : own,
+            selectedDecor: null,
+            ...(sub ? { layers: { ...s.layers, furniture: true, decor: true } } : {}),
+          };
+        }),
       addDecor: (item) => set((s) => ({ decor: [...s.decor, item], selectedDecor: item.id, layers: { ...s.layers, decor: true } })),
       updateDecor: (id, patch) => set((s) => ({ decor: s.decor.map((d) => (d.id === id ? { ...d, ...patch } : d)) })),
       removeDecor: (id) => set((s) => ({ decor: s.decor.filter((d) => d.id !== id), selectedDecor: s.selectedDecor === id ? null : s.selectedDecor })),

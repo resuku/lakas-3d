@@ -1,6 +1,7 @@
-import type { Room, Variant } from '../model/types';
+import type { DecorItem, Room, Variant } from '../model/types';
 import { CHOICE_GROUPS, DEFAULT_CHOICES } from '../data/choices';
 import { curtainLayouts } from './curtain';
+import { clashLine, colorClashes } from './colorClash';
 import { activeFurnishing, furnishChecks, replacedIds } from './furnish';
 import { mm, roomDims, toRoom, wallFrames } from './geom';
 import { collectVals, worst } from './status';
@@ -11,8 +12,14 @@ export interface Finding {
 }
 
 /** Funkcionális és adatbiztonsági ellenőrzések az aktuális helyiségre és változatra. */
-/** `furnish`: a választott bútortermékek (store.furniturePicks), ha a bútorok látszanak; null, ha nem. */
-export function runChecks(room: Room, v: Variant, choices: Record<string, string> = DEFAULT_CHOICES, furnish: Record<string, string> | null = {}): Finding[] {
+/** `furnish`: a választott bútortermékek (store.furniturePicks), ha a bútorok látszanak; null, ha nem. `decor`: a látható dekorelemek. */
+export function runChecks(
+  room: Room,
+  v: Variant,
+  choices: Record<string, string> = DEFAULT_CHOICES,
+  furnish: Record<string, string> | null = {},
+  decor: DecorItem[] = [],
+): Finding[] {
   const out: Finding[] = [];
   const { W } = roomDims(room);
 
@@ -123,6 +130,8 @@ export function runChecks(room: Room, v: Variant, choices: Record<string, string
   }
 
   if (furnish) out.push(...furnishChecks(room, choices, furnish));
+  // a változat bútor-színvilágától elütő termék vagy dekor (lib/colorClash.ts)
+  for (const c of colorClashes(v, choices, furnish, decor, [room.id])) out.push({ level: 'warn', text: clashLine(c) });
 
   for (const t of room.conflicts) out.push({ level: 'warn', text: `Ellentmondás: ${t}` });
   for (const t of room.missing) out.push({ level: 'info', text: `Hiányzó / lezáratlan adat: ${t}` });

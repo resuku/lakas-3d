@@ -17,6 +17,8 @@ export interface DecorType {
   /** Méretezhető (akusztikus panel): szélesség és magasság lépései (mm). */
   sizes?: { w: number[]; h: number[] };
   note?: string;
+  /** A színváltozat melyik bútor-színvilág listával vetendő össze (színfigyelmeztetés): fa / keret, textil / kerámia, fém. */
+  fit?: 'wood' | 'sofa' | 'metal';
 }
 
 export const DECOR_GROUPS: { id: DecorGroup; label: string }[] = [
@@ -65,6 +67,7 @@ export const DECOR_TYPES: DecorType[] = [
   { id: 'kep-panorama', label: 'Panorámakép, 120 × 40', group: 'picture', mount: 'wall', w: 1200, d: 25, h: 400, variants: FRAME },
   { id: 'kepfal-3', label: 'Képfal, 3 × 30 × 40', group: 'picture', mount: 'wall', w: 1060, d: 20, h: 400, variants: FRAME },
   { id: 'tukor-kerek', label: 'Kerek tükör, ø60', group: 'picture', mount: 'wall', w: 600, d: 25, h: 600, variants: FRAME },
+  { id: 'tukor-fali', label: 'Fali tükör, 50 × 120', group: 'picture', mount: 'wall', w: 500, d: 25, h: 1200, variants: FRAME },
   // Dekortárgyak
   { id: 'vaza-pampa', label: 'Padlóváza pampafűvel', group: 'object', mount: 'floor', w: 350, d: 350, h: 1200, variants: CERAMIC },
   { id: 'kosar', label: 'Fonott tárolókosár', group: 'object', mount: 'floor', w: 450, d: 450, h: 450 },
@@ -80,6 +83,9 @@ export const DECOR_TYPES: DecorType[] = [
   { id: 'falilora', label: 'Falióra', group: 'object', mount: 'wall', w: 400, d: 40, h: 400, variants: [{ id: 'feher', label: 'fehér', hex: '#f2f0eb' }, { id: 'tolgy', label: 'tölgy', hex: '#b8915f' }, { id: 'fekete', label: 'fekete', hex: '#262524' }] },
   { id: 'falipolc', label: 'Falipolc tárgyakkal', group: 'object', mount: 'wall', w: 800, d: 200, h: 250, variants: WOOD },
   { id: 'textil-falikep', label: 'Textil falikép (makramé)', group: 'object', mount: 'wall', w: 500, d: 20, h: 800 },
+  { id: 'fogas', label: 'Fogasléc (kabátakasztó)', group: 'object', mount: 'wall', w: 600, d: 60, h: 100, variants: WOOD },
+  { id: 'parafatabla', label: 'Parafatábla kerettel', group: 'object', mount: 'wall', w: 900, d: 25, h: 600, variants: FRAME },
+  { id: 'labtorlo', label: 'Lábtörlő, 60 × 90', group: 'object', mount: 'floor', w: 900, d: 600, h: 8, variants: [{ id: 'szurkebarna', label: 'szürkésbarna', hex: '#7d7064' }, ...FELT], note: 'Alacsony (legfeljebb 8–10 mm), hogy az ajtó átférjen fölötte.' },
   { id: 'futoszonyeg', label: 'Futószőnyeg, 80 × 200', group: 'object', mount: 'floor', w: 2000, d: 800, h: 8, variants: FELT },
   // Akusztikus falpanelek (méretezhetők; katalógustermék rendelhető hozzájuk)
   {
@@ -117,5 +123,8 @@ export const DECOR_TYPES: DecorType[] = [
     sizes: { w: [600, 1200, 1800], h: [600, 900, 1200] },
   },
 ];
+
+for (const t of DECOR_TYPES)
+  t.fit = t.variants === FRAME || t.variants === WOOD || t.id === 'falilora' ? 'wood' : t.id === 'lampas' ? 'metal' : t.variants ? 'sofa' : undefined;
 
 export const findDecorType = (id: string) => DECOR_TYPES.find((t) => t.id === id);

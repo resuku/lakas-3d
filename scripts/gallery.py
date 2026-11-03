@@ -23,6 +23,9 @@ VIEWS = [
 # A képernyőkép 3D-s része (bal oldalsáv és alsó panel nélkül)
 CROP = (330, 0, 1600, 770)
 
+sys.path.insert(0, os.path.join(ROOT, 'scripts', 'gen'))
+from numbering import FEATURED, key as jkey  # kiemelt javaslatok (aljavaslatokkal a programban)
+
 state = json.load(open(os.path.join(SHOTS, 'variants.json'), encoding='utf-8'))['state']
 variants = [v for v in state['variants'] if v['id'].startswith('j')]
 plans = {p['id']: p for p in state.get('lightPlans', [])}
@@ -123,11 +126,13 @@ for v in variants:
                      f'a képeken az alapértelmezett lehetőségek látszanak (egyenes kanapé, alacsony TV-szekrény, kör asztal, új ágy). {html.escape(fs.get("note") or "")}</p><ul class="prods">{frows}</ul>')
     figs = ''.join(f'<figure><img src="{s}" loading="lazy" alt="{html.escape(l)}"><figcaption>{html.escape(l)}</figcaption></figure>' for s, l in imgs)
     cards.append(
-        f'<section id="{v["id"]}"><h2>{html.escape(v["name"])}</h2>'
+        f'<section id="{v["id"]}"><h2>{html.escape(v["name"])}'
+        + ('<span class="tag">Kiemelt – a programban 5 aljavaslattal (Javaslat fül)</span>' if jkey(v['id']) in FEATURED else '')
+        + '</h2>'
         f'<p>{html.escape(v.get("note", ""))}</p><div class="shots">{figs}</div><ul class="prods">{"".join(rows)}</ul>{lamps_html}{furn_html}{fit_html}</section>'
     )
 
-toc = ''.join(f'<a href="#{v["id"]}">{html.escape(v["name"].split(" – ")[0])}</a>' for v in variants)
+toc = ''.join(f'<a href="#{v["id"]}"{" class=hl" if jkey(v["id"]) in FEATURED else ""}>{html.escape(v["name"].split(" – ")[0])}</a>' for v in variants)
 back = '<a href="../" class="back">← 3D program</a>' if PUBLIC else ''
 page = f'''<!doctype html><html lang="hu"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
@@ -136,7 +141,8 @@ page = f'''<!doctype html><html lang="hu"><meta charset="utf-8"><meta name="view
 body{{margin:0;font:15px/1.45 system-ui,sans-serif;background:#f4f1ec;color:#2b2622}}
 header{{position:sticky;top:0;background:#f4f1ecf2;padding:10px 20px;border-bottom:1px solid #ddd5ca;z-index:1}}
 header h1{{font-size:18px;margin:0 0 6px}} header nav a{{margin-right:10px;color:#7a5a3a;text-decoration:none;font-weight:600}}
-header nav a.back{{color:#2b2622;margin-right:18px}}
+header nav a.back{{color:#2b2622;margin-right:18px}} header nav a.hl{{background:#7a5a3a;color:#fff;padding:1px 6px;border-radius:4px}}
+.tag{{display:inline-block;margin-left:10px;padding:2px 8px;border-radius:4px;background:#efe4d6;color:#7a5a3a;font-size:12.5px;font-weight:600;vertical-align:3px}}
 main{{max-width:1500px;margin:0 auto;padding:0 20px 40px}}
 section{{background:#fff;border-radius:10px;padding:16px 20px;margin:22px 0;box-shadow:0 1px 3px #0001}}
 h2{{margin:0 0 4px;font-size:20px}} section>p{{margin:0 0 12px;color:#5b5249;max-width:1100px}}

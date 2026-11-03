@@ -122,8 +122,91 @@ export const DEFAULT_LIGHT_PLANS: LightPlan[] = [
     },
   },
   {
+    id: 'lj5',
+    name: 'J1 – fekete kontraszt a mélyzöldhöz',
+    note: 'Fekete kupola az étkező fölött (a TV-fal mélyzöldjéhez és a fekete TV-hez), szövetgömb a nappali részen, kőris állólámpa; a hálóban fehér–nyír függeszték és szövet falikarok.',
+    rooms: {
+      nappali: [
+        { id: 'etk', type: 'pendant', productId: 'lamp-ikea-ranarp-fuggolampa-fekete-38-cm', x: 1720, z: 2050, y: 1580, label: 'Étkező' },
+        { id: 'fo', type: 'pendant', productId: 'lamp-bonami-mellow-feher-fuggolampa-textil-bur', x: 1720, z: 5400, y: 2050, label: 'Nappali rész' },
+        { id: 'allo', type: 'floor', productId: 'lamp-ikea-kinnahult-allolampa-koris-feher-15', x: 300, z: 7100, label: 'Állólámpa' },
+      ],
+      halo: [
+        { id: 'fo', type: 'pendant', productId: 'lamp-ikea-bunkeflo-fuggolampa-feher-nyir-36', x: 1832, z: 1721, y: 2080, label: 'Általános fény' },
+        { id: 'ol1', type: 'wall', productId: 'lamp-bonami-fekete-bezs-konnektorhoz-csatlakoz', x: 120, z: 470, y: 1150, label: 'Olvasólámpa' },
+        { id: 'ol2', type: 'wall', productId: 'lamp-bonami-fekete-bezs-konnektorhoz-csatlakoz', x: 120, z: 3010, y: 1150, label: 'Olvasólámpa' },
+      ],
+      dolgozo: [
+        { id: 'fo', type: 'ceiling', productId: 'lamp-ikea-nosund-mennyezeti-lampa-nyir-44-cm', x: 964, z: 1715, label: 'Általános fény' },
+        { id: 'munka', type: 'table', productId: 'lamp-ikea-tertial-asztali-lampa-sotetszurke', x: 2180, z: 2850, label: 'Munkafény' },
+      ],
+      eloszoba: [
+        { id: 'fo', type: 'ceiling', productId: 'lamp-praktike-rabalux-leana2-led-mennyezeti-lamp', x: 1400, z: 698, label: 'Előszoba' },
+      ],
+      kozlekedo: [
+        { id: 'fo1', type: 'ceiling', productId: 'lamp-praktike-rabalux-leana2-led-mennyezeti-lamp', x: 420, z: 900, label: 'Közlekedő' },
+        { id: 'fo2', type: 'ceiling', productId: 'lamp-praktike-rabalux-leana2-led-mennyezeti-lamp', x: 420, z: 2490, label: 'Közlekedő' },
+      ],
+    },
+  },
+  {
+    id: 'lj17',
+    name: 'J2 – fekete, grafikus',
+    note: 'Fekete kúpos függeszték az étkező fölött, fekete sín a nappali részen, antracit kétfejű állólámpa; a hálóban fekete–tölgy spotsor és antracit fali olvasólámpák; sínek az előszobában és a közlekedőben. A fekete ajtókhoz fekete lámpatestek.',
+    rooms: {
+      nappali: [
+        { id: 'etk', type: 'pendant', productId: 'lamp-ikea-skurup-fuggolampa-fekete-38-cm', x: 1720, z: 2050, y: 1580, label: 'Étkező' },
+        { id: 'fo', type: 'track', productId: 'lamp-praktike-eglo-easyt-szpot-szett-gu10-4x10w', x: 1720, z: 5400, rot: 90, label: 'Nappali rész' },
+        { id: 'allo', type: 'floor', productId: 'lamp-ikea-kloving-allolampa-antracit', x: 300, z: 7100, label: 'Állólámpa' },
+      ],
+      halo: [
+        { id: 'fo', type: 'track', productId: 'lamp-praktike-rabalux-noxelle-mennyezeti-szpot-l', x: 1832, z: 1721, rot: 90, label: 'Általános fény' },
+        { id: 'ol1', type: 'wall', productId: 'lamp-ikea-nymane-fali-olvasolampa-antracit', x: 120, z: 470, y: 1150, label: 'Olvasólámpa' },
+        { id: 'ol2', type: 'wall', productId: 'lamp-ikea-nymane-fali-olvasolampa-antracit', x: 120, z: 3010, y: 1150, label: 'Olvasólámpa' },
+      ],
+      dolgozo: [
+        { id: 'fo', type: 'track', productId: 'lamp-praktike-rabalux-rogelio-mennyezeti-lampa-g', x: 964, z: 1715, rot: 90, label: 'Általános fény' },
+        { id: 'munka', type: 'table', productId: 'lamp-jysk-asztali-lampa-patrik-atm14xma45cm', x: 2180, z: 2850, label: 'Munkafény' },
+      ],
+      eloszoba: [
+        { id: 'fo', type: 'track', productId: 'lamp-ikea-skurup-mennyezeti-sin-3-spot-feket', x: 1400, z: 698, rot: 0, label: 'Előszoba' },
+      ],
+      kozlekedo: [
+        { id: 'fo', type: 'track', productId: 'lamp-praktike-eglo-easyt-szpot-szett-gu10-4x10w', x: 420, z: 1660, rot: 90, label: 'Sín' },
+      ],
+    },
+  },
+  {
+    id: 'lj18',
+    name: 'J3 – kakaó és bambusz',
+    note: 'Bambusz függeszték az étkező fölött, szövetgömb a nappali részen, sötétszürke–natúr állólámpa; a hálóban rattan függeszték és szövet falikarok. A kakaó TV-fal és a karamell bársony mellé meleg, fonott anyagok.',
+    rooms: {
+      nappali: [
+        { id: 'etk', type: 'pendant', productId: 'lamp-ikea-sinnerlig-fuggolampa-bambusz-kezze', x: 1720, z: 2050, y: 1580, label: 'Étkező' },
+        { id: 'fo', type: 'pendant', productId: 'lamp-bonami-mellow-feher-fuggolampa-textil-bur', x: 1720, z: 5400, y: 2050, label: 'Nappali rész' },
+        { id: 'allo', type: 'floor', productId: 'lamp-bonami-sotetszurke-natur-szinu-allolampa', x: 300, z: 7100, label: 'Állólámpa' },
+      ],
+      halo: [
+        { id: 'fo', type: 'pendant', productId: 'lamp-ikea-narrkolv-fuggolampa-rattan-56-cm', x: 1832, z: 1721, y: 2080, label: 'Általános fény' },
+        { id: 'ol1', type: 'wall', productId: 'lamp-bonami-fekete-bezs-konnektorhoz-csatlakoz', x: 120, z: 470, y: 1150, label: 'Olvasólámpa' },
+        { id: 'ol2', type: 'wall', productId: 'lamp-bonami-fekete-bezs-konnektorhoz-csatlakoz', x: 120, z: 3010, y: 1150, label: 'Olvasólámpa' },
+      ],
+      dolgozo: [
+        { id: 'fo', type: 'ceiling', productId: 'lamp-ikea-nymane-led-es-mennyezeti-lampa-ant', x: 964, z: 1715, label: 'Általános fény' },
+        { id: 'munka', type: 'floor', productId: 'lamp-ikea-kloving-allolampa-antracit', x: 2180, z: 2850, label: 'Munkafény' },
+      ],
+      eloszoba: [
+        { id: 'fo', type: 'ceiling', productId: 'lamp-bonami-allan-bezs-textil-mennyezeti-lampa', x: 1400, z: 698, label: 'Előszoba' },
+      ],
+      kozlekedo: [
+        { id: 'fo1', type: 'ceiling', productId: 'lamp-praktike-rabalux-leana2-led-mennyezeti-lamp', x: 420, z: 900, label: 'Közlekedő' },
+        { id: 'fo2', type: 'ceiling', productId: 'lamp-praktike-rabalux-leana2-led-mennyezeti-lamp', x: 420, z: 2490, label: 'Közlekedő' },
+      ],
+    },
+  },
+  {
     id: 'lj1',
-    name: 'J1 – natúr, könnyed',
+    name: 'J4 – natúr, könnyed',
     note: 'Bambusz függeszték az étkező fölött, szövetgömb a nappali részen, kőris lábú állólámpa; a hálóban fehér–nyír függeszték és szövetburás falikarok, a dolgozóban nyír mennyezeti lámpa. A zsálya és a világos tölgy mellé természetes anyagok, szórt fény.',
     rooms: {
       nappali: [
@@ -151,7 +234,7 @@ export const DEFAULT_LIGHT_PLANS: LightPlan[] = [
   },
   {
     id: 'lj2',
-    name: 'J2 – puha, rétegzett semleges',
+    name: 'J5 – puha, rétegzett semleges',
     note: 'Opálüveg gömb az étkező fölött, bézs szövet mennyezeti lámpa a nappali részen, pliszírozott szövetburás állólámpa; a hálóban szövet mennyezeti lámpa és falikarok. A greige alaphoz textil és opál, kemény kontraszt nélkül.',
     rooms: {
       nappali: [
@@ -179,7 +262,7 @@ export const DEFAULT_LIGHT_PLANS: LightPlan[] = [
   },
   {
     id: 'lj4',
-    name: 'J4 – friss, opál és szürke',
+    name: 'J6 – friss, opál és szürke',
     note: 'Fehér–nyír függeszték az étkező fölött, fekete-opál mennyezeti lámpa a nappali részen, világosszürke burás íves állólámpa; a hálóban fehér–nyír függeszték és antracit fali olvasólámpák. A kékesszürke kiemeléshez hűvösebb, letisztult formák.',
     rooms: {
       nappali: [
@@ -206,36 +289,8 @@ export const DEFAULT_LIGHT_PLANS: LightPlan[] = [
     },
   },
   {
-    id: 'lj5',
-    name: 'J5 – fekete kontraszt a mélyzöldhöz',
-    note: 'Fekete kupola az étkező fölött (a TV-fal mélyzöldjéhez és a fekete TV-hez), szövetgömb a nappali részen, kőris állólámpa; a hálóban fehér–nyír függeszték és szövet falikarok.',
-    rooms: {
-      nappali: [
-        { id: 'etk', type: 'pendant', productId: 'lamp-ikea-ranarp-fuggolampa-fekete-38-cm', x: 1720, z: 2050, y: 1580, label: 'Étkező' },
-        { id: 'fo', type: 'pendant', productId: 'lamp-bonami-mellow-feher-fuggolampa-textil-bur', x: 1720, z: 5400, y: 2050, label: 'Nappali rész' },
-        { id: 'allo', type: 'floor', productId: 'lamp-ikea-kinnahult-allolampa-koris-feher-15', x: 300, z: 7100, label: 'Állólámpa' },
-      ],
-      halo: [
-        { id: 'fo', type: 'pendant', productId: 'lamp-ikea-bunkeflo-fuggolampa-feher-nyir-36', x: 1832, z: 1721, y: 2080, label: 'Általános fény' },
-        { id: 'ol1', type: 'wall', productId: 'lamp-bonami-fekete-bezs-konnektorhoz-csatlakoz', x: 120, z: 470, y: 1150, label: 'Olvasólámpa' },
-        { id: 'ol2', type: 'wall', productId: 'lamp-bonami-fekete-bezs-konnektorhoz-csatlakoz', x: 120, z: 3010, y: 1150, label: 'Olvasólámpa' },
-      ],
-      dolgozo: [
-        { id: 'fo', type: 'ceiling', productId: 'lamp-ikea-nosund-mennyezeti-lampa-nyir-44-cm', x: 964, z: 1715, label: 'Általános fény' },
-        { id: 'munka', type: 'table', productId: 'lamp-ikea-tertial-asztali-lampa-sotetszurke', x: 2180, z: 2850, label: 'Munkafény' },
-      ],
-      eloszoba: [
-        { id: 'fo', type: 'ceiling', productId: 'lamp-praktike-rabalux-leana2-led-mennyezeti-lamp', x: 1400, z: 698, label: 'Előszoba' },
-      ],
-      kozlekedo: [
-        { id: 'fo1', type: 'ceiling', productId: 'lamp-praktike-rabalux-leana2-led-mennyezeti-lamp', x: 420, z: 900, label: 'Közlekedő' },
-        { id: 'fo2', type: 'ceiling', productId: 'lamp-praktike-rabalux-leana2-led-mennyezeti-lamp', x: 420, z: 2490, label: 'Közlekedő' },
-      ],
-    },
-  },
-  {
     id: 'lj6',
-    name: 'J6 – a lakberendező terve szerint',
+    name: 'J7 – a lakberendező terve szerint',
     note: 'Azonos a V1 tervvel: fekete függeszték az étkező fölött, fekete sín spotokkal a nappali részen, Manie állólámpa; rattan függeszték és fekete falikarok a hálóban; spotsor az előszobában és a közlekedőben.',
     rooms: {
       nappali: [
@@ -262,7 +317,7 @@ export const DEFAULT_LIGHT_PLANS: LightPlan[] = [
   },
   {
     id: 'lj7',
-    name: 'J7 – tervezői, lágyabban',
+    name: 'J8 – tervezői, lágyabban',
     note: 'Fekete függeszték az étkező fölött, 3 spotos fekete spotsor a nappali részen, Manie állólámpa; a hálóban rattan függeszték és Manie falikarok. A dió falpanelhez fekete részletek, de kevesebb sín, mint a V1-ben.',
     rooms: {
       nappali: [
@@ -290,7 +345,7 @@ export const DEFAULT_LIGHT_PLANS: LightPlan[] = [
   },
   {
     id: 'lj8',
-    name: 'J8 – kávéházi melegség',
+    name: 'J9 – kávéházi melegség',
     note: 'Rattan függeszték az étkező fölött, szövetgömb a nappali részen, pliszírozott natúr állólámpa; a hálóban sás mennyezeti lámpa és juta éjjeli lámpák; az előszobában bézs szövet mennyezeti lámpa.',
     rooms: {
       nappali: [
@@ -318,7 +373,7 @@ export const DEFAULT_LIGHT_PLANS: LightPlan[] = [
   },
   {
     id: 'lj9',
-    name: 'J9 – meleg, szórt fény a mokkához',
+    name: 'J10 – meleg, szórt fény a mokkához',
     note: 'Bézs–kőris függeszték az étkező fölött, bézs szövet mennyezeti lámpa a nappali részen, sötétszürke–natúr szövetburás állólámpa; a hálóban rattan függeszték és szövet falikarok. A mokka TV-fal mellé meleg textil, fekete és króm nélkül.',
     rooms: {
       nappali: [
@@ -346,7 +401,7 @@ export const DEFAULT_LIGHT_PLANS: LightPlan[] = [
   },
   {
     id: 'lj10',
-    name: 'J10 – napfényes, natúr',
+    name: 'J11 – napfényes, natúr',
     note: 'Juta henger az étkező fölött, szövetgömb a nappali részen, natúr szövetburás állólámpa; a hálóban sás mennyezeti lámpa és juta éjjeli lámpák. A terrakottához fonott anyagok és fehér opál.',
     rooms: {
       nappali: [
@@ -374,7 +429,7 @@ export const DEFAULT_LIGHT_PLANS: LightPlan[] = [
   },
   {
     id: 'lj11',
-    name: 'J11 – fekete részletek az olívához',
+    name: 'J12 – fekete részletek az olívához',
     note: 'Fekete kúpos függeszték az étkező fölött, fekete spotsor a nappali részen, Manie állólámpa; a hálóban bézs–kőris függeszték és Manie falikarok; a közlekedőben sín. Az olíva–dió kombinációhoz fekete fém.',
     rooms: {
       nappali: [
@@ -504,61 +559,6 @@ export const DEFAULT_LIGHT_PLANS: LightPlan[] = [
       ],
       eloszoba: [
         { id: 'fo', type: 'ceiling', productId: 'lamp-praktike-rabalux-leana2-led-mennyezeti-lamp', x: 1400, z: 698, label: 'Előszoba' },
-      ],
-      kozlekedo: [
-        { id: 'fo1', type: 'ceiling', productId: 'lamp-praktike-rabalux-leana2-led-mennyezeti-lamp', x: 420, z: 900, label: 'Közlekedő' },
-        { id: 'fo2', type: 'ceiling', productId: 'lamp-praktike-rabalux-leana2-led-mennyezeti-lamp', x: 420, z: 2490, label: 'Közlekedő' },
-      ],
-    },
-  },
-  {
-    id: 'lj17',
-    name: 'J17 – fekete, grafikus',
-    note: 'Fekete kúpos függeszték az étkező fölött, fekete sín a nappali részen, antracit kétfejű állólámpa; a hálóban fekete–tölgy spotsor és antracit fali olvasólámpák; sínek az előszobában és a közlekedőben. A fekete ajtókhoz fekete lámpatestek.',
-    rooms: {
-      nappali: [
-        { id: 'etk', type: 'pendant', productId: 'lamp-ikea-skurup-fuggolampa-fekete-38-cm', x: 1720, z: 2050, y: 1580, label: 'Étkező' },
-        { id: 'fo', type: 'track', productId: 'lamp-praktike-eglo-easyt-szpot-szett-gu10-4x10w', x: 1720, z: 5400, rot: 90, label: 'Nappali rész' },
-        { id: 'allo', type: 'floor', productId: 'lamp-ikea-kloving-allolampa-antracit', x: 300, z: 7100, label: 'Állólámpa' },
-      ],
-      halo: [
-        { id: 'fo', type: 'track', productId: 'lamp-praktike-rabalux-noxelle-mennyezeti-szpot-l', x: 1832, z: 1721, rot: 90, label: 'Általános fény' },
-        { id: 'ol1', type: 'wall', productId: 'lamp-ikea-nymane-fali-olvasolampa-antracit', x: 120, z: 470, y: 1150, label: 'Olvasólámpa' },
-        { id: 'ol2', type: 'wall', productId: 'lamp-ikea-nymane-fali-olvasolampa-antracit', x: 120, z: 3010, y: 1150, label: 'Olvasólámpa' },
-      ],
-      dolgozo: [
-        { id: 'fo', type: 'track', productId: 'lamp-praktike-rabalux-rogelio-mennyezeti-lampa-g', x: 964, z: 1715, rot: 90, label: 'Általános fény' },
-        { id: 'munka', type: 'table', productId: 'lamp-jysk-asztali-lampa-patrik-atm14xma45cm', x: 2180, z: 2850, label: 'Munkafény' },
-      ],
-      eloszoba: [
-        { id: 'fo', type: 'track', productId: 'lamp-ikea-skurup-mennyezeti-sin-3-spot-feket', x: 1400, z: 698, rot: 0, label: 'Előszoba' },
-      ],
-      kozlekedo: [
-        { id: 'fo', type: 'track', productId: 'lamp-praktike-eglo-easyt-szpot-szett-gu10-4x10w', x: 420, z: 1660, rot: 90, label: 'Sín' },
-      ],
-    },
-  },
-  {
-    id: 'lj18',
-    name: 'J18 – kakaó és bambusz',
-    note: 'Bambusz függeszték az étkező fölött, szövetgömb a nappali részen, sötétszürke–natúr állólámpa; a hálóban rattan függeszték és szövet falikarok. A kakaó TV-fal és a karamell bársony mellé meleg, fonott anyagok.',
-    rooms: {
-      nappali: [
-        { id: 'etk', type: 'pendant', productId: 'lamp-ikea-sinnerlig-fuggolampa-bambusz-kezze', x: 1720, z: 2050, y: 1580, label: 'Étkező' },
-        { id: 'fo', type: 'pendant', productId: 'lamp-bonami-mellow-feher-fuggolampa-textil-bur', x: 1720, z: 5400, y: 2050, label: 'Nappali rész' },
-        { id: 'allo', type: 'floor', productId: 'lamp-bonami-sotetszurke-natur-szinu-allolampa', x: 300, z: 7100, label: 'Állólámpa' },
-      ],
-      halo: [
-        { id: 'fo', type: 'pendant', productId: 'lamp-ikea-narrkolv-fuggolampa-rattan-56-cm', x: 1832, z: 1721, y: 2080, label: 'Általános fény' },
-        { id: 'ol1', type: 'wall', productId: 'lamp-bonami-fekete-bezs-konnektorhoz-csatlakoz', x: 120, z: 470, y: 1150, label: 'Olvasólámpa' },
-        { id: 'ol2', type: 'wall', productId: 'lamp-bonami-fekete-bezs-konnektorhoz-csatlakoz', x: 120, z: 3010, y: 1150, label: 'Olvasólámpa' },
-      ],
-      dolgozo: [
-        { id: 'fo', type: 'ceiling', productId: 'lamp-ikea-nymane-led-es-mennyezeti-lampa-ant', x: 964, z: 1715, label: 'Általános fény' },
-        { id: 'munka', type: 'floor', productId: 'lamp-ikea-kloving-allolampa-antracit', x: 2180, z: 2850, label: 'Munkafény' },
-      ],
-      eloszoba: [
-        { id: 'fo', type: 'ceiling', productId: 'lamp-bonami-allan-bezs-textil-mennyezeti-lampa', x: 1400, z: 698, label: 'Előszoba' },
       ],
       kozlekedo: [
         { id: 'fo1', type: 'ceiling', productId: 'lamp-praktike-rabalux-leana2-led-mennyezeti-lamp', x: 420, z: 900, label: 'Közlekedő' },

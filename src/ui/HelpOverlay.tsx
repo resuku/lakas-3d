@@ -46,6 +46,12 @@ export function HelpOverlay() {
             Az <b>Anyagok</b> fül <b>Bútor</b> csoportjában választható a kanapé (egyenes vagy L alakú), a TV alatti szekrény vagy TV-fal, az asztal és az ágy, hozzájuk valós termék is (<b>◆</b> a javaslathoz illő, <b>★</b> a tervezet).
           </li>
           <li>
+            A <b>kiemelt javaslatoknál</b> (J1–J3, a választó elején) a <b>Javaslat</b> fülön <b>aljavaslat</b> is választható (pl. J1-B): ugyanaz a szín- és anyagirány, más bútorokkal és előre elrendezett dekorral. A saját dekor megmarad.
+          </li>
+          <li>
+            A <b>⚠ Elüt a javaslat színvilágától</b> jelzés olyan bútort vagy dekort mutat, amelynek a színe ehhez a javaslathoz kerülendő – figyelmeztetés, nem tiltás.
+          </li>
+          <li>
             A <b>Dekor</b> csoportban növény, kép, tükör vagy akusztikus panel tehető ki: válaszd ki, a halvány előnézettel keresd meg a helyét, és kattints (Esc: mégse). Mozgatás: <b>M</b> nyomva tartva húzd az elemet.
           </li>
         </ul>

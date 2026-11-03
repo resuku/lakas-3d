@@ -5,7 +5,10 @@ import { COLOR_SOURCE_LABEL, findFurniture, FURNITURE_PRODUCTS } from '../data/p
 import { activeFurnishing, outOfLimits, SLOT_LIMITS, type ResolvedSpec } from '../lib/furnish';
 import { furnitureFit, furniturePalette, nearestFit, type FurnitureFit } from '../lib/furnitureFit';
 import { STATUS_INFO } from '../lib/status';
-import { suggestFurniture } from '../lib/furnitureSets';
+import { furnitureLines, suggestFurniture } from '../lib/furnitureSets';
+import { clashRow, colorClashes } from '../lib/colorClash';
+import { subPicks } from '../lib/subs';
+import { findSubVariant } from '../data/subVariants';
 import type { FurnCategory, FurnitureProduct, Variant } from '../model/types';
 import { useStore } from '../store';
 import { Field, Segmented, Toggle } from './controls';
@@ -86,6 +89,7 @@ function ProductPicker({ spec, fit, mine }: { spec: ResolvedSpec; fit: Furniture
               {p.colorName ?? p.hex} ({COLOR_SOURCE_LABEL[p.hexSource]}) – {VERDICT[nf.verdict]} a változathoz
             </span>
           )}
+          {nf?.verdict === 'bad' && <span className="warn-text">⚠ Elüt a javaslat színvilágától – a {nf.label} minta ehhez a változathoz kerülendő.</span>}
           {out.length > 0 && <span className="warn-text">Kilóg a méretkeretből: {out.join(', ')}</span>}
           {p.note && <small>{p.note}</small>}
         </div>
@@ -167,19 +171,35 @@ export function FurnishingPanel({ v, roomId }: { v: Variant; roomId: string }) {
   );
 }
 
-/** A változathoz illő bútorok (lib/furnitureSets.ts): termékhelyenként egy termék, a színvilág ítéletével. */
+/** A változathoz (aljavaslatnál annak termékeivel) illő bútorok (lib/furnitureSets.ts), a színvilág ítéletével. */
 export function VariantFurniture({ v }: { v: Variant }) {
   const s = useStore();
+  const found = findSubVariant(s.activeSubId);
+  const sub = found?.parent === v.id ? found : undefined;
   const sugg = useMemo(() => suggestFurniture(v), [v]);
-  const same = Object.entries(sugg.picks).every(([k, id]) => s.furniturePicks[k] === id);
+  const picks = useMemo(() => (sub ? subPicks(v, sub) : sugg.picks), [v, sub, sugg]);
+  const lines = useMemo(() => {
+    if (!sub) return sugg.lines;
+    // aljavaslatnál csak a választott lehetőségek termékhelyei; a rangsorból vett alternatíva jelölve
+    const visible = new Set(Object.keys(FURNISHING).flatMap((r) => activeFurnishing(r, s.choices, picks).map((f) => f.slot)));
+    const why = Object.fromEntries(
+      Object.entries(sub.picks ?? {})
+        .filter(([, n]) => typeof n === 'number' && n > 0)
+        .map(([slot, n]) => [slot, `${Number(n) + 1}. a változat rangsorában (alternatíva)`]),
+    );
+    return furnitureLines(v, picks, why).filter((l) => visible.has(l.slot));
+  }, [v, sub, sugg, picks, s.choices]);
+  const same = Object.entries(picks).every(([k, id]) => s.furniturePicks[k] === id);
   return (
     <>
       <p className="note">
-        Termékhelyenként a katalógusból a méretkeretbe férő, a változat színeihez legjobban illő termék (heurisztika, nem döntés; az egyes helyek a
-        lehetőségek szerint látszanak, pl. egyenes vagy L kanapé). {sugg.note}
+        {sub
+          ? `${sub.name}: a választott lehetőségek termékei – ahol az aljavaslat mást kér, a változat rangsorának egy másik, szintén illő terméke (heurisztika, nem döntés).`
+          : 'Termékhelyenként a katalógusból a méretkeretbe férő, a változat színeihez legjobban illő termék (heurisztika, nem döntés; az egyes helyek a lehetőségek szerint látszanak, pl. egyenes vagy L kanapé).'}{' '}
+        {sugg.note}
       </p>
       <ul className="furnish-sugg">
-        {sugg.lines.map((l) => (
+        {lines.map((l) => (
           <li key={l.slot} title={[l.product.note, l.fit.reasons.join('; ')].filter(Boolean).join('\n')}>
             <i style={{ background: l.product.hex }} />
             <span>
@@ -188,17 +208,39 @@ export function VariantFurniture({ v }: { v: Variant }) {
               <a href={l.product.url} target="_blank" rel="noreferrer">
                 ↗
               </a>
-              <small className={`fit-chip ${l.fit.verdict}`}>{l.fit.verdict === 'good' ? '✓' : '≈'} {l.why}</small>
+              <small className={`fit-chip ${l.fit.verdict}`}>{l.fit.verdict === 'good' ? '✓' : l.fit.verdict === 'ok' ? '≈' : '⚠'} {l.why}</small>
             </span>
           </li>
         ))}
       </ul>
       <div className="row">
-        <button onClick={() => s.setFurniturePicks(sugg.picks)} disabled={same} title="A fenti termékek a 3D nézetbe és a bevásárlólistába">
+        <button onClick={() => s.setFurniturePicks(picks)} disabled={same} title="A fenti termékek a 3D nézetbe és a bevásárlólistába">
           {same ? 'Ezek látszanak a 3D nézetben' : 'Betöltés a 3D nézetbe'}
         </button>
       </div>
       <Toggle checked={s.furnitureFollowsVariant} onChange={(b) => s.setFurnitureFollowsVariant(b)} label="A javaslat választásakor a bútorok is cserélődnek" />
     </>
+  );
+}
+
+/** A változat színvilágától elütő látható bútorok és dekorelemek, minden helyiségben (lib/colorClash.ts). */
+export function ColorClashes({ v }: { v: Variant }) {
+  const s = useStore();
+  const furnish = s.layers.furniture ? s.furniturePicks : null;
+  const decor = s.layers.decor ? s.decor : null;
+  const clashes = useMemo(() => colorClashes(v, s.choices, furnish, decor ?? []), [v, s.choices, furnish, decor]);
+  if (!furnish && !decor) return <p className="note">A bútorok és a dekor rejtve – nincs mit ellenőrizni.</p>;
+  return clashes.length ? (
+    <div className="clash-box">
+      <b>⚠ Elüt a javaslat színvilágától ({clashes.length}):</b>
+      <ul>
+        {clashes.map((c) => (
+          <li key={`${c.kind}-${c.id}`}>{clashRow(c)}</li>
+        ))}
+      </ul>
+      <small>Figyelmeztetés, nem tiltás: a választott termék vagy dekor színe a változat bútor-színvilágában a kerülendők közé esik.</small>
+    </div>
+  ) : (
+    <p className="note ok-text">✓ A látható bútorok{decor ? ' és dekorelemek' : ''} színe nem üt el a javaslat színvilágától.</p>
   );
 }

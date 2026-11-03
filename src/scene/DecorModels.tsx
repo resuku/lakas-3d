@@ -4,6 +4,9 @@ import { useFrame, type ThreeEvent } from '@react-three/fiber';
 import { findDecorType, type DecorType } from '../data/decor';
 import { findFurniture } from '../data/products';
 import { infoUrl } from '../lib/inspect';
+import { CLASH_PREFIX, decorFit } from '../lib/colorClash';
+import { subShortName } from '../data/subVariants';
+import { furnitureFit } from '../lib/furnitureFit';
 import { mm, wallFrames } from '../lib/geom';
 import type { DecorItem, Room } from '../model/types';
 import { useStore } from '../store';
@@ -159,6 +162,13 @@ function Picture({ item, t, w, h, frame }: { item: DecorItem; t: DecorType; w: n
           <circleGeometry args={[w / 2 - 0.025, 40]} />
           <meshStandardMaterial color="#dfe5e8" roughness={0.12} metalness={0.25} />
         </mesh>
+      </group>
+    );
+  if (t.id === 'tukor-fali')
+    return (
+      <group>
+        <Box x={[-w / 2, w / 2]} y={[0, h]} z={[0, d]} color={frame} rough={0.5} />
+        <Box x={[-w / 2 + 0.03, w / 2 - 0.03]} y={[0.03, h - 0.03]} z={[d, d + 0.003]} color="#dfe5e8" rough={0.12} metal={0.25} />
       </group>
     );
   if (t.id === 'kepfal-3') {
@@ -379,6 +389,36 @@ function ObjectModel({ t, w, h, color }: { t: DecorType; w: number; h: number; c
           ))}
         </group>
       );
+    case 'fogas':
+      return (
+        <group>
+          <Box x={[-w / 2, w / 2]} y={[0, h]} z={[0, 0.02]} color={color} rough={0.6} />
+          {[-0.36, -0.12, 0.12, 0.36].map((k) => (
+            <mesh key={k} position={[k * (w / 0.6) * 0.75, h / 2, 0.05]} rotation={[Math.PI / 2, 0, 0]}>
+              <cylinderGeometry args={[0.012, 0.012, 0.06, 10]} />
+              <meshStandardMaterial color={color} roughness={0.5} />
+            </mesh>
+          ))}
+          <Box x={[-0.27, -0.04]} y={[-0.85, h / 2]} z={[0.03, 0.11]} color="#8a7d6e" rough={1} />
+        </group>
+      );
+    case 'parafatabla':
+      return (
+        <group>
+          <Box x={[-w / 2, w / 2]} y={[0, h]} z={[0, d]} color={color} rough={0.5} />
+          <Box x={[-w / 2 + 0.02, w / 2 - 0.02]} y={[0.02, h - 0.02]} z={[d, d + 0.003]} color="#b98a5a" rough={1} />
+          {[[-0.25, 0.4, '#f2ead6'], [0.05, 0.3, '#e9d38a'], [0.25, 0.42, '#c9dde0'], [-0.1, 0.15, '#f2ead6']].map(([x, y, col]) => (
+            <Box key={String(x) + y} x={[(x as number) - 0.05, (x as number) + 0.05]} y={[(y as number) - 0.06, (y as number) + 0.06]} z={[d + 0.003, d + 0.005]} color={col as string} rough={0.9} noShadow />
+          ))}
+        </group>
+      );
+    case 'labtorlo':
+      return (
+        <group>
+          <Box x={[-w / 2, w / 2]} y={[0.001, h]} z={[-d / 2, d / 2]} color={new THREE.Color(color).multiplyScalar(0.8).getStyle()} rough={1} noShadow />
+          <Box x={[-w / 2 + 0.04, w / 2 - 0.04]} y={[0.002, h + 0.001]} z={[-d / 2 + 0.04, d / 2 - 0.04]} color={color} rough={1} noShadow />
+        </group>
+      );
     case 'futoszonyeg':
       return <Box x={[-w / 2, w / 2]} y={[0.001, h]} z={[-d / 2, d / 2]} color={color} rough={1} noShadow />;
     default:
@@ -444,6 +484,8 @@ export function DecorLayer({ room }: { room: Room }) {
   const selected = useStore((s) => s.selectedDecor);
   const select = useStore((s) => s.selectDecor);
   const preview = useStore((s) => (s.decorPreview?.roomId === room.id ? s.decorPreview.item : null));
+  const variant = useStore((s) => s.variants.find((v) => v.id === s.activeId) ?? s.variants[0]);
+  const fit = useMemo(() => furnitureFit(variant), [variant]);
   if (!on) return null;
   const pv = preview && decorPose(room, preview);
   return (
@@ -465,12 +507,13 @@ export function DecorLayer({ room }: { room: Room }) {
           const h = mm(d.h ?? t.h);
           const dd = mm(t.d);
           const p = findFurniture(d.productId);
+          const nf = decorFit(fit, d);
           return (
             <group
               key={d.id}
               position={pos}
               rotation={[0, rotY, 0]}
-              userData={{ ...infoUrl(p?.url, `${room.name} – ${t.label}`, `${Math.round(w * 1000)} × ${Math.round(h * 1000)} mm (jelzésszerű)`, p ? `${p.store}: ${p.name}${p.price ? ` · ${p.price}` : ''}` : t.note, 'Kattintás: kijelölés (Anyagok → Dekor) · M nyomva + húzás: mozgatás'), decorId: d.id }}
+              userData={{ ...infoUrl(p?.url, `${room.name} – ${t.label}`, `${Math.round(w * 1000)} × ${Math.round(h * 1000)} mm (jelzésszerű)`, p ? `${p.store}: ${p.name}${p.price ? ` · ${p.price}` : ''}` : t.note, nf?.verdict === 'bad' && `${CLASH_PREFIX} (legközelebbi minta: ${nf.label})`, d.origin && `Aljavaslatból: ${subShortName(d.origin)}`, 'Kattintás: kijelölés (Anyagok → Dekor) · M nyomva + húzás: mozgatás'), decorId: d.id }}
               onPointerDown={(e: ThreeEvent<PointerEvent>) => {
                 const st = useStore.getState();
                 if (!st.moveKey || st.placing || st.walk || e.nativeEvent.button !== 0) return;

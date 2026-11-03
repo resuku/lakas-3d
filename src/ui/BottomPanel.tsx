@@ -20,7 +20,9 @@ export function BottomPanel() {
   const furnishOn = useStore((s) => s.layers.furniture);
   const picks = useStore((s) => s.furniturePicks);
   const furnish = furnishOn ? picks : null;
-  const findings = useMemo(() => runChecks(room, variant, choices, furnish), [room, variant, choices, furnish]);
+  const decorOn = useStore((s) => s.layers.decor);
+  const decorItems = useStore((s) => s.decor);
+  const findings = useMemo(() => runChecks(room, variant, choices, furnish, decorOn ? decorItems : []), [room, variant, choices, furnish, decorOn, decorItems]);
   const rows = useMemo(() => collectVals(room), [room]);
   const warnCount = findings.filter((f) => f.level === 'warn').length;
   const used = useMemo(() => usedProducts(variant, Object.fromEntries(ROOMS.map((r) => [r.id, r]))), [variant]);
@@ -35,8 +37,6 @@ export function BottomPanel() {
     [plan, light],
   );
 
-  const decorOn = useStore((s) => s.layers.decor);
-  const decorItems = useStore((s) => s.decor);
   const shopping = useMemo(() => shoppingList(variant, plan, choices, furnish, decorOn ? decorItems : []), [variant, plan, choices, furnish, decorOn, decorItems]);
   const total = shoppingTotal(shopping);
   const furniture = shopping.filter((r) => r.category === 'Bútor' || r.category === 'Akusztikus falpanel');

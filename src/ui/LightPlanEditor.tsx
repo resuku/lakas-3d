@@ -141,6 +141,7 @@ export function LightPlanEditor({ roomId }: { roomId: string }) {
           <optgroup label="A J-javaslatokhoz illesztve">
             {s.lightPlans
               .filter((p) => /^lj\d/.test(p.id))
+              .sort((a, b) => Number(a.name.match(/^J(\d+)/)?.[1] ?? 1000) - Number(b.name.match(/^J(\d+)/)?.[1] ?? 1000))
               .map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name}

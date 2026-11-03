@@ -1,6 +1,7 @@
 import { Viewport } from './scene/RoomScene';
 import { BottomPanel } from './ui/BottomPanel';
 import { Sidebar } from './ui/Sidebar';
+import { VariantOptions } from './ui/VariantOptions';
 import { useStore } from './store';
 import { InspectTip, useInspectKeys, useMoveKey } from './scene/Inspector';
 import { HelpOverlay, SmallScreenNotice } from './ui/HelpOverlay';
@@ -13,11 +14,7 @@ function ViewHeader({ side }: { side: 'a' | 'b' }) {
     <div className="view-header">
       <b>{side.toUpperCase()}</b>
       <select value={id} onChange={(e) => set(e.target.value)}>
-        {variants.map((v) => (
-          <option key={v.id} value={v.id}>
-            {v.name}
-          </option>
-        ))}
+        <VariantOptions variants={variants} />
       </select>
     </div>
   );

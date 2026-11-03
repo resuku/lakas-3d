@@ -14,6 +14,8 @@ import { Box } from './Box';
 import { FurnitureModel } from './FurnitureModels';
 import { setGhost } from './ghost';
 import { ceilingInfo, floorInfo, info, infoUrl } from '../lib/inspect';
+import { CLASH_PREFIX, colorClashes } from '../lib/colorClash';
+import { findSubVariant } from '../data/subVariants';
 
 export function FloorAndCeiling({ room, variant }: { room: Room; variant: Variant }) {
   const { W, L, H } = roomDims(room);
@@ -86,11 +88,19 @@ const COLOR_ROLE: Record<FurnColor, keyof FurniturePalette | null> = {
 /** A berendezési javaslat bútorai (data/furnishing.ts); a szín a változat bútor-színvilágából. */
 function Furnishing({ room, specs, variant, layers }: { room: Room; specs: ResolvedSpec[]; variant: Variant; layers: Layers }) {
   const pal = useMemo(() => furniturePalette(furnitureFit(variant)), [variant]);
+  const choices = useStore((s) => s.choices);
+  const picks = useStore((s) => s.furniturePicks);
+  const clash = useMemo(() => new Map(colorClashes(variant, choices, picks, [], [room.id]).map((c) => [c.id, c])), [variant, choices, picks, room.id]);
+  // az aljavaslat (csak a saját J-javaslatánál) a helyőrző színszerepét is megadhatja
+  const sub = useStore((s) => findSubVariant(s.activeSubId));
+  const colors = sub?.parent === variant.id ? sub.colors : undefined;
   const gaps = useMemo(() => (layers.dims ? furnishGaps(room.id, specs) : []), [layers.dims, room.id, specs]);
   return (
     <>
       {specs.map((f) => {
-        const role = COLOR_ROLE[f.color];
+        const role = COLOR_ROLE[colors?.[f.id] ?? f.color];
+        const cl = clash.get(f.slot ?? f.id);
+        const warn = cl && `${CLASH_PREFIX} (legközelebbi minta: ${cl.fit.label})`;
         const item = role ? pal[role] : null;
         const p = f.product;
         const tint = layers.status ? STATUS_INFO[f.s].color : null;
@@ -102,12 +112,14 @@ function Furnishing({ room, specs, variant, layers }: { room: Room; specs: Resol
               `${p.store}: ${p.brand ? `${p.brand} ` : ''}${p.name}${p.price ? ` · ${p.price}` : ''}`,
               `${f.w} × ${f.d} × ${f.h} mm (a termékoldal szerint; ami ott nincs, a helyőrzőé)`,
               `Szín: ${p.colorName ?? p.hex} (${COLOR_SOURCE_LABEL[p.hexSource]})`,
+              warn,
               p.note,
             )
           : info(
               `${room.name} – ${f.label}`,
               `${f.w} × ${f.d} × ${f.h} mm, befoglaló méret (${f.s} – ${STATUS_INFO[f.s].label.toLowerCase()})`,
               !!item && `Szín: ${item.label} – a változat bútor-színvilágából, helyőrző${f.kind === 'table' || f.kind === 'chair' || f.kind === 'tvUnit' ? `; fém: ${pal.metal.label}` : ''}`,
+              warn,
               f.basis,
               f.note,
             );

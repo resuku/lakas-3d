@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { useEffect, useMemo } from 'react';
-import type { FurnitureProduct, FurnPart, FurnSpec } from '../model/types';
+import type { FurnitureProduct, FurnSpec } from '../model/types';
 import { mm } from '../lib/geom';
+import { layoutTvWall, tvWallParts } from '../lib/tvWall';
 import { Box } from './Box';
 
 // Paraméteres bútormodellek a befoglaló méretből, jelzésszerű formával. Helyi rendszer: középpont az origóban,
@@ -90,7 +91,7 @@ function Ottoman({ f, c }: { f: FurnSpec; c: FurnColors }) {
 }
 
 /** Alacsony szekrény: lábakon álló test, négy ajtó/fiók osztással; az éjjeliszekrény egy fiókkal. */
-function Cabinet({ f, c, doors }: { f: FurnSpec; c: FurnColors; doors: number }) {
+function Cabinet({ f, c, doors, flaps = 0 }: { f: FurnSpec; c: FurnColors; doors: number; flaps?: number }) {
   const w = mm(f.w) / 2;
   const d = mm(f.d) / 2;
   const h = mm(f.h);
@@ -106,6 +107,10 @@ function Cabinet({ f, c, doors }: { f: FurnSpec; c: FurnColors; doors: number })
         <Box key={x} x={[x - 0.002, x + 0.002]} y={[leg + 0.01, h - 0.01]} z={[d, d + 0.002]} color={groove} rough={0.6} noShadow />
       ))}
       {doors === 1 && <Box x={[-w + 0.01, w - 0.01]} y={[h - 0.16, h - 0.156]} z={[d, d + 0.002]} color={groove} rough={0.6} noShadow />}
+      {/* billenő fiókok (cipősszekrény): vízszintes osztás */}
+      {Array.from({ length: Math.max(0, flaps - 1) }, (_, i) => leg + ((i + 1) * (h - leg)) / flaps).map((y) => (
+        <Box key={y} x={[-w + 0.01, w - 0.01]} y={[y - 0.002, y + 0.002]} z={[d, d + 0.002]} color={groove} rough={0.6} noShadow />
+      ))}
     </group>
   );
 }
@@ -314,74 +319,10 @@ function OfficeChair({ f, c }: { f: FurnSpec; c: FurnColors }) {
   );
 }
 
-/**
- * TV-fal elemeinek elrendezése (m, helyi x a fal mentén, a TV középen). A termékoldalak ritkán adják meg az elemek helyét,
- * ezért jelzésszerű szabály: a magas elemek a két szélre, az alacsony pad(ok) középre a padlóra (ami nem fér el, ráépül),
- * a TV-nél szélesebb falra szerelt elem és a polc a TV fölé, a keskenyebbek a TV mellé, egymás fölé.
- */
-export function layoutTvWall(parts: FurnPart[], width: number) {
-  const W = width / 2;
-  const tvHalf = 0.614 + 0.05;
-  const tvTop = 1.43 + 0.12;
-  const out: { x0: number; x1: number; y0: number; y1: number; d: number; kind: FurnPart['kind'] }[] = [];
-  const units = parts.flatMap((p) => Array.from({ length: p.qty ?? 1 }, () => ({ ...p, w: mm(p.w), d: mm(p.d || 300), h: mm(p.h), y: p.y !== undefined ? mm(p.y) : undefined })));
-  let left = -W;
-  let right = W;
-  let tallN = 0;
-  for (const u of units.filter((u) => u.kind === 'tall')) {
-    const atLeft = u.side === 'left' || (u.side !== 'right' && tallN++ % 2 === 0);
-    if (atLeft) {
-      out.push({ x0: left, x1: left + u.w, y0: 0, y1: u.h, d: u.d, kind: u.kind });
-      left += u.w;
-    } else {
-      out.push({ x0: right - u.w, x1: right, y0: 0, y1: u.h, d: u.d, kind: u.kind });
-      right -= u.w;
-    }
-  }
-  // alacsony padok középen; ami nem fér el egymás mellett, a sor tetejére kerül
-  let rowY = 0;
-  let row: typeof units = [];
-  const flush = () => {
-    const tw = row.reduce((a, u) => a + u.w, 0);
-    let x = (left + right) / 2 - tw / 2;
-    for (const u of row) {
-      out.push({ x0: x, x1: x + u.w, y0: rowY, y1: rowY + u.h, d: u.d, kind: u.kind });
-      x += u.w;
-    }
-    rowY += Math.max(0, ...row.map((u) => u.h));
-    row = [];
-  };
-  for (const u of units.filter((u) => u.kind === 'low')) {
-    if (row.reduce((a, v) => a + v.w, 0) + u.w > right - left + 1e-6) flush();
-    row.push(u);
-  }
-  if (row.length) flush();
-  // TV fölötti sáv és a TV melletti oszlopok
-  let topY = Math.max(tvTop, rowY);
-  const side = { l: 0.72, r: 0.72 };
-  let sideN = 0;
-  for (const u of units.filter((u) => u.kind === 'wall' || u.kind === 'shelf')) {
-    if (u.w >= 1.1 || u.kind === 'shelf' && u.w >= 0.7) {
-      const y0 = Math.max(u.y ?? topY, topY);
-      out.push({ x0: -u.w / 2, x1: u.w / 2, y0, y1: y0 + u.h, d: u.d, kind: u.kind });
-      topY = y0 + u.h + 0.02;
-      continue;
-    }
-    const atLeft = u.side === 'left' || (u.side !== 'right' && sideN++ % 2 === 0);
-    const k = atLeft ? 'l' : 'r';
-    const y0 = u.y !== undefined ? u.y : Math.max(side[k], rowY + 0.3);
-    const x0 = atLeft ? Math.max(left, -tvHalf - u.w) : Math.min(right - u.w, tvHalf);
-    out.push({ x0, x1: x0 + u.w, y0, y1: y0 + u.h, d: u.d, kind: u.kind });
-    side[k] = y0 + u.h + 0.02;
-  }
-  return out;
-}
-
-/** TV-fal: az elemek `layoutTvWall` szerint; elemlista hiányában a teljes szélességű alacsony pad. */
+/** TV-fal: az elemek `layoutTvWall` (lib/tvWall.ts) szerint; elemlista hiányában a teljes szélességű alacsony pad. */
 function TvWall({ f, c }: { f: FurnSpec; c: FurnColors }) {
   const back = -mm(f.d) / 2;
-  const parts = f.parts?.length ? f.parts : [{ kind: 'low' as const, w: f.w, d: f.d, h: Math.min(f.h, 600) }];
-  const boxes = useMemo(() => layoutTvWall(parts, mm(f.w)), [parts, f.w]);
+  const boxes = useMemo(() => layoutTvWall(tvWallParts(f), mm(f.w)).boxes, [f]);
   const groove = shade(c.main, 0.6);
   return (
     <group>
@@ -394,6 +335,118 @@ function TvWall({ f, c }: { f: FurnSpec; c: FurnColors }) {
           )}
         </group>
       ))}
+    </group>
+  );
+}
+
+const BOOK = ['#6b4a33', '#a65a3f', '#e7dccb', '#4e5d58', '#c9a27e', '#2f3e57', '#d8b26e'];
+
+/** Nyitott polc (könyvespolc, társasjáték-polc): oldalak, polcok kb. 35 cm-enként, rajta jelzésszerű könyv- és dobozsorok. */
+function Bookcase({ f, c }: { f: FurnSpec; c: FurnColors }) {
+  const w = mm(f.w) / 2;
+  const d = mm(f.d) / 2;
+  const h = mm(f.h);
+  const t = 0.02;
+  const n = Math.max(2, Math.round(h / 0.36));
+  const cols = w * 2 > 0.7 && h < 1.6 ? 2 : 1;
+  const rows = Array.from({ length: n }, (_, i) => t + (i * (h - 2 * t)) / n);
+  return (
+    <group>
+      <Box x={[-w, -w + t]} y={[0, h]} z={[-d, d]} color={c.main} rough={0.6} />
+      <Box x={[w - t, w]} y={[0, h]} z={[-d, d]} color={c.main} rough={0.6} />
+      {cols === 2 && <Box x={[-t / 2, t / 2]} y={[0, h]} z={[-d, d]} color={c.main} rough={0.6} />}
+      <Box x={[-w + t, w - t]} y={[h - t, h]} z={[-d, d]} color={c.main} rough={0.6} />
+      {rows.map((y) => (
+        <Box key={y} x={[-w + t, w - t]} y={[y - t, y]} z={[-d, d]} color={c.main} rough={0.6} />
+      ))}
+      {rows.flatMap((y, ri) =>
+        Array.from({ length: cols }, (_, ci) => {
+          const x0 = cols === 2 ? (ci === 0 ? -w + t : t / 2) : -w + t;
+          const x1 = cols === 2 ? (ci === 0 ? -t / 2 : w - t) : w - t;
+          const k = (ri * 3 + ci * 5) % 7;
+          if (k === 3) return null;
+          const fill = 0.45 + (k % 3) * 0.2;
+          const bh = Math.min(0.3, (h - 2 * t) / n - 0.04) * (0.75 + (k % 2) * 0.2);
+          return <Box key={`${ri}-${ci}`} x={[x0 + 0.01, x0 + 0.01 + (x1 - x0 - 0.02) * fill]} y={[y, y + bh]} z={[-d + 0.03, d - 0.04]} color={BOOK[k]} rough={0.8} />;
+        }),
+      )}
+    </group>
+  );
+}
+
+/** Pad: deszka lábakon; az előszobai ülőpadnál alsó cipőtartó polccal és tömör oldalakkal. */
+function Bench({ f, c }: { f: FurnSpec; c: FurnColors }) {
+  const w = mm(f.w) / 2;
+  const d = mm(f.d) / 2;
+  const h = mm(f.h);
+  const shoe = f.id.startsWith('eloszoba');
+  if (shoe)
+    return (
+      <group>
+        <Box x={[-w, -w + 0.025]} y={[0, h - 0.03]} z={[-d, d]} color={c.main} rough={0.6} />
+        <Box x={[w - 0.025, w]} y={[0, h - 0.03]} z={[-d, d]} color={c.main} rough={0.6} />
+        <Box x={[-w, w]} y={[h - 0.03, h]} z={[-d, d]} color={c.main} rough={0.6} />
+        <Box x={[-w + 0.025, w - 0.025]} y={[0.1, 0.12]} z={[-d, d]} color={c.main} rough={0.6} />
+        <Box x={[-w + 0.05, -w + 0.33]} y={[0.12, 0.22]} z={[-d + 0.05, d - 0.03]} color="#4e4038" rough={0.7} />
+        <Box x={[-0.05, 0.25]} y={[0.12, 0.2]} z={[-d + 0.06, d - 0.04]} color="#c9b9a0" rough={0.7} />
+      </group>
+    );
+  return (
+    <group>
+      <Box x={[-w, w]} y={[h - 0.04, h]} z={[-d, d]} color={c.main} rough={0.6} />
+      {[-1, 1].map((sx) =>
+        [-1, 1].map((sz) => <Box key={`${sx}${sz}`} x={[sx * (w - 0.06) - 0.02, sx * (w - 0.06) + 0.02]} y={[0, h - 0.04]} z={[sz * (d - 0.05) - 0.02, sz * (d - 0.05) + 0.02]} color={c.metal} rough={0.5} />),
+      )}
+    </group>
+  );
+}
+
+/** Zsúrkocsi: két tálcaszint fém vázon, kerekekkel. */
+function Cart({ f, c }: { f: FurnSpec; c: FurnColors }) {
+  const w = mm(f.w) / 2;
+  const d = mm(f.d) / 2;
+  const h = mm(f.h);
+  return (
+    <group>
+      {[0.18, h - 0.03].map((y) => (
+        <group key={y}>
+          <Box x={[-w, w]} y={[y, y + 0.02]} z={[-d, d]} color={c.main} rough={0.6} />
+          <Box x={[-w, w]} y={[y + 0.02, y + 0.05]} z={[-d, -d + 0.01]} color={c.main} rough={0.6} />
+          <Box x={[-w, w]} y={[y + 0.02, y + 0.05]} z={[d - 0.01, d]} color={c.main} rough={0.6} />
+        </group>
+      ))}
+      {[-1, 1].map((sx) =>
+        [-1, 1].map((sz) => (
+          <group key={`${sx}${sz}`}>
+            <Box x={[sx * w - 0.01, sx * w + 0.01]} y={[0.05, h]} z={[sz * d - 0.01, sz * d + 0.01]} color={c.metal} rough={0.4} metal={0.4} />
+            <mesh position={[sx * w, 0.03, sz * d]} rotation={[0, 0, Math.PI / 2]}>
+              <cylinderGeometry args={[0.03, 0.03, 0.02, 12]} />
+              <meshStandardMaterial color="#2b2a28" roughness={0.6} />
+            </mesh>
+          </group>
+        )),
+      )}
+      <Box x={[-w + 0.05, -w + 0.15]} y={[h - 0.01, h + 0.18]} z={[-0.04, 0.04]} color="#e8e2d6" rough={0.3} />
+      <mesh position={[0.08, h + 0.03, 0]} castShadow>
+        <cylinderGeometry args={[0.1, 0.06, 0.06, 16, 1, true]} />
+        <meshStandardMaterial color="#b5694b" roughness={0.5} side={THREE.DoubleSide} />
+      </mesh>
+    </group>
+  );
+}
+
+/** Keskeny konzolasztal: lap, négy vékony láb, alsó polc. */
+function Console({ f, c }: { f: FurnSpec; c: FurnColors }) {
+  const w = mm(f.w) / 2;
+  const d = mm(f.d) / 2;
+  const h = mm(f.h);
+  return (
+    <group>
+      <Box x={[-w, w]} y={[h - 0.025, h]} z={[-d, d]} color={c.main} rough={0.55} />
+      <Box x={[-w + 0.02, w - 0.02]} y={[0.22, 0.24]} z={[-d + 0.02, d - 0.02]} color={c.main} rough={0.55} />
+      {[-1, 1].map((sx) =>
+        [-1, 1].map((sz) => <Box key={`${sx}${sz}`} x={[sx * (w - 0.02) - 0.012, sx * (w - 0.02) + 0.012]} y={[0, h - 0.025]} z={[sz * (d - 0.02) - 0.012, sz * (d - 0.02) + 0.012]} color={c.metal} rough={0.45} metal={0.3} />),
+      )}
     </group>
   );
 }
@@ -415,6 +468,20 @@ export function FurnitureModel({ f, c }: { f: FurnSpec & { product?: FurniturePr
       return <OfficeChair f={f} c={c} />;
     case 'nightstand':
       return <Cabinet f={f} c={c} doors={1} />;
+    case 'sideboard':
+      return <Cabinet f={f} c={c} doors={3} />;
+    case 'shoeCabinet':
+      return <Cabinet f={f} c={c} doors={1} flaps={2} />;
+    case 'bookcase':
+      return <Bookcase f={f} c={c} />;
+    case 'bench':
+      return <Bench f={f} c={c} />;
+    case 'cart':
+      return <Cart f={f} c={c} />;
+    case 'console':
+      return <Console f={f} c={c} />;
+    case 'armchair':
+      return <Sofa f={f} c={c} />;
     case 'tv':
       return <Tv f={f} />;
     case 'table':

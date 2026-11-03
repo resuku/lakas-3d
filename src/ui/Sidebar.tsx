@@ -15,7 +15,9 @@ import { CurtainCatalog, DoorCatalog, FloorCatalog, PaintCatalog, ProductInfo } 
 import { LightPlanEditor } from './LightPlanEditor';
 import { FurnitureFitPanel } from './FurnitureFitPanel';
 import { CHOICE_GROUPS } from '../data/choices';
-import { FurnishingPanel, hasFurnishing, VariantFurniture } from './FurnishingPanel';
+import { ColorClashes, FurnishingPanel, hasFurnishing, VariantFurniture } from './FurnishingPanel';
+import { findSubVariant, subVariantsOf } from '../data/subVariants';
+import { VariantOptions } from './VariantOptions';
 import { DecorPanel } from './DecorPanel';
 
 const MONTHS = ['jan.', 'febr.', 'márc.', 'ápr.', 'máj.', 'jún.', 'júl.', 'aug.', 'szept.', 'okt.', 'nov.', 'dec.'];
@@ -496,6 +498,34 @@ const TABS: { id: SidebarTab; label: string; title: string }[] = [
   { id: 'more', label: 'Továbbiak', title: 'Nyitott lehetőségek, konfiguráció mentése, alaphelyzet' },
 ];
 
+/** Aljavaslat a J-javaslaton belül (data/subVariants.ts): ugyanaz a szín- és anyagirány, más bútor és dekor. */
+function SubSelect({ v }: { v: Variant }) {
+  const s = useStore();
+  const subs = subVariantsOf(v.id);
+  if (!subs.length) return null;
+  const sub = findSubVariant(s.activeSubId);
+  return (
+    <Field label="Aljavaslat (bútor és dekor, ugyanebben a színvilágban)">
+      <select value={sub?.parent === v.id ? sub.id : ''} onChange={(e) => s.applySub(e.target.value || null)}>
+        <option value="">– alapjavaslat (aljavaslat nélkül) –</option>
+        {subs.map((x) => (
+          <option key={x.id} value={x.id}>
+            {x.name}
+          </option>
+        ))}
+      </select>
+      {sub?.parent === v.id ? (
+        <p className="variant-note">{sub.note}</p>
+      ) : (
+        <p className="note">
+          {subs.length} aljavaslat: a falak, a padló és a textilek maradnak, a bútorlehetőségek (kanapé, TV, asztal, tálaló, polcok, előszoba), a termékek és
+          az előre elrendezett dekor cserélődik. A saját elhelyezésű dekor megmarad.
+        </p>
+      )}
+    </Field>
+  );
+}
+
 export function Sidebar() {
   const s = useStore();
   const tab = s.sidebarTab;
@@ -626,19 +656,18 @@ export function Sidebar() {
       <Section title="Változat (paletta)">
         <Field label={s.viewMode === 'compare' ? 'Szerkesztett változat (bal oldali nézet)' : 'Aktív változat'}>
           <select value={s.activeId} onChange={(e) => s.setActive(e.target.value)}>
-            {s.variants.map((v) => {
-              const favs = Object.values(v.feedback ?? {}).filter((f) => f.fav).length;
-              return (
-                <option key={v.id} value={v.id}>
-                  {v.name}
-                  {favs ? `  ★${favs > 1 ? favs : ''}` : ''}
-                </option>
-              );
-            })}
+            <VariantOptions
+              variants={s.variants}
+              suffix={(v) => {
+                const favs = Object.values(v.feedback ?? {}).filter((f) => f.fav).length;
+                return favs ? `  ★${favs > 1 ? favs : ''}` : '';
+              }}
+            />
           </select>
         </Field>
         {s.details && <input className="name-input" value={active.name} onChange={(e) => s.updateVariant(active.id, (x) => ({ ...x, name: e.target.value }))} />}
         {active.note && <p className="variant-note">{active.note}</p>}
+        <SubSelect v={active} />
         <Feedback />
         <div className="row">
           <button onClick={() => s.duplicateVariant(active.id)} title="Saját másolat a kísérletezéshez – a konfigurációval visszaküldhető">
@@ -659,6 +688,10 @@ export function Sidebar() {
 
       <Section title="Bútorjavaslat ehhez a változathoz">
         <VariantFurniture v={active} />
+      </Section>
+
+      <Section title="Színellenőrzés (bútor és dekor)">
+        <ColorClashes v={active} />
       </Section>
 
         </>

@@ -143,6 +143,75 @@ export const CHOICE_GROUPS: ChoiceGroup[] = [
     ],
     default: 'meglevo',
   },
+  {
+    id: 'nappali-etkezo-tarolo',
+    roomId: 'nappali',
+    label: 'Étkező – tároló',
+    furniture: true,
+    options: [
+      { id: 'none', label: 'nincs' },
+      { id: 'talalo', label: 'tálaló', note: 'Alacsony tálaló a dolgozó ajtajától balra, a bontott tükrös szekrény helyén (120 × 40 cm); a dolgozó felőli szék mögött kb. 60 cm marad. Fölé tükör vagy nagy kép illik.' },
+      { id: 'polc', label: 'társasjáték-polc', note: 'Nyitott, 2 × 4 rekeszes polc a sarokban (77 × 39 × 147 cm) társasjátékoknak és könyveknek.' },
+    ],
+    default: 'none',
+  },
+  {
+    id: 'nappali-etkezo-ules',
+    roomId: 'nappali',
+    label: 'Étkező – ülés',
+    furniture: true,
+    options: [
+      { id: 'szekek', label: 'székek' },
+      { id: 'pad', label: 'pad a hosszú oldalon', note: 'A hosszú fal felőli két szék helyett pad (160 × 38 cm) – csak bővített asztalnál; társasjáték-estére.' },
+    ],
+    default: 'szekek',
+  },
+  {
+    id: 'nappali-zsurkocsi',
+    roomId: 'nappali',
+    label: 'Zsúrkocsi',
+    furniture: true,
+    options: [
+      { id: 'none', label: 'nincs' },
+      { id: 'van', label: 'van', note: 'Guruló, 2 szintes tálaló a hosszú falnál, a térelválasztó előtt; vendégségkor az asztalhoz húzható.' },
+    ],
+    default: 'none',
+  },
+  {
+    id: 'dolgozo-sarok',
+    roomId: 'dolgozo',
+    label: 'Dolgozó – ablak felőli sarok',
+    furniture: true,
+    options: [
+      { id: 'none', label: 'nincs' },
+      { id: 'konyvespolc', label: 'keskeny könyvespolc', note: '28 cm mély, 2 m magas polc a háló felőli fal ablak felőli végén – a szék mozgásterén kívül.' },
+      { id: 'fotel', label: 'olvasófotel', note: 'Kis fotel (72 × 75 cm) a radiátor mellett, a háló felőli sarokban; mellé állólámpa és kis lerakóasztal.' },
+    ],
+    default: 'none',
+  },
+  {
+    id: 'eloszoba-tarolo',
+    roomId: 'eloszoba',
+    label: 'Előszoba – a bejárat mellett',
+    furniture: true,
+    options: [
+      { id: 'none', label: 'nincs' },
+      { id: 'cipos', label: 'cipősszekrény', note: 'Keskeny, billenőajtós cipősszekrény (80 × 24 × 100 cm) a konyhafalon, a bejárati ajtó nyílásán kívül; fölé tükör.' },
+      { id: 'pad', label: 'ülőpad', note: 'Ülőpad cipőtartó polccal (80 × 35 cm) a cipősszekrény helyett, ha a leülés fontosabb.' },
+    ],
+    default: 'none',
+  },
+  {
+    id: 'eloszoba-konzol',
+    roomId: 'eloszoba',
+    label: 'Előszoba – konzolasztal',
+    furniture: true,
+    options: [
+      { id: 'none', label: 'nincs' },
+      { id: 'van', label: 'van', note: 'Keskeny (22 cm) konzolasztal a konyhafalon, a nappali felőli átjárónál; fölé kép.' },
+    ],
+    default: 'none',
+  },
 ];
 
 export const DEFAULT_CHOICES: Record<string, string> = Object.fromEntries(CHOICE_GROUPS.map((g) => [g.id, g.default]));

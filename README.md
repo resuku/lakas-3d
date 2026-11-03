@@ -84,8 +84,10 @@ a kialakítás (sima, marással, üvegbetétes) is átkerül a modellbe. A függ
 áttetsző réteg a fal felőli sínen, előtte a vastag függöny. A változatban használt termékek az alsó panel Termékek fülén látszanak, árral és
 linkkel. Ha egy felület színét kézzel módosítod, a termék-hozzárendelés törlődik.
 
-A J-kezdetű változatok (16 db; a halszálkás J3 és J12 törölve, a számozás marad) javaslatok ezekből a termékekből („kész”, berendezetlen állapot: fal,
-mennyezet, padló, ajtó, függöny); nem jóváhagyott döntések. Áttekintő galéria:
+A J-kezdetű változatok (16 db, J1–J16) javaslatok ezekből a termékekből („kész”, berendezetlen állapot: fal,
+mennyezet, padló, ajtó, függöny); nem jóváhagyott döntések. A számozás és a sorrend a `scripts/gen/numbering.py`-ban van: elöl a kiemelt
+javaslatok (J1–J3, aljavaslatokkal), utánuk a többi. Az azonosító a 2026-11-03 előtti számot őrzi (pl. `j5-melyzold` = J1, `lj5` a világítása),
+hogy a mentett beállítások és a vélemények megmaradjanak; a leírás végén „Korábbi száma: J5.” áll. Áttekintő galéria:
 
 ```bash
 scripts/shot.sh '<lépések>'   # a képek: screenshots/<változat-id>_<nézet>.png, a mentés: {"dump":"variants.json"}
@@ -143,11 +145,11 @@ szkriptek fejlécében olvasható.
 - Bútorok színvilága (`src/lib/furnitureFit.ts`): a változat fal-, kiemelés-, padló- és ajtószíneiből
   (OKLab) heurisztikusan pontozza a jellemző kanapé-, bútortest- és fémszíneket (jól megy / elmegy /
   kerülendő, indoklással), és becsli a beszerezhetőséget. Minden színváltoztatásra újraszámol.
-- A J-javaslatokhoz illesztett világítási tervek (LJ1–LJ18); a javaslat választásakor a hozzá illő
+- A J-javaslatokhoz illesztett világítási tervek (a javaslat számával); a javaslat választásakor a hozzá illő
   világítás bekapcsol (kikapcsolható).
 - Bútorjavaslat változatonként (`src/lib/furnitureSets.ts`): termékhelyenként a katalógusból a méretkeretbe férő, a változat
   bútor-színvilágához legjobban illő termék (a kerülendő szín kiesik; a változat kárpit-, bútortest-, fa- és szőnyegszínéhez való közelség,
-  a konszignáció-tervezet, az ellenőrzött ár és a kör, bővíthető asztal számít). A J6 a lakberendező termékeit kapja, ahol beleférnek
+  a konszignáció-tervezet, az ellenőrzött ár és a kör, bővíthető asztal számít). A J7 (`j6-tervezoi`) a lakberendező termékeit kapja, ahol beleférnek
   (`FURNITURE_OVERRIDES`). A javaslat választásakor a bútorok is cserélődnek (Javaslat fül, kikapcsolható); a választóban ◆ jelöli.
 - Egyszerű és részletes nézet (fejléc): az egyszerű a családnak szól – a rétegek, az ellenőrzések, a források és a lámpaszerkesztés rejtve.
   Első megnyitáskor rövid súgó (újra: Súgó gomb); telefonon figyelmeztetés és könnyített megjelenítés.
@@ -161,9 +163,13 @@ szkriptek fejlécében olvasható.
   mennyiséggel és összeggel (`src/lib/shopping.ts`: padló +10 %, festék 2 réteg / 12 m²/l, függöny kétszeres ráncolás, izzók foglalat szerint).
 - Berendezési javaslat (`src/data/furnishing.ts`, `src/lib/furnish.ts`): a nappaliban kanapé (egyenes ágyazható + puff, vagy L alakú:
   a chaise az erkély felé – legfeljebb kb. 180 cm-es ággal, az ellenőrzés méri az erkélyajtó vonalához – vagy az étkező felé; sarokkanapénál a rövid ágnak is van háttámlája), a falra szerelt TV alatt alacsony TV-szekrény vagy TV-fal (az elemek
-  jelzésszerű elrendezésével), szőnyeg, lamellás térelválasztó és étkező
+  jelzésszerű elrendezésével, `src/lib/tvWall.ts`: a magas elemek a szélekre, a TV közéjük – ha kell, a fal közepétől arrébb –, alatta a pad,
+  a falra szerelt elemek a TV mellé, egy magas elem fölé vagy a TV fölé, úgy, hogy a TV-t ne takarják; az eltolást és a szűk rést az ellenőrzés jelzi), szőnyeg, lamellás térelválasztó és étkező
   (kör ø120-as asztal 4 székkel vagy bővítve 196 cm-re); a hálóban szőnyeg, éjjeliszekrények és új, legalább 180 × 200-as ágy (alapból; a meglévő keret választható);
   a dolgozóban a meglévő kb. 300 × 103 cm-es asztal, sarokasztal az ajtó melletti sarokban (rövid ág ≤ 125 cm) vagy félszigetként, 3 monitorral és laptoppal.
+  Kiegészítő elemek (ötletek, méretkeret feltételezés): az étkezőben tálaló vagy társasjáték-polc a dolgozó ajtaja mellett, étkezőpad a
+  bővített asztal hosszú fal felőli oldalán, zsúrkocsi; a dolgozóban keskeny könyvespolc vagy olvasófotel a háló felőli fal ablak felőli
+  végén; az előszobában cipősszekrény vagy ülőpad és keskeny konzolasztal a konyhafalon. Egy elem több feltételhez is köthető (`when`, `unless`).
   Paraméteres modellek befoglaló mérettel, nem termékek; a szín a változat bútor-színvilágából jön (`furniturePalette`).
   A lehetőségek az Anyagok → Bútor csoportban, a megjelenítés a Nézet fülön kapcsolható. Termékhelyenként (pl. a 4 szék egy hely)
   katalógusbútor választható a méretkeret szerint szűrve („belefér” / „kilóg”); ekkor a termék mérete és színe látszik, a fal mellé állított
@@ -173,7 +179,18 @@ szkriptek fejlécében olvasható.
   „Jelölt – 3D-tervezet (nem jóváhagyott)” sorokként is szerepel. A választott bútorok a Termékek fülön és a bevásárlólistában is megjelennek. Az ellenőrzések jelzik a radiátor előtti
   zónába, az erkélyajtó megközelítésébe és az ajtólap ívébe lógó bútort, mérik az ajtók előtti szabad helyet és a fontosabb közöket
   (Méretek rétegen is).
-- Dekorelemek (`src/data/decor.ts`, `src/scene/DecorModels.tsx`, `src/scene/placement.ts`; alapból rejtve): 30 jelzésszerű elem – növények,
+- Aljavaslatok (`src/data/subVariants.ts`, `src/lib/subs.ts`): a kiemelt J1–J3 javaslathoz öt-öt (pl. J1-A … J1-E: klasszikus étkező,
+  társasjáték-est, zöld nappali, galéria, letisztult). A falak, a padló, az ajtók és a textilek a fő javaslatéi; az aljavaslat a bútorlehetőségeket
+  (kanapé, TV, asztal, tálaló, polcok, dolgozó, előszoba), a termékeket (a változat saját rangsorának egy másik helye, `rankSlot`) és az előre
+  elrendezett dekort adja. A dekor színe a változat bútor-színvilágából jön (`autoDecorVariant`; a kedvelt szín csak akkor, ha nem kerülendő),
+  a bútor tetejére kerülő elem a választott bútor magasságára. A Javaslat fülön a változat alatti legördülőből választható; váltáskor
+  csak az aljavaslat dekorja cserélődik (`origin: 'sub:…'`), a saját elhelyezésű marad. Más J-javaslatra váltva az aljavaslat kikapcsol.
+  A változatválasztóban (oldalsáv és összehasonlító nézet) a kiemelt javaslatok külön csoportban, elöl állnak; utánuk a többi J, végül a
+  saját változatok (`src/ui/VariantOptions.tsx`).
+- Színellenőrzés (`src/lib/colorClash.ts`): a látható bútortermék, a rögzített színű meglévő bútor vagy a dekorelem színe a változat
+  bútor-színvilágában kerülendő → „⚠ Elüt a javaslat színvilágától” figyelmeztetés az ellenőrzésekben, a Javaslat fül összesítőjében, a
+  termékválasztóban, a dekorlistában és a gyorsinfóban.
+- Dekorelemek (`src/data/decor.ts`, `src/scene/DecorModels.tsx`, `src/scene/placement.ts`; alapból rejtve): 34 jelzésszerű elem – növények,
   képek és tükrök, dekortárgyak, akusztikus falpanelek (lamellás, hatszög, filc; katalógustermék rendelhető hozzájuk, a bevásárlólistában
   lapszámmal). Az Anyagok → Dekor csoportban típust választva halvány, áttetsző előnézet követi az egeret, és a falra, a padlóra vagy egy
   bútor tetejére kattintva kerül a helyére (Esc: mégse). Az M billentyűt nyomva tartva az elem egérrel húzható (a megfogás helyén marad
@@ -203,8 +220,8 @@ szkriptek fejlécében olvasható.
   fényerő nem hiteles.
 - Rétegek: adatbiztonság-színezés, funkcionális zónák (ajtónyitás, erkélyajtó megközelítése, klíma légárama, a radiátor előtti
   szabad zóna), méretcímkék, nyitott ajtók.
-- Ellenőrzések: függöny és radiátor ütközése (a sarokban is), közlekedősáv szélessége, ellentmondások
-  és hiányzó adatok a JSON-ból.
+- Ellenőrzések: függöny és radiátor ütközése (a sarokban is), közlekedősáv szélessége, a színvilágtól elütő bútor és dekor,
+  ellentmondások és hiányzó adatok a JSON-ból.
 - Képernyőkép mentése (összehasonlító nézetben a két kép egymás mellé kerül).
 
 A színek képernyős közelítések, nem gyártói kódok. Végső döntés előtt fizikai színminta kell.
@@ -238,5 +255,5 @@ A tároló commitjai a GitHub noreply címével készülnek (tárolószintű `gi
 
 1. Beépített LED-sávok (médiafal, polcok, mennyezeti koszorú) a bútorokkal együtt; a kiválasztott festékek, padló- és ajtódekorok fizikai mintáinak fotója szürkekártyával.
 2. A közlekedő hosszának közvetlen mérése; a WC- és fürdőajtó nyitásiránya; falvastagságok (lásd a helyiségek „missing” listáját).
-3. A dolgozó berendezése (a nagy tervezőasztal mérete még hiányzik); a bútor-konszignáció átvezetése a naplóba jóváhagyás után.
-4. Dekorelemek húzással mozgatva; ütközésjelzés a dekor és a bútorok között.
+3. A bútor-konszignáció átvezetése a naplóba jóváhagyás után; az aljavaslatok a többi J-javaslathoz, ha az irány beválik.
+4. Ütközésjelzés a dekor és a bútorok között; a kiegészítő bútorokhoz (tálaló, polcok, előszoba) katalógustermékek.

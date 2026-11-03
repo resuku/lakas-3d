@@ -3,6 +3,7 @@ import { FURNISH_GAPS, FURNISHING } from '../data/furnishing';
 import { findFurniture } from '../data/products';
 import type { FurnitureProduct, FurnSpec, Room } from '../model/types';
 import { mm, roomDims, wallFrames, type WallFrame } from './geom';
+import { layoutTvWall, TV, tvWallParts } from './tvWall';
 
 // Berendezési javaslat: a választásoktól függő elemek, alaprajzi befoglalók (m) és a közlekedési ellenőrzések.
 
@@ -15,14 +16,15 @@ export interface Rect {
 
 /** A látható elemek; ha a termékhelyre katalógusbútor van választva, annak méretével (`product` mezővel). */
 export function activeFurnishing(roomId: string, choices: Record<string, string>, picks: Record<string, string> = {}): ResolvedSpec[] {
-  const specs = (FURNISHING[roomId] ?? []).filter((f) => !f.choice || (choices[f.choice.group] ?? DEFAULT_CHOICES[f.choice.group]) === f.choice.option);
+  const is = (c: { group: string; option: string }) => (choices[c.group] ?? DEFAULT_CHOICES[c.group]) === c.option;
+  const specs = (FURNISHING[roomId] ?? []).filter((f) => (!f.choice || is(f.choice)) && (f.when ?? []).every(is) && !(f.unless && is(f.unless)));
   return resolveFurnishing(specs, picks);
 }
 
 export type ResolvedSpec = FurnSpec & { product?: FurnitureProduct };
 
 /** A fal mellé állított bútorok: termékcserénél a hátuk a falnál marad. */
-const BACK_TO_WALL = new Set<FurnSpec['kind']>(['sofa', 'tvUnit', 'tvWall', 'bed', 'nightstand', 'desk']);
+const BACK_TO_WALL = new Set<FurnSpec['kind']>(['sofa', 'tvUnit', 'tvWall', 'bed', 'nightstand', 'desk', 'sideboard', 'shoeCabinet', 'bookcase', 'console']);
 /** A betolt szék ülése ennyivel ér az asztallap alá (mm). */
 const TUCK = 150;
 
@@ -83,6 +85,16 @@ export function resolveFurnishing(specs: FurnSpec[], picks: Record<string, strin
   const bed = out.find((f) => f.kind === 'bed');
   if (bed)
     for (const n of out.filter((f) => f.kind === 'nightstand')) n.z = bed.z + Math.sign(n.z - bed.z) * (bed.w / 2 + 20 + n.w / 2);
+  // a falra szerelt TV a TV-fal elrendezése szerint: a magas elemek közti résben, a pad fölött
+  const wall = out.find((f) => f.kind === 'tvWall');
+  const tv = out.find((f) => f.kind === 'tv');
+  if (wall && tv) {
+    const l = layoutTvWall(tvWallParts(wall), mm(wall.w));
+    const th = ((wall.rot ?? 0) * Math.PI) / 180;
+    tv.x += Math.round(Math.cos(th) * l.tvX * 1000);
+    tv.z -= Math.round(Math.sin(th) * l.tvX * 1000);
+    tv.y = Math.round(l.tvY * 1000);
+  }
   return out;
 }
 
@@ -130,7 +142,7 @@ export function outOfLimits(slot: string, p: FurnitureProduct): string[] {
 /** Az asztali lámpa alatti bútor teteje (m), ha a pont egy asztal, éjjeliszekrény vagy szekrény fölé esik. */
 export function standTop(specs: FurnSpec[], x: number, z: number): number | null {
   const tops = specs
-    .filter((f) => ['desk', 'nightstand', 'tvUnit', 'table'].includes(f.kind))
+    .filter((f) => ['desk', 'nightstand', 'tvUnit', 'table', 'sideboard', 'shoeCabinet', 'console', 'bookcase', 'cart'].includes(f.kind))
     .filter((f) => footprint(f).some((r) => mm(x) >= r.x0 && mm(x) <= r.x1 && mm(z) >= r.z0 && mm(z) <= r.z1))
     .map((f) => mm(f.h));
   return tops.length ? Math.max(...tops) : null;
@@ -258,6 +270,20 @@ export function furnishChecks(room: Room, choices: Record<string, string>, picks
   if (!specs.length) return [];
   const out: FurnishFinding[] = [];
   const solid = specs.filter((f) => f.kind !== 'rug' && f.kind !== 'tv');
+
+  // TV-fal: a jelzésszerű elrendezésben hová kerül a TV, és elfér-e
+  const tvWall = specs.find((f) => f.kind === 'tvWall');
+  if (tvWall && specs.some((f) => f.kind === 'tv')) {
+    const l = layoutTvWall(tvWallParts(tvWall), mm(tvWall.w));
+    const cmOf = (m: number) => Math.round(Math.abs(m) * 100);
+    if (!l.tvFits)
+      out.push({ level: 'warn', text: `${tvWall.label}: a TV (${(TV.half * 200).toFixed(1).replace('.', ',')} cm) szélesebb, mint a magas elemek közti rés – a magas elemeket szét kell húzni, a TV-fal így szélesebb a termékoldali méretnél.` });
+    if (cmOf(l.tvX) >= 2)
+      out.push({ level: 'info', text: `${tvWall.label}: a magas elem miatt a TV a TV-fal közepétől kb. ${cmOf(l.tvX)} cm-rel ${l.tvX > 0 ? 'az erkély' : 'az étkező'} felé kerül (a kanapé középvonalától is).` });
+    if (l.tvY > TV.bottom + 0.01) out.push({ level: 'info', text: `${tvWall.label}: a pad magassága miatt a TV alsó éle kb. ${cmOf(l.tvY)} cm-re kerül (alapból ${cmOf(TV.bottom)} cm).` });
+    if (l.maxY > 2.5)
+      out.push({ level: 'info', text: `${tvWall.label}: a termékoldal elemei a jelzésszerű elrendezésben kb. ${cmOf(l.maxY)} cm magasra érnek – a valós összeállítást a termékoldalon érdemes megnézni.` });
+  }
 
   for (const z of keepClearZones(room)) {
     for (const f of solid)

@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { DECOR_GROUPS, DECOR_TYPES, findDecorType } from '../data/decor';
 import { FURNITURE_PRODUCTS } from '../data/products';
 import { getRoom } from '../data/rooms';
 import type { DecorItem, WallId } from '../model/types';
-import { useStore } from '../store';
+import { decorFit } from '../lib/colorClash';
+import { subShortName } from '../data/subVariants';
+import { furnitureFit, type FitItem } from '../lib/furnitureFit';
+import { useStore, useVariant } from '../store';
 import { Field, Toggle } from './controls';
 
 // Dekorelemek egy helyiségben: típus választása és elhelyezése kattintással (fal, padló, bútor teteje), a kijelölt elem
@@ -12,7 +15,7 @@ import { Field, Toggle } from './controls';
 const PANEL_TYPE: Record<string, string> = { 'akusztik-lamella': 'slat', 'akusztik-hatszog': 'hexagon', 'akusztik-filc': 'felt' };
 const STEP = 50;
 
-function Selected({ d }: { d: DecorItem }) {
+function Selected({ d, fit }: { d: DecorItem; fit: FitItem | null }) {
   const s = useStore();
   const t = findDecorType(d.type)!;
   const room = getRoom(d.roomId);
@@ -62,6 +65,8 @@ function Selected({ d }: { d: DecorItem }) {
           ))}
         </select>
       )}
+      {fit?.verdict === 'bad' && <span className="warn-text">⚠ Elüt a javaslat színvilágától (legközelebbi minta: {fit.label}) – más szín vagy keret illik jobban.</span>}
+      {d.origin && <small>Aljavaslatból ({subShortName(d.origin)}); másik aljavaslat választásakor cserélődik.</small>}
       {t.sizes && (
         <div className="row">
           <select value={d.w ?? t.w} onChange={(e) => up({ w: Number(e.target.value) })} title="Szélesség">
@@ -114,6 +119,9 @@ export function DecorPanel({ roomId }: { roomId: string }) {
   const [ask, setAsk] = useState(false);
   const items = s.decor.filter((d) => d.roomId === roomId);
   const sel = items.find((d) => d.id === s.selectedDecor);
+  const v = useVariant(s.activeId);
+  const vf = useMemo(() => furnitureFit(v), [v]);
+  const fits = useMemo(() => new Map(items.map((d) => [d.id, decorFit(vf, d)])), [items, vf]);
   const placingType = s.placing ? findDecorType(s.placing.typeId ?? s.decor.find((d) => d.id === s.placing?.moveId)?.type ?? '') : undefined;
   useEffect(() => {
     if (!s.placing) return;
@@ -134,7 +142,7 @@ export function DecorPanel({ roomId }: { roomId: string }) {
           <button onClick={() => s.setPlacing(null)}>Mégse</button>
         </div>
       )}
-      <p className="note">Jelzésszerű formák „mutatóba” – nem termékek. Válassz egy elemet: a 3D nézetben halvány előnézet követi az egeret, kattintásra a helyére kerül. Mozgatás: az <b>M</b> billentyűt nyomva tartva húzd az elemet (falon a fal mentén, padlón a padlón vagy bútorra); a kijelölt elem lent is hangolható. Az akusztikus panelekhez katalógustermék is rendelhető.</p>
+      <p className="note">Jelzésszerű formák „mutatóba” – nem termékek. Válassz egy elemet: a 3D nézetben halvány előnézet követi az egeret, kattintásra a helyére kerül. Mozgatás: az <b>M</b> billentyűt nyomva tartva húzd az elemet (falon a fal mentén, padlón a padlón vagy bútorra); a kijelölt elem lent is hangolható. Az akusztikus panelekhez katalógustermék is rendelhető. A listában ◇: aljavaslatból betöltött elem, ⚠: a színe elüt a javaslat színvilágától.</p>
       {DECOR_GROUPS.map((g) => (
         <Field key={g.id} label={g.label}>
           <div className="decor-types">
@@ -151,13 +159,19 @@ export function DecorPanel({ roomId }: { roomId: string }) {
           <ul className="decor-list">
             {items.map((d) => (
               <li key={d.id} className={d.id === s.selectedDecor ? 'on' : ''}>
-                <button className="link-btn" onClick={() => s.selectDecor(d.id === s.selectedDecor ? null : d.id)}>
+                <button
+                  className="link-btn"
+                  onClick={() => s.selectDecor(d.id === s.selectedDecor ? null : d.id)}
+                  title={fits.get(d.id)?.verdict === 'bad' ? `Elüt a javaslat színvilágától (${fits.get(d.id)!.label})` : d.origin ? 'Aljavaslatból' : undefined}
+                >
+                  {fits.get(d.id)?.verdict === 'bad' ? '⚠ ' : ''}
                   {findDecorType(d.type)?.label ?? d.type}
+                  {d.origin ? ' ◇' : ''}
                 </button>
               </li>
             ))}
           </ul>
-          {sel && <Selected d={sel} />}
+          {sel && <Selected d={sel} fit={fits.get(sel.id) ?? null} />}
           {!ask ? (
             <button className="wide" onClick={() => setAsk(true)}>
               Minden dekor törlése ebben a helyiségben…
