@@ -13,7 +13,7 @@ import { STATUS_INFO, worst } from '../lib/status';
 import { Box } from './Box';
 import { FurnitureModel } from './FurnitureModels';
 import { setGhost } from './ghost';
-import { ceilingInfo, floorInfo, info } from '../lib/inspect';
+import { ceilingInfo, floorInfo, info, infoUrl } from '../lib/inspect';
 
 export function FloorAndCeiling({ room, variant }: { room: Room; variant: Variant }) {
   const { W, L, H } = roomDims(room);
@@ -96,7 +96,8 @@ function Furnishing({ room, specs, variant, layers }: { room: Room; specs: Resol
         const tint = layers.status ? STATUS_INFO[f.s].color : null;
         const c = { main: tint ?? p?.hex ?? item?.hex ?? '#1a1b1d', metal: tint ?? pal.metal.hex };
         const ud = p
-          ? info(
+          ? infoUrl(
+              p.url,
               `${room.name} – ${f.label}`,
               `${p.store}: ${p.brand ? `${p.brand} ` : ''}${p.name}${p.price ? ` · ${p.price}` : ''}`,
               `${f.w} × ${f.d} × ${f.h} mm (a termékoldal szerint; ami ott nincs, a helyőrzőé)`,

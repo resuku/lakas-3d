@@ -2,7 +2,7 @@ import { Viewport } from './scene/RoomScene';
 import { BottomPanel } from './ui/BottomPanel';
 import { Sidebar } from './ui/Sidebar';
 import { useStore } from './store';
-import { InspectTip, useInspectKeys } from './scene/Inspector';
+import { InspectTip, useInspectKeys, useMoveKey } from './scene/Inspector';
 import { HelpOverlay, SmallScreenNotice } from './ui/HelpOverlay';
 
 function ViewHeader({ side }: { side: 'a' | 'b' }) {
@@ -37,6 +37,7 @@ function WalkHint() {
 
 export default function App() {
   useInspectKeys();
+  useMoveKey();
   const viewMode = useStore((s) => s.viewMode);
   const activeId = useStore((s) => s.activeId);
   const compareId = useStore((s) => s.compareId);

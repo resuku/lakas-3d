@@ -1,13 +1,14 @@
 import * as THREE from 'three';
-import { useEffect, useMemo } from 'react';
-import type { ThreeEvent } from '@react-three/fiber';
+import { useEffect, useMemo, useRef, type ReactNode } from 'react';
+import { useFrame, type ThreeEvent } from '@react-three/fiber';
 import { findDecorType, type DecorType } from '../data/decor';
 import { findFurniture } from '../data/products';
-import { info } from '../lib/inspect';
+import { infoUrl } from '../lib/inspect';
 import { mm, wallFrames } from '../lib/geom';
 import type { DecorItem, Room } from '../model/types';
 import { useStore } from '../store';
 import { Box } from './Box';
+import { startDrag } from './placement';
 
 // Dekorelemek jelzésszerű modelljei. Helyi rendszer: padlón / bútoron álló elemnél a talppont az origó (y = 0 az alap);
 // falra kerülő elemnél a hátlap a z = 0 síkon, az eleje +z felé, az alsó él y = 0, vízszintesen középre igazítva.
@@ -412,15 +413,48 @@ export function decorPose(room: Room, item: DecorItem): { pos: [number, number, 
   return { pos: [mm(item.x ?? 0), mm(item.y), mm(item.z ?? 0)], rotY: ((item.rot ?? 0) * Math.PI) / 180 };
 }
 
-/** A helyiség dekorelemei; kattintásra kijelölés, a kijelölt elem körül keret. */
+/** Halvány, áttetsző szürke előnézet: a sugár átmegy rajta, árnyékot nem vet (elhelyezés közben). */
+function Ghost({ children }: { children: ReactNode }) {
+  const ref = useRef<THREE.Group>(null);
+  useFrame(() => {
+    ref.current?.traverse((o) => {
+      const m = o as THREE.Mesh;
+      if (!m.isMesh) return;
+      m.raycast = () => {};
+      m.castShadow = false;
+      for (const mat of ([] as THREE.Material[]).concat(m.material)) {
+        mat.transparent = true;
+        mat.opacity = 0.38;
+        mat.depthWrite = false;
+        (mat as THREE.MeshStandardMaterial).color?.set('#9a9a9a');
+      }
+    });
+  });
+  return (
+    <group ref={ref} userData={{ decorPreview: true }}>
+      {children}
+    </group>
+  );
+}
+
+/** A helyiség dekorelemei; kattintásra kijelölés, a kijelölt elem körül keret; M + húzás: mozgatás; elhelyezés közben előnézet. */
 export function DecorLayer({ room }: { room: Room }) {
   const items = useStore((s) => s.decor);
   const on = useStore((s) => s.layers.decor);
   const selected = useStore((s) => s.selectedDecor);
   const select = useStore((s) => s.selectDecor);
+  const preview = useStore((s) => (s.decorPreview?.roomId === room.id ? s.decorPreview.item : null));
   if (!on) return null;
+  const pv = preview && decorPose(room, preview);
   return (
     <>
+      {preview && pv && (
+        <group position={pv.pos} rotation={[0, pv.rotY, 0]}>
+          <Ghost>
+            <DecorModel item={preview} />
+          </Ghost>
+        </group>
+      )}
       {items
         .filter((d) => d.roomId === room.id)
         .map((d) => {
@@ -436,9 +470,16 @@ export function DecorLayer({ room }: { room: Room }) {
               key={d.id}
               position={pos}
               rotation={[0, rotY, 0]}
-              userData={{ ...info(`${room.name} – ${t.label}`, `${Math.round(w * 1000)} × ${Math.round(h * 1000)} mm (jelzésszerű)`, p ? `${p.store}: ${p.name}${p.price ? ` · ${p.price}` : ''}` : t.note, 'Kattintás: kijelölés (Anyagok → Dekor)'), decorId: d.id }}
+              userData={{ ...infoUrl(p?.url, `${room.name} – ${t.label}`, `${Math.round(w * 1000)} × ${Math.round(h * 1000)} mm (jelzésszerű)`, p ? `${p.store}: ${p.name}${p.price ? ` · ${p.price}` : ''}` : t.note, 'Kattintás: kijelölés (Anyagok → Dekor) · M nyomva + húzás: mozgatás'), decorId: d.id }}
+              onPointerDown={(e: ThreeEvent<PointerEvent>) => {
+                const st = useStore.getState();
+                if (!st.moveKey || st.placing || st.walk || e.nativeEvent.button !== 0) return;
+                e.stopPropagation();
+                select(d.id);
+                startDrag(room, e, d);
+              }}
               onClick={(e: ThreeEvent<MouseEvent>) => {
-                if (useStore.getState().placing || e.delta > 4) return;
+                if (useStore.getState().placing || e.delta > 4 || e.nativeEvent.ctrlKey || e.nativeEvent.metaKey) return;
                 e.stopPropagation();
                 select(d.id);
                 useStore.getState().setViewer({ sidebarTab: 'materials' });

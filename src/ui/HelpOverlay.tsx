@@ -25,7 +25,7 @@ export function HelpOverlay() {
             <b>Teljes lakás</b>: minden helyiség a helyén. <b>Bejárás</b>: séta szemmagasságban – <b>W A S D</b> vagy nyilak, egérhúzással körbenézés, Esc: kilépés.
           </li>
           <li>
-            <b>Alt</b> nyomva tartva (vagy <b>I</b>): az egér alatti elem – fal, padló, ajtó, lámpa – pontos terméke. Egy lámpára kattintva ki- és bekapcsol.
+            <b>Alt</b> nyomva tartva (vagy <b>I</b>): az egér alatti elem – fal, padló, ajtó, lámpa, bútor – pontos terméke; <b>Ctrl</b> (Macen <b>⌘</b>) + kattintás: a termék oldala új lapon. Egy lámpára kattintva ki- és bekapcsol.
           </li>
         </ul>
         <h3>Javaslatok</h3>
@@ -46,7 +46,7 @@ export function HelpOverlay() {
             Az <b>Anyagok</b> fül <b>Bútor</b> csoportjában választható a kanapé (egyenes vagy L alakú), a TV alatti szekrény vagy TV-fal, az asztal és az ágy, hozzájuk valós termék is (<b>◆</b> a javaslathoz illő, <b>★</b> a tervezet).
           </li>
           <li>
-            A <b>Dekor</b> csoportban növény, kép, tükör vagy akusztikus panel tehető ki: válaszd ki, majd kattints a 3D nézetben a falra vagy a padlóra (Esc: mégse).
+            A <b>Dekor</b> csoportban növény, kép, tükör vagy akusztikus panel tehető ki: válaszd ki, a halvány előnézettel keresd meg a helyét, és kattints (Esc: mégse). Mozgatás: <b>M</b> nyomva tartva húzd az elemet.
           </li>
         </ul>
         <h3>Véleményezés</h3>

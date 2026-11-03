@@ -26,6 +26,11 @@ if (steps[0]?.helpShot) {
 const start = page.getByRole('button', { name: 'Kezdjük', exact: true });
 if (await start.count()) await start.click();
 
+page.context().on('page', async (p) => {
+  await p.waitForLoadState('commit').catch(() => {});
+  console.log('új lap:', p.url());
+});
+
 for (const s of steps) {
   if (s.click) await page.getByRole('button', { name: s.click, exact: true }).first().click();
   if (s.toggle) await page.getByLabel(s.toggle).click();
@@ -52,6 +57,20 @@ for (const s of steps) {
   if (s.fill) await page.getByPlaceholder(s.fill[0]).first().fill(s.fill[1]);
   // egér mozgatása oldalkoordinátára (pl. gyorsinfóhoz), pl. {"mouse":[900,400]}
   if (s.mouse) await page.mouse.move(s.mouse[0], s.mouse[1], { steps: 4 });
+  // billentyű le / fel külön lépésben (pl. M nyomva tartása egérhúzás közben), egérgomb le / fel oldalkoordinátán
+  if (s.keyDown) await page.keyboard.down(s.keyDown);
+  if (s.keyUp) await page.keyboard.up(s.keyUp);
+  if (s.mouseDown) {
+    await page.mouse.move(s.mouseDown[0], s.mouseDown[1]);
+    await page.mouse.down();
+  }
+  if (s.mouseUp) await page.mouse.up();
+  // Ctrl + kattintás oldalkoordinátán (a megnyitott új lap címét kiírja)
+  if (s.ctrlClick) {
+    await page.keyboard.down('Control');
+    await page.mouse.click(s.ctrlClick[0], s.ctrlClick[1]);
+    await page.keyboard.up('Control');
+  }
   // kattintás oldalkoordinátán, pl. {"clickAt":[969,107]}
   if (s.clickAt) await page.mouse.click(s.clickAt[0], s.clickAt[1]);
   if (s.drag) {

@@ -54,10 +54,73 @@ export function Inspector() {
   return null;
 }
 
+/** Ctrl (⌘) + kattintás: az egér alatti elem termékoldala új lapon (userData.productUrl; lib/inspect.ts – infoUrl). */
+export function ProductLinks() {
+  const camera = useThree((s) => s.camera);
+  const scene = useThree((s) => s.scene);
+  const gl = useThree((s) => s.gl);
+  useEffect(() => {
+    const el = gl.domElement;
+    const ray = new THREE.Raycaster();
+    const click = (e: MouseEvent) => {
+      if (!(e.ctrlKey || e.metaKey) || useStore.getState().walk) return;
+      const r = el.getBoundingClientRect();
+      ray.setFromCamera(new THREE.Vector2(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1), camera);
+      for (const h of ray.intersectObjects(scene.children, true)) {
+        const mats = ([] as THREE.Material[]).concat((h.object as THREE.Mesh).material ?? []);
+        if (!h.object.visible || mats.some((m) => m.colorWrite === false)) continue;
+        let o: THREE.Object3D | null = h.object;
+        while (o && !o.userData.inspect) o = o.parent;
+        const url = o?.userData.productUrl as string | undefined;
+        if (url) {
+          e.preventDefault();
+          window.open(url, '_blank', 'noopener,noreferrer');
+        }
+        return;
+      }
+    };
+    el.addEventListener('click', click);
+    return () => el.removeEventListener('click', click);
+  }, [camera, scene, gl]);
+  return null;
+}
+
 const typing = (e: KeyboardEvent) => {
   const t = e.target as HTMLElement | null;
   return !!t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA');
 };
+
+/** M nyomva tartva: dekorelem mozgatása egérrel (húzás); a kamera ilyenkor nem forog. Felengedéskor a húzás véget ér. */
+export function useMoveKey() {
+  const setMoveKey = useStore((s) => s.setMoveKey);
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.code === 'KeyM' && !typing(e) && !e.ctrlKey && !e.metaKey && !e.altKey && !useStore.getState().walk) setMoveKey(true);
+    };
+    const end = () => {
+      setMoveKey(false);
+      useStore.getState().setDecorDrag(null);
+    };
+    const up = (e: KeyboardEvent) => e.code === 'KeyM' && end();
+    const release = () => useStore.getState().setDecorDrag(null);
+    window.addEventListener('keydown', down);
+    window.addEventListener('keyup', up);
+    window.addEventListener('blur', end);
+    window.addEventListener('pointerup', release);
+    // egérmutató: M nyomva „fogó kéz”, húzás közben „markoló kéz”
+    const unsub = useStore.subscribe((s) => {
+      document.body.classList.toggle('move-key', s.moveKey);
+      document.body.classList.toggle('dragging', !!s.decorDrag);
+    });
+    return () => {
+      unsub();
+      window.removeEventListener('keydown', down);
+      window.removeEventListener('keyup', up);
+      window.removeEventListener('blur', end);
+      window.removeEventListener('pointerup', release);
+    };
+  }, [setMoveKey]);
+}
 
 /** Billentyűk: Alt nyomva tartva = gyorsinfó; I = rögzítés be/ki. A böngésző Alt-menüjét elnyomja. */
 export function useInspectKeys() {

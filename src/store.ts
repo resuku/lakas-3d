@@ -65,6 +65,12 @@ interface State {
   placing: { typeId?: string; moveId?: string } | null;
   /** A kijelölt dekorelem; nem mentődik. */
   selectedDecor: string | null;
+  /** Elhelyezés közben az egér alatti leendő hely (halvány előnézet); nem mentődik. */
+  decorPreview: { roomId: string; item: DecorItem } | null;
+  /** Az egérrel húzott dekorelem (M + húzás); nem mentődik. */
+  decorDrag: string | null;
+  /** Az M billentyű nyomva: dekor mozgatása egérrel, a kamera ilyenkor nem forog; nem mentődik. */
+  moveKey: boolean;
   /** Gyorsinfó (Alt nyomva tartva vagy I-vel rögzítve): az egér alatti elem leírása; nem mentődik. */
   inspect: { on: boolean; sticky: boolean; info: { title: string; lines: string[] } | null; x: number; y: number };
   /** Kameraváltási kérés: preset index vagy 'overview'. */
@@ -104,6 +110,9 @@ interface State {
   removeDecor(id: string): void;
   setPlacing(p: State['placing']): void;
   selectDecor(id: string | null): void;
+  setDecorPreview(p: State['decorPreview']): void;
+  setDecorDrag(id: string | null): void;
+  setMoveKey(on: boolean): void;
   setPlanFollowsVariant(on: boolean): void;
   setFurnitureFollowsVariant(on: boolean): void;
   setViewer(patch: Partial<Pick<State, 'viewerName' | 'details' | 'lowQuality' | 'helpSeen' | 'sidebarTab'>>): void;
@@ -286,6 +295,9 @@ export const useStore = create<State>()(
       walk: false,
       placing: null,
       selectedDecor: null,
+      decorPreview: null,
+      decorDrag: null,
+      moveKey: false,
       inspect: { on: false, sticky: false, info: null, x: 0, y: 0 },
       viewerName: '',
       details: false,
@@ -362,8 +374,11 @@ export const useStore = create<State>()(
       addDecor: (item) => set((s) => ({ decor: [...s.decor, item], selectedDecor: item.id, layers: { ...s.layers, decor: true } })),
       updateDecor: (id, patch) => set((s) => ({ decor: s.decor.map((d) => (d.id === id ? { ...d, ...patch } : d)) })),
       removeDecor: (id) => set((s) => ({ decor: s.decor.filter((d) => d.id !== id), selectedDecor: s.selectedDecor === id ? null : s.selectedDecor })),
-      setPlacing: (p) => set((s) => ({ placing: p, layers: p ? { ...s.layers, decor: true } : s.layers })),
+      setPlacing: (p) => set((s) => ({ placing: p, decorPreview: null, layers: p ? { ...s.layers, decor: true } : s.layers })),
       selectDecor: (id) => set({ selectedDecor: id }),
+      setDecorPreview: (p) => set({ decorPreview: p }),
+      setDecorDrag: (id) => set({ decorDrag: id }),
+      setMoveKey: (on) => set({ moveKey: on }),
       setPlanFollowsVariant: (on) => set({ planFollowsVariant: on }),
       setFurnitureFollowsVariant: (on) => set({ furnitureFollowsVariant: on }),
       setViewer: (patch) => set(patch),

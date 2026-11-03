@@ -134,7 +134,7 @@ export function DecorPanel({ roomId }: { roomId: string }) {
           <button onClick={() => s.setPlacing(null)}>Mégse</button>
         </div>
       )}
-      <p className="note">Jelzésszerű formák „mutatóba” – nem termékek. Válassz egy elemet, majd kattints a helyére; a kijelölt elem lent hangolható. Az akusztikus panelekhez katalógustermék is rendelhető.</p>
+      <p className="note">Jelzésszerű formák „mutatóba” – nem termékek. Válassz egy elemet: a 3D nézetben halvány előnézet követi az egeret, kattintásra a helyére kerül. Mozgatás: az <b>M</b> billentyűt nyomva tartva húzd az elemet (falon a fal mentén, padlón a padlón vagy bútorra); a kijelölt elem lent is hangolható. Az akusztikus panelekhez katalógustermék is rendelhető.</p>
       {DECOR_GROUPS.map((g) => (
         <Field key={g.id} label={g.label}>
           <div className="decor-types">

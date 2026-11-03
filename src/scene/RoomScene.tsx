@@ -11,9 +11,9 @@ import { CameraRig } from './CameraRig';
 import { Furniture, FloorAndCeiling } from './Interior';
 import { GlobalLights, Lights, RoomLights } from './Lights';
 import { Walls } from './Walls';
-import { Inspector } from './Inspector';
+import { Inspector, ProductLinks } from './Inspector';
 import { DecorLayer } from './DecorModels';
-import { placementHandler } from './placement';
+import { placementHandler, placementMoveHandler } from './placement';
 
 function Scene({ variantId, viewId }: { variantId: string; viewId: string }) {
   const roomId = useStore((s) => s.roomId);
@@ -25,10 +25,11 @@ function Scene({ variantId, viewId }: { variantId: string; viewId: string }) {
   const lampsOff = useStore((s) => s.lampsOff);
   const lr = useMemo(() => computeLighting(room, light, roomLampLm(room, plan, light, lampsOff)), [room, light, plan, lampsOff]);
   const onPlace = useMemo(() => placementHandler(room), [room]);
+  const onMove = useMemo(() => placementMoveHandler(room), [room]);
   return (
     <>
       <Lights room={room} ls={light} lr={lr} />
-      <group onClick={onPlace}>
+      <group onClick={onPlace} onPointerMove={onMove} userData={{ roomRoot: room.id }}>
         <FloorAndCeiling room={room} variant={variant} />
         <Walls room={room} variant={variant} layers={layers} />
         <Furniture room={room} variant={variant} layers={layers} />
@@ -60,6 +61,7 @@ function WholeScene({ variantId, viewId }: { variantId: string; viewId: string }
   }, []);
   const mats = useMemo(() => Object.fromEntries(ROOMS.map((r) => [r.id, roomMatrix(r.id)])), []);
   const placers = useMemo(() => Object.fromEntries(ROOMS.map((r) => [r.id, placementHandler(r)])), []);
+  const movers = useMemo(() => Object.fromEntries(ROOMS.map((r) => [r.id, placementMoveHandler(r)])), []);
   const bounds = useMemo(() => boundsOf(ROOMS.map((r) => worldRect(r))), []);
   const center = useMemo(() => new THREE.Vector3((bounds.x0 + bounds.x1) / 2, 1.3, (bounds.z0 + bounds.z1) / 2), [bounds]);
   const radius = Math.hypot(bounds.x1 - bounds.x0, bounds.z1 - bounds.z0) / 2 + 1;
@@ -83,7 +85,7 @@ function WholeScene({ variantId, viewId }: { variantId: string; viewId: string }
     <>
       <GlobalLights lr={lrs[here] ?? lrs[room.id]} sunLr={sunLr} center={center} radius={radius} hemiScale={hemiScale} />
       {ROOMS.map((r) => (
-        <group key={r.id} matrixAutoUpdate={false} matrix={mats[r.id]} onClick={placers[r.id]}>
+        <group key={r.id} matrixAutoUpdate={false} matrix={mats[r.id]} onClick={placers[r.id]} onPointerMove={movers[r.id]} userData={{ roomRoot: r.id }}>
           <RoomLights room={r} ls={light} lr={lrs[r.id]} shadows={false} />
           <FloorAndCeiling room={r} variant={variant} />
           <Walls room={r} variant={variant} layers={layers} connected={connected.get(r.id)} />
@@ -115,6 +117,7 @@ export function Viewport({ variantId, viewId }: { variantId: string; viewId: str
     >
       <SceneSwitch variantId={variantId} viewId={viewId} />
       <Inspector />
+      <ProductLinks />
     </Canvas>
   );
 }

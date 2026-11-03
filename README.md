@@ -175,9 +175,12 @@ szkriptek fejlécében olvasható.
   (Méretek rétegen is).
 - Dekorelemek (`src/data/decor.ts`, `src/scene/DecorModels.tsx`, `src/scene/placement.ts`; alapból rejtve): 30 jelzésszerű elem – növények,
   képek és tükrök, dekortárgyak, akusztikus falpanelek (lamellás, hatszög, filc; katalógustermék rendelhető hozzájuk, a bevásárlólistában
-  lapszámmal). Az Anyagok → Dekor csoportban típust választva a 3D nézetben a falra, a padlóra vagy egy bútor tetejére kattintva kerül
-  a helyére (Esc: mégse); a 3D-ben rákattintva kijelölhető, majd 5 cm-es lépésekkel mozgatható, forgatható, átméretezhető, áthelyezhető,
-  másolható és törölhető. A konfigurációs fájlba is bekerül.
+  lapszámmal). Az Anyagok → Dekor csoportban típust választva halvány, áttetsző előnézet követi az egeret, és a falra, a padlóra vagy egy
+  bútor tetejére kattintva kerül a helyére (Esc: mégse). Az M billentyűt nyomva tartva az elem egérrel húzható (a megfogás helyén marad
+  az egér alatt; a kamera ilyenkor nem forog); a 3D-ben rákattintva kijelölhető, majd 5 cm-es lépésekkel mozgatható, forgatható,
+  átméretezhető, áthelyezhető, másolható és törölhető. A konfigurációs fájlba is bekerül.
+- Termékoldal: Ctrl (Macen ⌘) + kattintás az elemen új lapon megnyitja a termék oldalát (festéknél a gyártói színoldalt; padló, ajtó,
+  függöny, lámpa, bútor, akusztikus panel). A gyorsinfó jelzi, hol van ilyen link.
 - Gyorsinfó: Alt nyomva tartva (vagy I-vel rögzítve) az egér alatti elem – fal, padló, mennyezet, ajtó,
   ablak, függöny, radiátor, klíma, cső, lámpa, bútor – leírása buborékban (termék, kód, szín, ár).
 - Világítási terv (lakásszintű, a színváltozattól független; `src/data/lightPlans.ts`): helyiségenként lámpák
@@ -216,7 +219,7 @@ Fej nélküli Chromium fut Playwright-konténerben, a képek a `screenshots/` ma
 A lépések: `click` (gombfelirat), `toggle` (jelölőnégyzet felirata), `select` (`[sorszám, felirat]` vagy `["auto", felirat]`), `wait` (ms),
 `shot` (fájlnév), `eval` (kifejezés kiértékelése a böngészőben; fejlesztői szerveren a `window.__lakas.store` a tárolt állapot), `dump` (a mentett állapot
 kiírása fájlba), `hold` (billentyű nyomva tartása, pl. `["w",1500]`), `drag` (egérhúzás a 3D
-nézetben, pl. `[200,0]`) `clickAt` (kattintás oldalkoordinátán, pl. `[969,107]`) `mouse` (egér mozgatása, pl. `[900,400]`), `download` (`[gombfelirat, fájlnév]`), `upload` (`[fájlmező-szelektor, fájlnév]`), `fill` (`[helykitöltő szöveg, érték]`) és `dumpEval` (`[fájlnév, kifejezés]`). Ha az első lépés `{"helpShot":"név"}`, a nyitó súgóról is kép készül; a súgót a szkript utána bezárja.
+nézetben, pl. `[200,0]`) `clickAt` (kattintás oldalkoordinátán, pl. `[969,107]`) `ctrlClick` (Ctrl + kattintás oldalkoordinátán; a megnyitott új lap címét kiírja) `keyDown` / `keyUp` (billentyű le / fel, pl. `"m"`) `mouseDown` (egérgomb le oldalkoordinátán) `mouseUp` `mouse` (egér mozgatása, pl. `[900,400]`), `download` (`[gombfelirat, fájlnév]`), `upload` (`[fájlmező-szelektor, fájlnév]`), `fill` (`[helykitöltő szöveg, érték]`) és `dumpEval` (`[fájlnév, kifejezés]`). Ha az első lépés `{"helpShot":"név"}`, a nyitó súgóról is kép készül; a súgót a szkript utána bezárja.
 
 ## Kirakás (GitHub Pages)
 

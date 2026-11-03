@@ -74,7 +74,7 @@ export function FixtureMesh({ f, room, ls, off, shadows, onToggle }: { f: Fixtur
     userData: lampInfo(room, f, ls, off),
     onClick: (e: ThreeEvent<MouseEvent>) => {
       // dekor elhelyezésekor a kattintás a helyiségé
-      if (useStore.getState().placing) return;
+      if (useStore.getState().placing || e.nativeEvent.ctrlKey || e.nativeEvent.metaKey) return;
       e.stopPropagation();
       // forgatás / körbenézés közbeni egérhúzás nem kapcsol
       if (e.delta > 4) return;

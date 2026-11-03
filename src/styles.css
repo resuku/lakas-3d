@@ -962,3 +962,11 @@ body.placing canvas {
 .furnish-sugg small {
   display: block;
 }
+
+body.move-key canvas {
+  cursor: grab;
+}
+
+body.dragging canvas {
+  cursor: grabbing;
+}

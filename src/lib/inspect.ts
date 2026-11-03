@@ -12,6 +12,11 @@ export interface InspectInfo {
 
 export const info = (title: string, ...lines: (string | false | undefined)[]) => ({ inspect: { title, lines: lines.filter(Boolean) as string[] } });
 
+/** Mint az `info`, termékoldallal: Ctrl (⌘) + kattintásra új lapon nyílik meg (Inspector.tsx – useProductLinks). */
+export const infoUrl = (url: string | undefined, title: string, ...lines: (string | false | undefined)[]) =>
+  url ? { ...info(title, ...lines, LINK_HINT), productUrl: url } : info(title, ...lines);
+export const LINK_HINT = 'Ctrl (⌘) + kattintás: termékoldal új lapon';
+
 const priceOf = (p?: string) => (p ? p.split(' (')[0] : '');
 const val = (v: Val) => `${v.v} mm (${v.s} – ${STATUS_INFO[v.s].label.toLowerCase()})`;
 
@@ -25,7 +30,9 @@ export function wallInfo(room: Room, wallId: string, v: Variant) {
   const key = `${room.id}.${wallId}`;
   const accent = v.accents[key];
   const wood = v.accentWood?.includes(key);
-  return info(
+  const pid = accent ? v.products?.[`accent:${key}`] : v.products?.wall;
+  return infoUrl(
+    findPaint(pid)?.url,
     `${room.name} – ${room.walls[wallId as keyof Room['walls']].name}`,
     accent ? `Kiemelt fal${wood ? ' (fa falpanel)' : ''}: ${paintLine(accent, v.products?.[`accent:${key}`])}` : `Falszín: ${paintLine(v.wall, v.products?.wall)}`,
     `Felület: ${v.wallFinish === 'matt' ? 'matt' : 'selyemfényű'}`,
@@ -36,7 +43,8 @@ export function floorInfo(room: Room, v: Variant) {
   if (room.floor && v.floorAll === false) return info(`${room.name} – padló`, 'Eltérő burkolat: járólap', room.floor.note);
   const f = findFloor(v.products?.floor);
   const pattern = v.floor.pattern === 'herringbone' ? 'halszálka' : v.floor.pattern === 'tile' ? 'lap' : 'hajópadló';
-  return info(
+  return infoUrl(
+    f?.url,
     `${room.name} – padló`,
     f ? `${f.store}: ${f.manufacturer} ${f.name}${f.decor ? ` (${f.decor})` : ''}` : `${v.floor.tone} – kézi szín, nincs hozzárendelt termék`,
     f?.size && `${f.size.l} × ${f.size.w} mm · ${f.type}${f.wear ? ` · ${f.wear}` : ''}`,
@@ -44,13 +52,14 @@ export function floorInfo(room: Room, v: Variant) {
   );
 }
 
-export const ceilingInfo = (room: Room, v: Variant) => info(`${room.name} – mennyezet`, paintLine(v.ceiling, v.products?.ceiling));
+export const ceilingInfo = (room: Room, v: Variant) => infoUrl(findPaint(v.products?.ceiling)?.url, `${room.name} – mennyezet`, paintLine(v.ceiling, v.products?.ceiling));
 
 export function doorInfo(room: Room, o: Opening, v: Variant, showLeaf: boolean) {
   const size = `${o.width.v} × ${o.height.v} mm nyílás`;
   if (o.leaf?.fixed) return info(`${room.name} – ${o.label}`, size, o.leaf.fixed.note ?? 'Nem része az ajtócserének.');
   const d = findDoor(v.products?.door);
-  return info(
+  return infoUrl(
+    showLeaf ? d?.url : undefined,
     `${room.name} – ${o.label}`,
     size,
     !showLeaf
@@ -69,7 +78,8 @@ export const windowInfo = (room: Room, o: Opening) =>
 export function curtainInfo(room: Room, v: Variant) {
   const c = findCurtain(v.products?.curtain);
   const s = findCurtain(v.products?.sheer);
-  return info(
+  return infoUrl(
+    c?.url ?? s?.url,
     `${room.name} – függöny`,
     c ? `${c.store}: ${c.name}, ${c.colorName} · ${CURTAIN_TYPE_LABEL[c.type]}${c.price ? ` · ${priceOf(c.price)}` : ''}` : `${v.curtain.color} – kézi szín (${v.curtain.sheer ? 'áttetsző' : 'vastag'})`,
     v.curtain.sheerLayer && (s ? `Áttetsző réteg: ${s.store}: ${s.name}, ${s.colorName}` : `Áttetsző réteg: ${v.curtain.sheerLayer}`),
@@ -80,7 +90,8 @@ export function curtainInfo(room: Room, v: Variant) {
 export function lampInfo(room: Room, f: Fixture, ls: LightSettings, off: boolean) {
   const p = findLamp(f.productId);
   const spec = fixtureSpec(f, ls);
-  return info(
+  return infoUrl(
+    p?.url,
     `${room.name} – ${f.label ?? FIXTURE_LABEL[f.type]}`,
     p ? `${p.store}: ${p.brand ? `${p.brand} ` : ''}${p.name}${p.price ? ` · ${priceOf(p.price)}` : ''}` : `Általános ${FIXTURE_LABEL[f.type]} (termék nélkül)`,
     `${Math.round(spec.lm)} lm${spec.K ? ` · ${spec.K} K` : ''} · ${off ? 'lekapcsolva' : 'bekapcsolva'} (kattintás: ki/be)`,

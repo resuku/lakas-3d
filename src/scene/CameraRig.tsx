@@ -50,6 +50,8 @@ export function CameraRig({ room, viewId }: { room: Room; viewId: string }) {
   const publish = useStore((s) => s.publishCamera);
   const walk = useStore((s) => s.walk);
   const whole = useStore((s) => s.whole);
+  // M nyomva: a dekor mozgatása egérrel, a kamera ilyenkor nem forog
+  const moveKey = useStore((s) => s.moveKey);
   const areas = useMemo(() => walkAreas(whole ? ROOMS : [room], whole), [whole, room]);
   const driving = useRef(false);
   const lastSync = useRef(0);
@@ -99,6 +101,7 @@ export function CameraRig({ room, viewId }: { room: Room; viewId: string }) {
     <OrbitControls
       ref={controls}
       makeDefault
+      enabled={!moveKey}
       enableDamping={false}
       rotateSpeed={0.5}
       zoomSpeed={0.8}
