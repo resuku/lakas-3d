@@ -4,11 +4,13 @@ A program leírása, futtatása, adatmodellje és szkriptjei a `README.md`-ben v
 
 ## Projektkontextus
 
-- A felújítás forrásai a `../Felujítás/Doc` mappában vannak. Először a `00_Lakasfelujitas_CONTEXT.txt`-t, majd a `Lakasfelujitas_handoff_aktualis.txt`-t olvasd el. A 2026-11-02-i felhasználói közlések a V15 naplóban és a handoffban szerepelnek; a 2026-11-03-iak (kiemelt javaslatok, aljavaslatok, átszámozás – régi → új tábla) csak a handoff 11. fejezetében. Az `old` mappát ne használd forrásként.
+- A felújítás forrásai a `../Felujítás/Doc` mappában vannak. Először a `00_Lakasfelujitas_CONTEXT.txt`-t, majd a `Lakasfelujitas_handoff_aktualis.txt`-t olvasd el. A 2026-11-02-i felhasználói közlések a V15 naplóban és a handoffban szerepelnek; a 2026-11-03-iak (kiemelt javaslatok, aljavaslatok, átszámozás – régi → új tábla) csak a handoff 11. fejezetében, a forráslista- és katalógusbővítés (2026-11-04) a 12.-ben. Az `old` mappát ne használd forrásként.
 - Ne találj ki méretet. Minden szám `{v, s, note, src}` formában szerepel, a `src` a live naplóra mutat. Ellenőrzés: `npm run check-data`.
 - A Felújítás live forrásait (napló, CONTEXT, handoff, Konszignáció) csak kifejezett jóváhagyással módosítsd. Döntést ne jelölj véglegesnek. A J-javaslatok és a világítási tervek javaslatok, nem döntések.
 - A napló szoros megkötései (D-/ND-/DD- döntések) irányelvek, nem minden esetben szabályok. Ha egy megkötés kizárna egy lehetőséget, mutasd meg azt is, és kérdezz rá.
 - Bútornál és dekornál mindig jelöld a méret forrását (`basis`: naplósor, lakberendezői konszignáció vagy feltételezés). A katalógustermék jelölt, nem kiválasztott termék.
+- Katalógusbővítésnél a boltok botellenőrzését (Cloudflare, captcha) ne kerüld meg. Ilyenkor a Wayback Machine mentése használható: `archiveUrl` = a mentés, `checkedAt` = a mentés dátuma, az ár „(bolt, archív ÉÉÉÉ-HH-NN)”. Az archive.org-ról kérésenként legalább 6 s szünettel tölts (gyorsabban 429-et ad). A beszerzési forráslista hozzáférési besorolása mutatja, melyik bolt olvasható (handoff 12. fejezet).
+- Új katalógustermék után a J-javaslatok és aljavaslatok bútorai is változhatnak (rangsor, `rankSlot`): vesd össze előtte–utána, és jelezd a usernek.
 
 ## Parancsok
 

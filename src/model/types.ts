@@ -188,6 +188,8 @@ export interface FurnitureProduct {
   variants?: string[];
   price?: string;
   url: string;
+  /** A Wayback Machine mentése, ha az adat onnan való (az élő oldal botellenőrzés mögött van); ekkor a checkedAt a mentés dátuma. */
+  archiveUrl?: string;
   imageUrl?: string;
   checkedAt: string;
   note?: string;
@@ -454,6 +456,8 @@ export interface FloorProduct {
   hexSource: ColorSource;
   price?: string;
   url: string;
+  /** A Wayback Machine mentése, ha az adat onnan való; ekkor a checkedAt a mentés dátuma. */
+  archiveUrl?: string;
   checkedAt: string;
   note?: string;
 }
@@ -475,6 +479,8 @@ export interface DoorProduct {
   hexSource: ColorSource;
   price?: string;
   url: string;
+  /** A Wayback Machine mentése, ha az adat onnan való; ekkor a checkedAt a mentés dátuma. */
+  archiveUrl?: string;
   checkedAt: string;
   note?: string;
 }

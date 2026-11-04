@@ -60,15 +60,17 @@ Az első szkennelés (nappali, előszoba, közlekedő; 2026-11-01) tapasztalatai
 A `src/data/products/` mappában valós, Magyarországon kapható termékek vannak; ellenőrzés: 2026-11-01.
 
 - `paints.json`: 63 falfestékszín (Dulux, Poli-Farbe Platinum, PPG Trilak Héra), színcsaládok szerint.
-- `floors.json`: 26 padló (DIEGO, Parkettadiszkont, Praktiker, OBI, Parkettawebáruház), halszálkák is.
-- `doors.json`: 22 beltéri ajtó (Ajtógyár Pascal Optima dekorok, OBI, Praktiker, Porta, AjtóMester), sima, marással díszített és üvegbetétes.
+- `floors.json`: 43 padló (DIEGO, Parkettadiszkont, Praktiker, OBI, Parkettawebáruház, JOLA – szalagparketta is –, BAUHAUS), halszálkák is.
+- `doors.json`: 46 beltéri ajtó (Ajtógyár Pascal Optima dekorok, OBI, Praktiker, Porta, AjtóMester, PORTA gyártói dekorok, JOLA, BAUHAUS), sima, marással díszített és üvegbetétes.
 - `curtains.json`: 28 függöny (IKEA, JYSK, Bonami és kisebb hazai webshopok): sötétítő, fényszűrő és áttetsző.
 - `panels.json`: fa falpanel kiemelt falra (a lakberendezői tervben szereplő Okapi dió).
-- `furniture.json`: 190 tétel (IKEA, JYSK, Bútor1, Bonami, Beliani, DIEGO, kisebb webshopok és a Biano piactér eladói; ellenőrzés: 2026-11-02):
+- `furniture.json`: 427 tétel (IKEA, JYSK, Bútor1, Bonami, Beliani, DIEGO, RS Bútor, Artpresident, Zondo, Mindigbútor, BútorCity, Westwing,
+  Kanapébolt, Kanapékirály, XXXLutz, mömax, Möbelix, kisebb webshopok és a Biano piactér eladói; ellenőrzés: 2026-11-02 és 2026-11-03):
   ágyazható kanapé, L alakú (chaise-es és sarok-) kanapé, puff, TV-szekrény, TV-fal (elemlistával), étkezőasztal, szék, térelválasztó,
   szőnyeg (nappali és háló), ágy (180 és 200 × 200), éjjeliszekrény, sarok íróasztal és akusztikus falpanel. Méret és ár a
   termékoldalról (ami ott nincs, hiányzik); a szín fehér hátterű termékfotóból, ha az a színnévhez közeli, egyébként a színnévből becsült.
-  Az XXXLutz, a Möbelix és a mömax oldalai a gyűjtéskor 403-at adtak, ezért tőlük nincs termék.
+  Az XXXLutz, a Möbelix és a mömax élő oldala botellenőrzés mögött van, ezért ezek termékei (és a BAUHAUS ajtói, padlói) a
+  Wayback Machine mentéseiből származnak: az ár és az elérhetőség a mentés napjára igaz, a `checkedAt` a mentés dátuma, az `archiveUrl` a mentés.
 - `lamps.json`: 49 lámpa (IKEA, Bonami, Praktiker, OBI, JYSK, Watt Webshop): függeszték, mennyezeti lámpa, sín / spotsor, álló-, fali és asztali lámpa, köztük a konszignáció Manie állólámpája. Izzó nélküli lámpánál a modell meleg LED izzóval számol (E27 806 lm, E14 470 lm, GU10 345 lm, G9 kb. 280 lm).
 
 A modellszín eredete minden terméknél jelölve van:
