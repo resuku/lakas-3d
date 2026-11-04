@@ -6,6 +6,8 @@ import type { Bed as BedT, FurnColor, FurnSpec, Room, Val, Variant } from '../mo
 import { COLOR_SOURCE_LABEL } from '../data/products';
 import { useStore, type Layers } from '../store';
 import { makeFloorTexture } from '../lib/floorTexture';
+import { formLabel } from '../lib/cabinetForm';
+import { useLocalTextures } from '../lib/localTextures';
 import { activeFurnishing, furnishGaps, replacedIds, type ResolvedSpec } from '../lib/furnish';
 import { furnitureFit, furniturePalette, type FurniturePalette } from '../lib/furnitureFit';
 import { mm, roomDims } from '../lib/geom';
@@ -13,6 +15,7 @@ import { STATUS_INFO, worst } from '../lib/status';
 import { Box } from './Box';
 import { FurnitureModel } from './FurnitureModels';
 import { setGhost } from './ghost';
+import { useStudio } from './studio';
 import { ceilingInfo, floorInfo, info, infoUrl } from '../lib/inspect';
 import { CLASH_PREFIX, colorClashes } from '../lib/colorClash';
 import { findSubVariant } from '../data/subVariants';
@@ -25,13 +28,17 @@ export function FloorAndCeiling({ room, variant }: { room: Room; variant: Varian
   const dir = variant.floor.dir;
   const pl = plank?.l;
   const pw = plank?.w;
+  // helyi fotótextúra a változat padlótermékéhez (a helyiség saját burkolatához nem)
+  const local = useLocalTextures();
+  const photo = own ? null : (local?.floors[variant.products?.floor ?? ''] ?? null);
   const tex = useMemo(
-    () => makeFloorTexture(pattern, tone, dir, W, L, pl && pw ? { l: pl, w: pw } : undefined),
-    [pattern, tone, dir, W, L, pl, pw],
+    () => makeFloorTexture(pattern, tone, dir, W, L, pl && pw ? { l: pl, w: pw } : undefined, false, photo),
+    [pattern, tone, dir, W, L, pl, pw, photo],
   );
   useEffect(() => () => tex.dispose(), [tex]);
   const ceiling = useRef<THREE.Mesh>(null);
   const camera = useThree((s) => s.camera);
+  const studio = useStudio();
   useFrame(() => {
     if (ceiling.current) setGhost(ceiling.current, camera.position.y > H - 0.01);
   });
@@ -41,8 +48,9 @@ export function FloorAndCeiling({ room, variant }: { room: Room; variant: Varian
         <planeGeometry args={[W, L]} />
         <meshStandardMaterial map={tex} roughness={pattern === 'tile' ? 0.35 : 0.55} />
       </mesh>
-      {/* A mennyezet árnyékot is vet, különben a nap felülről besütne. */}
-      <mesh ref={ceiling} rotation={[Math.PI / 2, 0, 0]} position={[W / 2, H, L / 2]} castShadow receiveShadow userData={ceilingInfo(room, variant)}>
+      {/* A mennyezet árnyékot is vet, különben a nap felülről besütne; termékhű nézetben nem, mert a stúdió felülfénye a
+          bútorok alá vet árnyékot. */}
+      <mesh ref={ceiling} rotation={[Math.PI / 2, 0, 0]} position={[W / 2, H, L / 2]} castShadow={!studio} receiveShadow userData={ceilingInfo(room, variant)}>
         <planeGeometry args={[W + 0.6, L + 0.6]} />
         <meshStandardMaterial color={variant.ceiling} roughness={0.95} shadowSide={THREE.DoubleSide} />
       </mesh>
@@ -95,6 +103,7 @@ function Furnishing({ room, specs, variant, layers }: { room: Room; specs: Resol
   const sub = useStore((s) => findSubVariant(s.activeSubId));
   const colors = sub?.parent === variant.id ? sub.colors : undefined;
   const gaps = useMemo(() => (layers.dims ? furnishGaps(room.id, specs) : []), [layers.dims, room.id, specs]);
+  const local = useLocalTextures();
   return (
     <>
       {specs.map((f) => {
@@ -104,14 +113,19 @@ function Furnishing({ room, specs, variant, layers }: { room: Room; specs: Resol
         const item = role ? pal[role] : null;
         const p = f.product;
         const tint = layers.status ? STATUS_INFO[f.s].color : null;
-        const c = { main: tint ?? p?.hex ?? item?.hex ?? '#1a1b1d', metal: tint ?? pal.metal.hex };
+        const wood = !tint && p ? local?.woods[p.id] : undefined;
+        const c = { main: tint ?? p?.hex ?? item?.hex ?? '#1a1b1d', metal: tint ?? pal.metal.hex, tinted: !!tint, wood };
+        const partForms = p?.parts?.some((x) => x.form);
         const ud = p
           ? infoUrl(
               p.url,
               `${room.name} – ${f.label}`,
               `${p.store}: ${p.brand ? `${p.brand} ` : ''}${p.name}${p.price ? ` · ${p.price}` : ''}`,
-              `${f.w} × ${f.d} × ${f.h} mm (a termékoldal szerint; ami ott nincs, a helyőrzőé)`,
+              `${f.w} × ${f.d} × ${f.h} mm (a termékoldal szerint; ami ott nincs, a helyőrzőé)${p.form?.base === 'wall' && f.kind !== 'tvWall' ? `, falra szerelve, alsó éle ${p.form.baseH ?? 0} mm (feltételezés)` : ''}`,
               `Szín: ${p.colorName ?? p.hex} (${COLOR_SOURCE_LABEL[p.hexSource]})`,
+              p.form ? `Forma: ${formLabel(p.form)}` : partForms ? 'Forma: elemenként, a termékfotó alapján' : 'Forma: jelzésszerű (nincs termékforma)',
+              p.form?.note,
+              wood && 'Felület: a termékfotóból (helyi fotótextúra, nem kerül a kirakott oldalra)',
               warn,
               p.note,
             )

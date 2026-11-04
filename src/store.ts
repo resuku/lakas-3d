@@ -10,7 +10,8 @@ import { findSubVariant } from './data/subVariants';
 import { isSubDecor, subChoices, subDecor, subPicks } from './lib/subs';
 import type { DecorItem, LightPlan, LightSettings, Variant } from './model/types';
 
-export type ViewMode = 'single' | 'compare';
+/** Egy nézet, vagy két nézet egymás mellett ugyanarról: bal a fényjelenet, jobb a termékhű nézet. */
+export type ViewMode = 'single' | 'split';
 export type SidebarTab = 'view' | 'variant' | 'materials' | 'light' | 'more';
 
 export interface Layers {
@@ -36,7 +37,6 @@ interface State {
   whole: boolean;
   variants: Variant[];
   activeId: string;
-  compareId: string;
   sceneId: string;
   light: LightSettings;
   layers: Layers;
@@ -52,6 +52,10 @@ interface State {
   details: boolean;
   /** Könnyített megjelenítés gyengébb gépekhez: árnyék nélkül, kisebb felbontással. */
   lowQuality: boolean;
+  /** Termékhű nézet: semleges stúdiófény, Neutral tónusleképezés – a szemből látott felület a katalógusszínt mutatja. */
+  productView: boolean;
+  /** Helyi fotótextúrák (padló, ajtó, bútor a termékfotóból), ha a gépen vannak (lib/localTextures.ts). */
+  photoTextures: boolean;
   helpSeen: boolean;
   /** Az oldalsáv aktív füle. */
   sidebarTab: SidebarTab;
@@ -88,7 +92,6 @@ interface State {
   setViewMode(m: ViewMode): void;
   setWhole(on: boolean): void;
   setActive(id: string): void;
-  setCompare(id: string): void;
   updateVariant(id: string, fn: (v: Variant) => Variant): void;
   duplicateVariant(id: string): void;
   deleteVariant(id: string): void;
@@ -121,7 +124,7 @@ interface State {
   setMoveKey(on: boolean): void;
   setPlanFollowsVariant(on: boolean): void;
   setFurnitureFollowsVariant(on: boolean): void;
-  setViewer(patch: Partial<Pick<State, 'viewerName' | 'details' | 'lowQuality' | 'helpSeen' | 'sidebarTab'>>): void;
+  setViewer(patch: Partial<Pick<State, 'viewerName' | 'details' | 'lowQuality' | 'productView' | 'photoTextures' | 'helpSeen' | 'sidebarTab'>>): void;
   /** A saját visszajelzés (viewerName néven) az adott változathoz. */
   setFeedback(variantId: string, patch: { fav?: boolean; note?: string }): void;
   /** Más konfigurációs fájljából a visszajelzések (és az ott létrehozott új változatok) átvétele. */
@@ -143,7 +146,6 @@ function initialSettings() {
     whole: false,
     variants: clone(DEFAULT_VARIANTS),
     activeId: DEFAULT_VARIANTS[0].id,
-    compareId: DEFAULT_VARIANTS[1].id,
     sceneId: SCENES[0].id,
     light: clone(SCENES[0].settings),
     layers: { status: false, zones: false, dims: false, doorsOpen: false, furniture: true, decor: false },
@@ -161,7 +163,7 @@ function initialSettings() {
 }
 
 /** A mentett állapot verziója (localStorage és konfigurációs fájl). */
-export const STORE_VERSION = 11;
+export const STORE_VERSION = 13;
 
 /** A v6-ban törölt alapváltozatok (halszálkás J3, J12; termék nélküli A/B/C koncepciók) és terveik. */
 const REMOVED_VARIANTS = ['v-meleg', 'v-japandi', 'v-zsalya', 'j3-homok-agyag', 'j12-mediterran'];
@@ -173,7 +175,6 @@ const PERSISTED_KEYS = [
   'whole',
   'variants',
   'activeId',
-  'compareId',
   'sceneId',
   'light',
   'layers',
@@ -194,7 +195,7 @@ function pickPersisted(s: State): Persisted {
 }
 
 /** A böngészőben megmaradó állapot: a konfiguráció + a néző-szintű beállítások. */
-const LOCAL_KEYS = [...PERSISTED_KEYS, 'viewerName', 'details', 'lowQuality', 'helpSeen', 'sidebarTab'] as const;
+const LOCAL_KEYS = [...PERSISTED_KEYS, 'viewerName', 'details', 'lowQuality', 'productView', 'photoTextures', 'helpSeen', 'sidebarTab'] as const;
 function pickLocal(s: State) {
   return Object.fromEntries(LOCAL_KEYS.map((k) => [k, s[k]]));
 }
@@ -222,6 +223,11 @@ export function smallDevice() {
 // v11: átszámozás (scripts/gen/numbering.py: elöl a kiemelt, aljavaslatos javaslatok). Az azonosítók maradnak; a mentett
 //      J-változatok és -tervek (és másolataik) neve az új számot kapja, ha még a régi „Jn – cím” kezdetű; a J-változatok
 //      leírása a friss; a sorrend az alapé, a saját változatok és tervek a végén
+// v12: az A/B összehasonlítás (két változat) helyett a két nézet ugyanarról (fényjelenet és termékhű nézet): a
+//      `compareId` törlődik, a `viewMode` 'compare' értéke 'split' lesz
+// v13: katalógusszín-javítás a termékfotó alapján (DOOR_HEX_FIXES): a mentett változat ajtószíne az újra, ha a
+//      változat ezt az ajtóterméket használja és a színe még a régi katalógusszín (kézi szín nem változik)
+const DOOR_HEX_FIXES: { product: string; from: string; to: string }[] = [{ product: 'door-ajtomester-charleston-tolgy', from: '#A18069', to: '#937159' }];
 const MOVED_FIXTURES: { id: string; from: [number, number]; to: [number, number] }[] = [
   { id: 'etk', from: [1720, 1700], to: [1720, 2050] },
   { id: 'allo', from: [300, 3800], to: [300, 7100] },
@@ -305,6 +311,17 @@ function migrateState(persisted: unknown, version: number) {
     }
     if (s.lightPlans) s.lightPlans = renumber(s.lightPlans, DEFAULT_LIGHT_PLANS, (id) => id.match(/^lj(\d+)$/)?.[1]);
   }
+  if (version < 12) {
+    const st = s as { compareId?: string; viewMode?: string };
+    delete st.compareId;
+    if (st.viewMode === 'compare') st.viewMode = 'split';
+  }
+  if (version < 13 && s.variants) {
+    s.variants = s.variants.map((v) => {
+      const fix = DOOR_HEX_FIXES.find((f) => f.product === v.products?.door && f.from.toLowerCase() === v.door.toLowerCase());
+      return fix ? { ...v, door: fix.to } : v;
+    });
+  }
   return s;
 }
 
@@ -339,6 +356,8 @@ export const useStore = create<State>()(
       viewerName: '',
       details: false,
       lowQuality: smallDevice(),
+      productView: false,
+      photoTextures: true,
       helpSeen: false,
       sidebarTab: 'variant',
 
@@ -359,7 +378,6 @@ export const useStore = create<State>()(
             ...leave,
           };
         }),
-      setCompare: (id) => set({ compareId: id }),
       updateVariant: (id, fn) => set((s) => ({ variants: s.variants.map((v) => (v.id === id ? fn(clone(v)) : v)) })),
       duplicateVariant: (id) => {
         const src = get().variants.find((v) => v.id === id);
@@ -374,10 +392,9 @@ export const useStore = create<State>()(
           return {
             variants,
             activeId: s.activeId === id ? variants[0].id : s.activeId,
-            compareId: s.compareId === id ? variants[Math.min(1, variants.length - 1)].id : s.compareId,
           };
         }),
-      replaceVariants: (vs) => set({ variants: vs, activeId: vs[0].id, compareId: vs[Math.min(1, vs.length - 1)].id }),
+      replaceVariants: (vs) => set({ variants: vs, activeId: vs[0].id }),
       applyScene: (id) => {
         const sc = SCENES.find((x) => x.id === id);
         if (sc) set((s) => ({ sceneId: id, light: { ...clone(sc.settings), ev: s.light.ev } }));
@@ -486,7 +503,7 @@ export const useStore = create<State>()(
         if (!Array.isArray(st.variants) || !st.variants.length || !st.variants.every((v) => v && v.id && v.name && v.floor)) return 'A fájlban nincs érvényes változatlista.';
         const merged = { ...initialSettings(), ...st };
         if (!merged.variants.some((v) => v.id === merged.activeId)) merged.activeId = merged.variants[0].id;
-        if (!merged.variants.some((v) => v.id === merged.compareId)) merged.compareId = merged.variants[Math.min(1, merged.variants.length - 1)].id;
+        if (merged.viewMode !== 'single' && merged.viewMode !== 'split') merged.viewMode = 'single';
         if (!merged.lightPlans.some((p) => p.id === merged.activePlanId)) merged.activePlanId = merged.lightPlans[0].id;
         if (!ROOMS.some((r) => r.id === merged.roomId)) merged.roomId = ROOMS[0].id;
         set((s) => ({ ...merged, walk: false, camRequest: { key: merged.whole ? 'overview' : '0', n: s.camRequest.n + 1 } }));

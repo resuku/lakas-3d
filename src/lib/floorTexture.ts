@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import type { FloorPattern } from '../model/types';
 import { hexToHsl, hslCss } from './color';
+import type { FloorPhoto } from './localTextures';
 
 // Eljárásos padlótextúra a teljes padlófelületre (nem ismétlődő, így nem kell csempézhetőnek lennie).
 
@@ -52,11 +53,40 @@ function woodBlock(ctx: Ctx, r: () => number, base: { h: number; s: number; l: n
 }
 
 /**
+ * Egy lap a termék dekorképéből (helyi fotótextúra, lib/localTextures.ts): véletlen valódi lap – lehetőleg olyan,
+ * amelynek aránya legalább 60 %-a a lapénak –, a lap arányához illő véletlen kivágással (rövidebb forrásnál az erezet
+ * irányában nyújtva) és véletlen tükrözéssel; halvány illesztésvonallal. `alongX: false`: a lap hossza y irányú
+ * (halszálka másik iránya), a téglalap ilyenkor (x, y, wid, len).
+ */
+function photoBlock(ctx: Ctx, r: () => number, photo: FloorPhoto, x: number, y: number, len: number, wid: number, px: number, alongX = true) {
+  const want = len / wid;
+  const long = photo.planks.filter(([, , w, h]) => w / h >= want * 0.6);
+  const pool = long.length ? long : photo.planks;
+  const [sx0, sy0, sw0, sh0] = pool[Math.floor(r() * pool.length)];
+  let [sx, sw] = [sx0, sw0];
+  if (sw0 / sh0 > want) {
+    sw = sh0 * want;
+    sx = sx0 + r() * (sw0 - sw);
+  }
+  const [w, h] = alongX ? [len, wid] : [wid, len];
+  ctx.save();
+  ctx.translate(x + w / 2, y + h / 2);
+  if (!alongX) ctx.rotate(Math.PI / 2);
+  ctx.scale(r() < 0.5 ? -1 : 1, r() < 0.5 ? -1 : 1);
+  ctx.drawImage(photo.img, sx, sy0, sw, sh0, -len / 2, -wid / 2, len, wid);
+  ctx.restore();
+  ctx.strokeStyle = 'rgba(45,28,12,0.3)';
+  ctx.lineWidth = px;
+  ctx.strokeRect(x, y, w, h);
+}
+
+/**
  * @param W a padló x mérete (m)
  * @param L a padló z mérete (m)
  * @param dir a hosszanti illesztés iránya
  * @param plank lapméret mm-ben (katalógustermékből); hiányában az alapértelmezett méretek
  * @param aligned a lapok nem eltolva, egy vonalban indulnak (falpanel)
+ * @param photo a termék dekorképe (helyi fotótextúra): hajópadlónál a lapok ebből kerülnek a padlóra
  */
 export function makeFloorTexture(
   pattern: FloorPattern,
@@ -66,6 +96,7 @@ export function makeFloorTexture(
   L: number,
   plank?: { l: number; w: number },
   aligned = false,
+  photo?: FloorPhoto | null,
 ): THREE.CanvasTexture {
   const ppm = Math.min(600, 4096 / Math.max(W, L));
   const cw = Math.round(W * ppm);
@@ -98,7 +129,8 @@ export function makeFloorTexture(
       while (x < A) {
         const len = aligned ? pl : pl * (0.85 + r() * 0.15);
         // falpanelnél egy dekor: a lapok között csak kis eltérés
-        woodBlock(ctx, r, base, x, i * pw, len, pw, true, px, aligned ? 0.25 : 1);
+        if (photo?.planks.length) photoBlock(ctx, r, photo, x, i * pw, len, pw, px);
+        else woodBlock(ctx, r, base, x, i * pw, len, pw, true, px, aligned ? 0.25 : 1);
         x += len;
       }
     }
@@ -116,8 +148,13 @@ export function makeFloorTexture(
       for (let j = -nj; j <= nj; j++) {
         const ox = i * w + j * Lb;
         const oy = -i * w + j * Lb;
-        woodBlock(ctx, r, base, ox, oy, Lb, w, true, px);
-        woodBlock(ctx, r, base, ox + Lb - w, oy + w, Lb, w, false, px);
+        if (photo?.planks.length) {
+          photoBlock(ctx, r, photo, ox, oy, Lb, w, px, true);
+          photoBlock(ctx, r, photo, ox + Lb - w, oy + w, Lb, w, px, false);
+        } else {
+          woodBlock(ctx, r, base, ox, oy, Lb, w, true, px);
+          woodBlock(ctx, r, base, ox + Lb - w, oy + w, Lb, w, false, px);
+        }
       }
     }
     ctx.restore();

@@ -16,6 +16,7 @@ import { curtainInfo, doorInfo, info, wallInfo, windowInfo } from '../lib/inspec
 import { Wardrobe } from './Wardrobe';
 import { Box } from './Box';
 import { setGhost } from './ghost';
+import { useLocalTextures } from '../lib/localTextures';
 
 const FLOOR_OPENING = 0.001;
 
@@ -105,6 +106,8 @@ function WallContent({ room, f, variant, layers, connected }: { room: Room; f: W
   const { H } = roomDims(room);
   const choices = useStore((s) => s.choices);
   const choiceOf = (g: string) => choices[g] ?? DEFAULT_CHOICES[g];
+  // helyi fotótextúra a változat ajtótermékéhez (a fix lapokhoz – bejárati, tároló – nem)
+  const doorTex = useLocalTextures()?.woods[variant.products?.door ?? ''];
   const id = f.id;
   const openings = room.openings.filter((o) => o.wall === id);
   const rects = openings.map((o) => ({
@@ -166,6 +169,7 @@ function WallContent({ room, f, variant, layers, connected }: { room: Room; f: W
             zones={layers.zones}
             style={o.leaf?.fixed ? o.leaf.fixed.style : variant.doorStyle}
             handle={o.leaf?.fixed ? 'steel' : variant.handle}
+            tex={o.leaf?.fixed ? undefined : doorTex}
           />
           </group>
         ),

@@ -90,6 +90,21 @@ const typing = (e: KeyboardEvent) => {
   return !!t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA');
 };
 
+/** T: termékhű nézet be/ki (gyors összevetés a fényjelenettel). */
+export function useProductViewKey() {
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.code !== 'KeyT' || e.repeat || typing(e) || e.ctrlKey || e.metaKey || e.altKey) return;
+      const s = useStore.getState();
+      // a két nézetes módban mindkét nézet látszik
+      if (s.viewMode !== 'single') return;
+      s.setViewer({ productView: !s.productView });
+    };
+    window.addEventListener('keydown', down);
+    return () => window.removeEventListener('keydown', down);
+  }, []);
+}
+
 /** M nyomva tartva: dekorelem mozgatása egérrel (húzás); a kamera ilyenkor nem forog. Felengedéskor a húzás véget ér. */
 export function useMoveKey() {
   const setMoveKey = useStore((s) => s.setMoveKey);

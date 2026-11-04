@@ -58,7 +58,10 @@ export function resolveFurnishing(specs: FurnSpec[], picks: Record<string, strin
           ? { side, w: s.legD ?? f.chaise.w, d: s.legL ?? f.chaise.d }
           : { side, w: s.chaiseW ?? f.chaise.w, d: s.chaiseD ?? f.chaise.d, corner: p.lType === 'corner' };
     }
-    if (f.kind === 'tvWall') r.parts = p.parts?.length ? p.parts : undefined;
+    // elemlista nélküli TV-fal: a teljes szélességű alacsony pad a termék formájával (lásd tvWallParts)
+    if (f.kind === 'tvWall') r.parts = p.parts?.length ? p.parts : p.form ? [{ kind: 'low', w: r.w, d: r.d, h: Math.min(r.h, 600), form: p.form }] : undefined;
+    // falra szerelt szekrény: az alsó éle a forma szerinti magasságban
+    else if (p.form?.base === 'wall') r.y = p.form.baseH ?? 0;
     if (f.kind === 'desk') r.h = s.h ?? s.hMin ?? f.h;
     const th = ((f.rot ?? 0) * Math.PI) / 180;
     if (BACK_TO_WALL.has(f.kind)) {
@@ -144,7 +147,7 @@ export function standTop(specs: FurnSpec[], x: number, z: number): number | null
   const tops = specs
     .filter((f) => ['desk', 'nightstand', 'tvUnit', 'table', 'sideboard', 'shoeCabinet', 'console', 'bookcase', 'cart'].includes(f.kind))
     .filter((f) => footprint(f).some((r) => mm(x) >= r.x0 && mm(x) <= r.x1 && mm(z) >= r.z0 && mm(z) <= r.z1))
-    .map((f) => mm(f.h));
+    .map((f) => mm((f.y ?? 0) + f.h));
   return tops.length ? Math.max(...tops) : null;
 }
 

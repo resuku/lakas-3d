@@ -1,21 +1,17 @@
 import { Viewport } from './scene/RoomScene';
 import { BottomPanel } from './ui/BottomPanel';
 import { Sidebar } from './ui/Sidebar';
-import { VariantOptions } from './ui/VariantOptions';
 import { useStore } from './store';
-import { InspectTip, useInspectKeys, useMoveKey } from './scene/Inspector';
+import { InspectTip, useInspectKeys, useMoveKey, useProductViewKey } from './scene/Inspector';
 import { HelpOverlay, SmallScreenNotice } from './ui/HelpOverlay';
 
-function ViewHeader({ side }: { side: 'a' | 'b' }) {
-  const variants = useStore((s) => s.variants);
-  const id = useStore((s) => (side === 'a' ? s.activeId : s.compareId));
-  const set = useStore((s) => (side === 'a' ? s.setActive : s.setCompare));
+/** A két nézetes mód felirata: melyik nézet melyik oldalon (mindkettő az aktív javaslat). */
+function ViewHeader({ studio }: { studio: boolean }) {
+  const name = useStore((s) => s.variants.find((v) => v.id === s.activeId)?.name ?? '');
   return (
-    <div className="view-header">
-      <b>{side.toUpperCase()}</b>
-      <select value={id} onChange={(e) => set(e.target.value)}>
-        <VariantOptions variants={variants} />
-      </select>
+    <div className="view-header" title={studio ? 'Semleges stúdiófény: a szemből látott felület a katalógus (termékfotó) színét mutatja.' : 'A Világítás fül fényjelenete: milyen lesz a lakás fényében.'}>
+      <b>{studio ? 'Termékhű nézet' : 'Fényjelenet'}</b>
+      <span>{name}</span>
     </div>
   );
 }
@@ -32,27 +28,40 @@ function WalkHint() {
   );
 }
 
+/** A termékhű nézet jelzése a 3D nézet sarkában (képernyőképen is látszik, melyik nézet). */
+function ProductViewBadge() {
+  const on = useStore((s) => s.productView);
+  const setViewer = useStore((s) => s.setViewer);
+  if (!on) return null;
+  return (
+    <button className="mode-badge" onClick={() => setViewer({ productView: false })} title="Semleges stúdiófény: a szemből látott felület a katalógus színét mutatja. Kattintás vagy T: vissza a fényjelenethez.">
+      Termékhű nézet · T
+    </button>
+  );
+}
+
 export default function App() {
   useInspectKeys();
   useMoveKey();
+  useProductViewKey();
   const viewMode = useStore((s) => s.viewMode);
   const activeId = useStore((s) => s.activeId);
-  const compareId = useStore((s) => s.compareId);
-  const compare = viewMode === 'compare';
+  const split = viewMode === 'split';
   return (
     <div className="app">
       <Sidebar />
       <main className="main">
-        <div className={`viewports ${compare ? 'compare' : ''}`}>
+        <div className={`viewports ${split ? 'split' : ''}`}>
           <div className="viewport">
-            {compare && <ViewHeader side="a" />}
-            <Viewport variantId={activeId} viewId="a" />
+            {split && <ViewHeader studio={false} />}
+            <Viewport variantId={activeId} viewId="a" studio={split ? false : undefined} />
             <WalkHint />
+            {!split && <ProductViewBadge />}
           </div>
-          {compare && (
+          {split && (
             <div className="viewport">
-              <ViewHeader side="b" />
-              <Viewport variantId={compareId} viewId="b" />
+              <ViewHeader studio />
+              <Viewport variantId={activeId} viewId="b" studio />
             </div>
           )}
         </div>

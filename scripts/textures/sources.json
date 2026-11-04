@@ -1,0 +1,269 @@
+{
+  "note": "Helyi fotótextúrák forrásai (scripts/textures/prep_textures.py). A képek a gyártó / bolt termékfotói: csak helyben használhatók, a kimenet (public/textures-local/) és a letöltések (textures-src/) gitignore-oltak. Koordináták a `ref` méretű (kicsinyített) képen mérve, a szkript a letöltött kép méretére skáláz; size: a kivágott felület valós mérete méterben (becslés, a termékméretből). Kimaradt (nincs használható forrás): Geluza, BREVAS, Genta (a fa felület a fotón takart, árnyékos vagy túl kicsi), Veneti (a tölgy rész árnyékban).",
+  "items": [
+    {
+      "id": "parkettadisz-k4423",
+      "kind": "floor",
+      "url": "https://parkettadiszkont.hu/wp-content/uploads/jola-parkettabirodalom-laminalt-padlo-k4423-tolgy-evoke-crystal2-dekor.jpg",
+      "note": "J1 padlója; felülnézeti dekorkép, vízszintes lapok."
+    },
+    {
+      "id": "diego-el2402",
+      "kind": "floor",
+      "url": "https://www.diego.hu/media/catalog/product/5/9/5996285431675-laminalt-padlo-10mm-nature-sense-aqua-classic-el2402-cognac-brown-sherman-oak-szinminta-02_1.jpg",
+      "note": "J2 padlója; színminta, vízszintes lapok."
+    },
+    {
+      "id": "parkettadisz-k2752",
+      "kind": "floor",
+      "url": "https://parkettadiszkont.hu/wp-content/uploads/jola-parkettabirodalom-laminalt-padlo-k2752-tolgy-aviva-vernal-1-dekor.jpg",
+      "note": "J3 padlója; felülnézeti dekorkép, vízszintes lapok (élletörés: kettős illesztésvonal)."
+    },
+    {
+      "id": "diego-el2431",
+      "kind": "floor",
+      "url": "https://www.diego.hu/media/catalog/product/5/9/5996285425858-laminalt-padlo-10mm-egger-pro-long-el2431-light-bayford-oak-szinminta-02_1.jpg"
+    },
+    {
+      "id": "parkettadisz-k4420",
+      "kind": "floor",
+      "url": "https://kaindlpadlo.hu/wp-content/uploads/2018/12/DK4420_vf_jpg.jpg",
+      "rects": [[175, 4, 546, 67], [4, 79, 483, 69], [499, 79, 297, 69], [4, 156, 254, 71], [270, 156, 526, 71], [4, 235, 354, 71], [370, 235, 426, 71], [200, 314, 546, 68]],
+      "note": "A gyártó (Kaindl) felülnézeti dekorképe; kis felbontás (800 × 386). A bolt dekorképe csak másfél lapsort mutat. Az illesztések világosak (a felismerés nem találja): a lapok kézzel kijelölve."
+    },
+    {
+      "id": "parkettadisz-k2737",
+      "kind": "floor",
+      "url": "https://parkettadiszkont.hu/wp-content/uploads/jola-parkettabirodalom-laminalt-padlo-k2737-tolgy-cremona-cotta-1-dekor.jpg"
+    },
+    {
+      "id": "parkettaweba-sgmpc20330",
+      "kind": "floor",
+      "url": "https://cdn3.quick-step.com/-/media/imported%20assets/flooring/2/1/b/sgmpc20330topshotjpg248498/cq5dam%20web.ashx?rev=c342c2122beb4873a0b90f84d3daa1b8",
+      "rotate": 90,
+      "rects": [[0, 131, 1200, 163], [0, 306, 425, 158], [437, 306, 843, 158], [0, 476, 922, 161], [934, 476, 346, 161], [78, 649, 1122, 158]],
+      "note": "J7 (lakberendezői) vinyl padlója; a gyártó (Quick-Step Fuse, Linen oak dark brown) felülnézeti képe, függőleges lapok. A sötét képen a felismerés nem találja az illesztéseket: a lapok kézzel kijelölve (90°-os forgatás után)."
+    },
+    {
+      "id": "diego-5537",
+      "kind": "floor",
+      "url": "https://www.diego.hu/media/catalog/product/5/9/5996285421249-laminalt-padlo-atlantic-10mm-5537-tawny-chestnut-szinminta-02_1.jpg",
+      "crop": [0, 518, 1200, 615],
+      "note": "Egyetlen lap fehér háttér előtt: a lap kivágva."
+    },
+    {
+      "id": "diego-el2858",
+      "kind": "floor",
+      "url": "https://www.diego.hu/media/catalog/product/5/9/5996285431637-laminalt-padlo-10mm-nature-sense-aqua-classic-el2858-smoke-olchon-oak-szinminta-02_1.jpg"
+    },
+    {
+      "id": "parkettadisz-k2596",
+      "kind": "floor",
+      "url": "https://parkettadiszkont.hu/wp-content/uploads/jola-parkettabirodalom-laminalt-padlo-csm-k2596-dio-dekor.jpg"
+    },
+    {
+      "id": "diego-el2132",
+      "kind": "floor",
+      "url": "https://www.diego.hu/media/catalog/product/5/9/5996285431620-laminalt-padlo-10mm-nature-sense-aqua-classic-el2132-light-baronia-oak-szinminta-02_1.jpg"
+    },
+    {
+      "id": "parkettadisz-k326",
+      "kind": "floor",
+      "url": "https://parkettadiszkont.hu/wp-content/uploads/jola-parkettabirodalom-laminalt-padlo-krono-herringbone-k326-1.jpg",
+      "rotate": -45,
+      "flat": false,
+      "rects": [[305, 360, 322, 54], [235, 431, 325, 54], [162, 503, 328, 54], [375, 290, 325, 52]],
+      "note": "Halszálkás dekorkép 45°-kal elforgatva; négy teljes lap kézzel kijelölve."
+    },
+    {
+      "id": "parkettadisz-k478",
+      "kind": "floor",
+      "url": "https://parkettadiszkont.hu/wp-content/uploads/k478-mushroom-carpenter-oak-1.jpg"
+    },
+    {
+      "id": "door-ajtogyar-sherman-antracit-tolgy",
+      "kind": "wood",
+      "url": "https://ajtogyar.hu/wp-content/uploads/2021/11/optima-cpl-sherman-tolgy-h1346-800-1.jpg",
+      "size": [0.45, 0.45],
+      "grain": "y",
+      "note": "J2 ajtaja; dekorminta, függőleges erezet. A minta valós mérete becslés."
+    },
+    {
+      "id": "door-ajtogyar-natural-kendal-tolgy",
+      "kind": "wood",
+      "url": "https://ajtogyar.hu/wp-content/uploads/2021/11/optima-cpl-natural-kendal-tolgy-h1300-800.jpg",
+      "size": [0.45, 0.45],
+      "grain": "y",
+      "note": "J3 ajtaja; dekorminta, függőleges erezet. A minta valós mérete becslés."
+    },
+    {
+      "id": "door-ajtogyar-spanyol-szil",
+      "kind": "wood",
+      "url": "https://ajtogyar.hu/wp-content/uploads/2026/02/optima-cpl-spanyol-szil.jpg",
+      "size": [0.45, 0.45],
+      "grain": "y",
+      "note": "Dekorminta, függőleges erezet. A minta valós mérete becslés."
+    },
+    {
+      "id": "door-ajtogyar-spanyol-szil-zen-02-diszcsik",
+      "kind": "wood",
+      "same": "door-ajtogyar-spanyol-szil"
+    },
+    {
+      "id": "door-ajtogyar-alda-dio-tabak",
+      "kind": "wood",
+      "url": "https://ajtogyar.hu/wp-content/uploads/2021/11/optima-cpl-alda-dio-tabak-h3704.jpg",
+      "size": [0.45, 0.45],
+      "grain": "y",
+      "note": "Dekorminta, függőleges erezet. A minta valós mérete becslés."
+    },
+    {
+      "id": "door-ajto-diszk-porta-cpl-1-1-termeszetes-di",
+      "kind": "wood",
+      "url": "https://ajto-diszkont.com/wp-content/uploads/2023/10/okleinowaneCPL_11_cplOrzechNaturalnyMatowy_PS_klamkaEdel_drz_Porta_RN.png",
+      "crop": [260, 80, 800, 1880],
+      "size": [0.59, 1.98],
+      "grain": "y",
+      "note": "Szemből fotózott ajtó: az ajtólap a kilincs és a pántok nélkül; a valós méret az ajtólapból becsülve."
+    },
+    {
+      "id": "door-ajtomester-charleston-tolgy",
+      "kind": "wood",
+      "url": "https://www.belteriajtorendeles.hu/wp-content/uploads/2025/12/TeliCharlstonTolgy.B731.Jobbos-80.jpg",
+      "crop": [400, 50, 680, 955],
+      "size": [0.51, 1.93],
+      "grain": "y",
+      "note": "Szemből ábrázolt ajtó: az ajtólap a kilincs és a pántok nélkül; a valós méret az ajtólapból becsülve."
+    },
+    {
+      "id": "furn-ikea-tonstad-tv-allvany-tolgy-furner-178x37x5",
+      "kind": "wood",
+      "url": "https://www.ikea.com/hu/hu/images/products/tonstad-tv-allvany-toelgy-furner__1328115_pe944674_s5.jpg?f=xl",
+      "ref": [900, 900],
+      "quad": [[392, 330], [770, 362], [770, 570], [392, 524]],
+      "size": [0.78, 0.41],
+      "out": [1024, 538],
+      "grain": "x",
+      "note": "J1–J3 TV-szekrénye; a jobb oldali tolóajtó (a fogóvájat nélkül), perspektíva-korrigálva."
+    },
+    {
+      "id": "furn-ikea-tonstad-ejjeliszekreny-tolgy-furner-40x4",
+      "kind": "wood",
+      "same": "furn-ikea-tonstad-tv-allvany-tolgy-furner-178x37x5",
+      "note": "Ugyanaz a TONSTAD tölgy furnér, mint a TV-szekrényen."
+    },
+    {
+      "id": "furn-jysk-ejjeliszekreny-tapdrup-1-fiokos-vilagos",
+      "kind": "wood",
+      "url": "https://cdn2.jysk.com/getimage/wd3.large/257624",
+      "ref": [774, 900],
+      "quad": [[170, 141], [760, 107], [760, 397], [170, 443]],
+      "size": [0.4, 0.23],
+      "out": [1024, 589],
+      "mask": [0.3, 0.38, 0.76, 0.62],
+      "grain": "x",
+      "note": "J1–J3 éjjeliszekrénye; a fiókfront, a fogantyú sávja az alatta lévő erezet tükrével pótolva."
+    },
+    {
+      "id": "furn-jysk-tv-allvany-alsted-1-ajtos-2-fiokos-tolgy",
+      "kind": "wood",
+      "url": "https://cdn2.jysk.com/getimage/wd3.large/284243",
+      "ref": [900, 287],
+      "quad": [[362, 56], [630, 46], [630, 150], [362, 165]],
+      "size": [0.56, 0.24],
+      "out": [1024, 439],
+      "grain": "x",
+      "note": "A középső front a fogóbemetszés alatt."
+    },
+    {
+      "id": "furn-jysk-ejjeliszekreny-hokksund-1-fiokos-natur-t",
+      "kind": "wood",
+      "url": "https://cdn3.jysk.com/getimage/wd3.large/255971",
+      "ref": [849, 900],
+      "quad": [[252, 84], [814, 65], [814, 228], [252, 253]],
+      "size": [0.4, 0.125],
+      "out": [1024, 320],
+      "mask": [0.42, 0.25, 0.62, 0.75],
+      "grain": "x",
+      "note": "A fiókfront, a gomb helye pótolva."
+    },
+    {
+      "id": "furn-ikea-kallax-lack-tv-tarolokombinacio-feherre",
+      "kind": "wood",
+      "url": "https://www.ikea.com/hu/hu/images/products/kallax-lack-tv-tarolokombinacio-feherre-pacolt-toelgy-hatas__1243014_pe920482_s5.jpg?f=xl",
+      "ref": [900, 900],
+      "quad": [[538, 594], [640, 600], [640, 742], [538, 727]],
+      "size": [0.26, 0.3],
+      "out": [512, 590],
+      "grain": "x",
+      "note": "A magas elem bal alsó ajtaja (a gomb nélkül); fehérre pácolt tölgy hatás."
+    },
+    {
+      "id": "furn-biano-kondel-nappali-fal-sonoma-tolgy-kevin",
+      "kind": "wood",
+      "url": "https://static.biano.hu/i/product/1020-1020/8e/1f/b4/51c59543f7cbf9618bce96457d86010b8b8bd83d-nappali-fal-sonoma-tolgy-kevin.jpg",
+      "ref": [900, 716],
+      "quad": [[662, 415], [760, 421], [760, 683], [662, 660]],
+      "size": [0.36, 0.65],
+      "out": [512, 853],
+      "grain": "y",
+      "note": "A magas szekrény ajtaja a fogantyútól jobbra (sonoma tölgy, függőleges erezet); a szobafotó fényátmenete kiegyenlítve."
+    },
+    {
+      "id": "furn-ikea-hemnes-tv-tarolokombinacio-feherre-pacol",
+      "kind": "wood",
+      "url": "https://www.ikea.com/hu/hu/images/products/hemnes-tv-tarolokombinacio-feherre-pacolt__0704200_pe725045_s5.jpg?f=xl",
+      "ref": [900, 900],
+      "quad": [[312, 672], [452, 685], [452, 756], [312, 741]],
+      "size": [0.44, 0.19],
+      "out": [1024, 442],
+      "mask": [0.35, 0.2, 0.62, 0.8],
+      "grain": "x",
+      "note": "A középső fiókfront, a gomb helye pótolva; fehérre pácolt fenyő."
+    },
+    {
+      "id": "furn-zondo-tv-asztal-szekreny-dilune-180-kezmuves-t",
+      "kind": "wood",
+      "url": "https://cdn.mobinterier.com/3/36671473c5e2537719afb3b15d9a876c.jpg",
+      "ref": [900, 675],
+      "crop": [48, 425, 445, 535],
+      "size": [0.88, 0.245],
+      "grain": "x",
+      "matchHex": "catalog",
+      "note": "A bal billenőajtó szemből (kézműves tölgy, csomós). Szobai render, túl világos: a szín a katalógusé (matchHex)."
+    },
+    {
+      "id": "furn-butorcity-nepo-ejjeliszekreny-sonoma-kom1s",
+      "kind": "wood",
+      "url": "https://comfortbutor.cdn.shoprenter.hu/custom/comfortbutor/image/cache/w1719h900/product/Nepo%20/nepo_ejjeli_sonoma.jpg.webp?lastmod=1720000246.1793692696",
+      "ref": [900, 471],
+      "crop": [276, 230, 634, 366],
+      "mask": [0.32, 0.4, 0.7, 0.64],
+      "size": [0.45, 0.19],
+      "grain": "x",
+      "note": "A fiókfront szemből, a fogantyú helye pótolva (sonoma tölgy)."
+    },
+    {
+      "id": "furn-ikea-gillersberg-ejjeliszekreny-bambusz-feher",
+      "kind": "wood",
+      "url": "https://www.ikea.com/hu/hu/images/products/gillersberg-ejjeliszekreny-bambusz-feher__1481576_pe1000558_s5.jpg?f=xl",
+      "ref": [900, 900],
+      "crop": [390, 205, 530, 440],
+      "size": [0.12, 0.2],
+      "grain": "y",
+      "note": "A bambusz hátlap szemből; a minta valós mérete becslés."
+    },
+    {
+      "id": "furn-biano-primbu-kos-v8-nappali-szekrenysor-feher-artisan",
+      "kind": "wood",
+      "url": "https://static.biano.hu/i/product/1020-1020/00/f1/4a/9ef450081456206e0f4f5e8395c9c8e54e5b5d8f-kos-v8-nappali-szekrenysor-feher-artisan-tolgy-190-cm.jpg",
+      "ref": [900, 900],
+      "quad": [[256, 625], [515, 612], [515, 690], [256, 717]],
+      "size": [0.46, 0.28],
+      "out": [800, 487],
+      "grain": "x",
+      "matchHex": "#c49a6c",
+      "note": "A bal billenőajtó a fogantyú alatt (artisan tölgy); kis felbontású, sötét szobafotó: a szín a forma frontszínéhez igazítva (matchHex). A forma szerint csak a frontokra és a nyitott dobozokra kerül (woodOn)."
+    }
+  ]
+}

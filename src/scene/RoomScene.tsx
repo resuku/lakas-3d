@@ -9,7 +9,9 @@ import { roomLampLm } from '../lib/fixtures';
 import { useActivePlan, useStore, useVariant } from '../store';
 import { CameraRig } from './CameraRig';
 import { Furniture, FloorAndCeiling } from './Interior';
-import { GlobalLights, Lights, RoomLights } from './Lights';
+import { GlobalLights, Lights, RoomLights, StudioLights } from './Lights';
+import { DevProbe } from './DevProbe';
+import { StudioContext, useStudio } from './studio';
 import { Walls } from './Walls';
 import { Inspector, ProductLinks } from './Inspector';
 import { DecorLayer } from './DecorModels';
@@ -26,9 +28,10 @@ function Scene({ variantId, viewId }: { variantId: string; viewId: string }) {
   const lr = useMemo(() => computeLighting(room, light, roomLampLm(room, plan, light, lampsOff)), [room, light, plan, lampsOff]);
   const onPlace = useMemo(() => placementHandler(room), [room]);
   const onMove = useMemo(() => placementMoveHandler(room), [room]);
+  const studio = useStudio();
   return (
     <>
-      <Lights room={room} ls={light} lr={lr} />
+      <Lights room={room} ls={light} lr={lr} studio={studio} />
       <group onClick={onPlace} onPointerMove={onMove} userData={{ roomRoot: room.id }}>
         <FloorAndCeiling room={room} variant={variant} />
         <Walls room={room} variant={variant} layers={layers} />
@@ -81,12 +84,17 @@ function WholeScene({ variantId, viewId }: { variantId: string; viewId: string }
   // az egy helyiséges nézetre hangolt értéknek csak a harmada
   const hereRoom = getRoom(here);
   const hemiScale = hereRoom.openings.some((o) => o.kind === 'window') ? 1 : 1 / 3;
+  const studio = useStudio();
   return (
     <>
-      <GlobalLights lr={lrs[here] ?? lrs[room.id]} sunLr={sunLr} center={center} radius={radius} hemiScale={hemiScale} />
+      {studio ? (
+        <StudioLights center={center} radius={radius} />
+      ) : (
+        <GlobalLights lr={lrs[here] ?? lrs[room.id]} sunLr={sunLr} center={center} radius={radius} hemiScale={hemiScale} />
+      )}
       {ROOMS.map((r) => (
         <group key={r.id} matrixAutoUpdate={false} matrix={mats[r.id]} onClick={placers[r.id]} onPointerMove={movers[r.id]} userData={{ roomRoot: r.id }}>
-          <RoomLights room={r} ls={light} lr={lrs[r.id]} shadows={false} />
+          <RoomLights room={r} ls={light} lr={lrs[r.id]} shadows={false} studio={studio} />
           <FloorAndCeiling room={r} variant={variant} />
           <Walls room={r} variant={variant} layers={layers} connected={connected.get(r.id)} />
           <Furniture room={r} variant={variant} layers={layers} />
@@ -103,7 +111,11 @@ function SceneSwitch({ variantId, viewId }: { variantId: string; viewId: string 
   return whole ? <WholeScene variantId={variantId} viewId={viewId} /> : <Scene variantId={variantId} viewId={viewId} />;
 }
 
-export function Viewport({ variantId, viewId }: { variantId: string; viewId: string }) {
+/**
+ * Egy 3D nézet (vászon). `studio`: a két nézetes módban a vászon rögzített nézete (false: fényjelenet, true: termékhű);
+ * hiányában a néző kapcsolója dönt.
+ */
+export function Viewport({ variantId, viewId, studio }: { variantId: string; viewId: string; studio?: boolean }) {
   // könnyített megjelenítés: árnyéktérképek nélkül, 1-es pixelaránnyal (a vásznat újra kell létrehozni)
   const low = useStore((s) => s.lowQuality);
   return (
@@ -115,9 +127,12 @@ export function Viewport({ variantId, viewId }: { variantId: string; viewId: str
       gl={{ preserveDrawingBuffer: true, antialias: true }}
       data-view={viewId}
     >
-      <SceneSwitch variantId={variantId} viewId={viewId} />
+      <StudioContext.Provider value={studio ?? null}>
+        <SceneSwitch variantId={variantId} viewId={viewId} />
+      </StudioContext.Provider>
       <Inspector />
       <ProductLinks />
+      {import.meta.env.DEV && <DevProbe name={viewId === 'a' ? 'probe' : 'probeB'} />}
     </Canvas>
   );
 }

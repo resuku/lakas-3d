@@ -3,7 +3,10 @@ import { useEffect, useMemo } from 'react';
 import type { FurnitureProduct, FurnSpec } from '../model/types';
 import { mm } from '../lib/geom';
 import { layoutTvWall, tvWallParts } from '../lib/tvWall';
+import { defaultCabinetForm, defaultPartForm } from '../lib/cabinetForm';
+import type { WoodTex } from '../lib/localTextures';
 import { Box } from './Box';
+import { CabinetBody } from './CabinetModel';
 
 // Paraméteres bútormodellek a befoglaló méretből, jelzésszerű formával. Helyi rendszer: középpont az origóban,
 // szélesség x mentén, az eleje +z felé, a padló y = 0 (a FurnSpec.rot és a pozíció a hívó csoportjában).
@@ -11,6 +14,10 @@ import { Box } from './Box';
 export interface FurnColors {
   main: string;
   metal: string;
+  /** Adatbiztonság-színezés (a termékforma színei ilyenkor nem számítanak). */
+  tinted?: boolean;
+  /** Helyi fotótextúra a termékfotóból (dobozbútoron a test és a frontok felülete). */
+  wood?: WoodTex;
 }
 
 const shade = (hex: string, k: number) => '#' + new THREE.Color(hex).multiplyScalar(k).getHexString();
@@ -90,29 +97,15 @@ function Ottoman({ f, c }: { f: FurnSpec; c: FurnColors }) {
   );
 }
 
-/** Alacsony szekrény: lábakon álló test, négy ajtó/fiók osztással; az éjjeliszekrény egy fiókkal. */
-function Cabinet({ f, c, doors, flaps = 0 }: { f: FurnSpec; c: FurnColors; doors: number; flaps?: number }) {
+/**
+ * Dobozbútor (TV-szekrény, éjjeliszekrény, tálaló, cipősszekrény): a katalógustermék formája (talp, frontok, fogantyú
+ * a termékfotó alapján), hiányában a bútortípus alapformája (lábakon álló test ajtókkal / fiókkal).
+ */
+function Cabinet({ f, c }: { f: FurnSpec & { product?: FurnitureProduct }; c: FurnColors }) {
   const w = mm(f.w) / 2;
   const d = mm(f.d) / 2;
-  const h = mm(f.h);
-  const leg = Math.min(0.1, h * 0.2);
-  const groove = shade(c.main, 0.6);
-  return (
-    <group>
-      {[-1, 1].map((sx) =>
-        [-1, 1].map((sz) => <Box key={`${sx}${sz}`} x={[sx * (w - 0.04) - 0.012, sx * (w - 0.04) + 0.012]} y={[0, leg]} z={[sz * (d - 0.04) - 0.012, sz * (d - 0.04) + 0.012]} color={c.metal} rough={0.5} />),
-      )}
-      <Box x={[-w, w]} y={[leg, h]} z={[-d, d]} color={c.main} rough={0.55} />
-      {Array.from({ length: doors - 1 }, (_, i) => -w + ((i + 1) * 2 * w) / doors).map((x) => (
-        <Box key={x} x={[x - 0.002, x + 0.002]} y={[leg + 0.01, h - 0.01]} z={[d, d + 0.002]} color={groove} rough={0.6} noShadow />
-      ))}
-      {doors === 1 && <Box x={[-w + 0.01, w - 0.01]} y={[h - 0.16, h - 0.156]} z={[d, d + 0.002]} color={groove} rough={0.6} noShadow />}
-      {/* billenő fiókok (cipősszekrény): vízszintes osztás */}
-      {Array.from({ length: Math.max(0, flaps - 1) }, (_, i) => leg + ((i + 1) * (h - leg)) / flaps).map((y) => (
-        <Box key={y} x={[-w + 0.01, w - 0.01]} y={[y - 0.002, y + 0.002]} z={[d, d + 0.002]} color={groove} rough={0.6} noShadow />
-      ))}
-    </group>
-  );
+  const form = f.product?.form ?? defaultCabinetForm(f.kind, f.h);
+  return <CabinetBody x={[-w, w]} y={[0, mm(f.h)]} z={[-d, d]} form={form} c={{ body: c.main, front: c.main, metal: c.metal, tinted: c.tinted, wood: c.wood }} />;
 }
 
 function Tv({ f }: { f: FurnSpec }) {
@@ -319,21 +312,18 @@ function OfficeChair({ f, c }: { f: FurnSpec; c: FurnColors }) {
   );
 }
 
-/** TV-fal: az elemek `layoutTvWall` (lib/tvWall.ts) szerint; elemlista hiányában a teljes szélességű alacsony pad. */
+/**
+ * TV-fal: az elemek `layoutTvWall` (lib/tvWall.ts) szerint, mindegyik dobozbútorként az elem formájával (hiányában az
+ * elemtípus alapformája); elemlista hiányában a teljes szélességű alacsony pad.
+ */
 function TvWall({ f, c }: { f: FurnSpec; c: FurnColors }) {
   const back = -mm(f.d) / 2;
   const boxes = useMemo(() => layoutTvWall(tvWallParts(f), mm(f.w)).boxes, [f]);
-  const groove = shade(c.main, 0.6);
+  const cc = { body: c.main, front: c.main, metal: c.metal, tinted: c.tinted, wood: c.wood };
   return (
     <group>
       {boxes.map((b, i) => (
-        <group key={i}>
-          <Box x={[b.x0 + 0.002, b.x1 - 0.002]} y={[b.y0 + (b.kind === 'low' && b.y0 === 0 ? 0.06 : 0), b.y1]} z={[back, back + b.d]} color={c.main} rough={0.55} />
-          {b.kind === 'low' && b.y0 === 0 && <Box x={[b.x0 + 0.03, b.x1 - 0.03]} y={[0, 0.06]} z={[back + 0.03, back + b.d - 0.03]} color={c.metal} rough={0.5} />}
-          {b.kind !== 'shelf' && b.x1 - b.x0 > 0.5 && (
-            <Box x={[(b.x0 + b.x1) / 2 - 0.002, (b.x0 + b.x1) / 2 + 0.002]} y={[b.y0 + 0.07, b.y1 - 0.01]} z={[back + b.d, back + b.d + 0.002]} color={groove} rough={0.6} noShadow />
-          )}
-        </group>
+        <CabinetBody key={i} x={[b.x0 + 0.002, b.x1 - 0.002]} y={[b.y0, b.y1]} z={[back, back + b.d]} form={b.form ?? defaultPartForm(b.kind, b.x1 - b.x0, b.y0 === 0)} c={cc} />
       ))}
     </group>
   );
@@ -459,7 +449,7 @@ export function FurnitureModel({ f, c }: { f: FurnSpec & { product?: FurniturePr
     case 'ottoman':
       return <Ottoman f={f} c={c} />;
     case 'tvUnit':
-      return <Cabinet f={f} c={c} doors={4} />;
+      return <Cabinet f={f} c={c} />;
     case 'tvWall':
       return <TvWall f={f} c={c} />;
     case 'desk':
@@ -467,11 +457,11 @@ export function FurnitureModel({ f, c }: { f: FurnSpec & { product?: FurniturePr
     case 'officeChair':
       return <OfficeChair f={f} c={c} />;
     case 'nightstand':
-      return <Cabinet f={f} c={c} doors={1} />;
+      return <Cabinet f={f} c={c} />;
     case 'sideboard':
-      return <Cabinet f={f} c={c} doors={3} />;
+      return <Cabinet f={f} c={c} />;
     case 'shoeCabinet':
-      return <Cabinet f={f} c={c} doors={1} flaps={2} />;
+      return <Cabinet f={f} c={c} />;
     case 'bookcase':
       return <Bookcase f={f} c={c} />;
     case 'bench':

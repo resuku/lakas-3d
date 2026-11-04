@@ -1,4 +1,4 @@
-import type { FurnPart, FurnSpec } from '../model/types';
+import type { CabinetForm, FurnPart, FurnSpec } from '../model/types';
 import { mm } from './geom';
 
 // TV-fal elemeinek jelzésszerű elrendezése (m, helyi x a fal mentén, 0 = a TV-fal közepe). A termékoldalak ritkán adják
@@ -19,7 +19,12 @@ export interface TvWallBox {
   y1: number;
   d: number;
   kind: FurnPart['kind'];
+  /** Az elem formája (a termékadatból), ha van. */
+  form?: CabinetForm;
 }
+
+/** Falra szerelt elem emelése (m): a forma alsó éle a padló fölött. */
+const lift = (u: { form?: CabinetForm }) => (u.form?.base === 'wall' ? mm(u.form.baseH ?? 0) : 0);
 
 export interface TvWallLayout {
   boxes: TvWallBox[];
@@ -54,9 +59,10 @@ export function layoutTvWall(parts: FurnPart[], width: number): TvWallLayout {
   for (const u of units.filter(isTall)) {
     const atLeft = u.side === 'left' || (u.side !== 'right' && tallN++ % 2 === 0);
     const b = atLeft ? { x0: left, x1: left + u.w } : { x0: right - u.w, x1: right };
-    const box = { ...b, y0: 0, y1: u.h, d: u.d, kind: u.kind };
+    const y0 = lift(u);
+    const box = { ...b, y0, y1: y0 + u.h, d: u.d, kind: u.kind, form: u.form };
     out.push(box);
-    towers.push({ ...box, top: u.h });
+    towers.push({ ...box, top: y0 + u.h });
     if (atLeft) left += u.w;
     else right -= u.w;
   }
@@ -88,11 +94,13 @@ export function layoutTvWall(parts: FurnPart[], width: number): TvWallLayout {
     if (over > 0 && over < 0.03) row = row.map((u) => ({ ...u, w: u.w - over / row.length }));
     const tw = row.reduce((a, u) => a + u.w, 0);
     let x = clamp(tvX, left + tw / 2, right - tw / 2) - tw / 2;
+    // az első sor falra szerelt elemei a megadott magasságban lebegnek
+    const up = rowY === 0 ? Math.max(0, ...row.map(lift)) : 0;
     for (const u of row) {
-      out.push({ x0: x, x1: x + u.w, y0: rowY, y1: rowY + u.h, d: u.d, kind: 'low' });
+      out.push({ x0: x, x1: x + u.w, y0: rowY + up, y1: rowY + up + u.h, d: u.d, kind: 'low', form: u.form });
       x += u.w;
     }
-    rowY += Math.max(0, ...row.map((u) => u.h));
+    rowY += up + Math.max(0, ...row.map((u) => u.h));
     row = [];
   };
   for (const u of units.filter(isLow)) {
@@ -121,7 +129,7 @@ export function layoutTvWall(parts: FurnPart[], width: number): TvWallLayout {
         const x1 = x0 + u.w;
         if (x0 < left - 1e-6 || x1 > right + 1e-6) continue;
         const y0 = Math.max(u.y ?? tvY, topAt(x0, x1) + (u.y !== undefined ? 0 : 0.3));
-        const b = { x0, x1, y0, y1: y0 + u.h, d: u.d, kind: u.kind };
+        const b = { x0, x1, y0, y1: y0 + u.h, d: u.d, kind: u.kind, form: u.form };
         if (b.y1 <= TOP && free(b)) {
           out.push(b);
           placed = true;
@@ -131,7 +139,7 @@ export function layoutTvWall(parts: FurnPart[], width: number): TvWallLayout {
       for (const t of placed ? [] : towers) {
         if (u.w > t.x1 - t.x0 + 0.02) continue;
         const c = (t.x0 + t.x1) / 2;
-        const b = { x0: c - u.w / 2, x1: c + u.w / 2, y0: t.top + 0.15, y1: t.top + 0.15 + u.h, d: u.d, kind: u.kind };
+        const b = { x0: c - u.w / 2, x1: c + u.w / 2, y0: t.top + 0.15, y1: t.top + 0.15 + u.h, d: u.d, kind: u.kind, form: u.form };
         if (b.y1 <= TOP && free(b)) {
           out.push(b);
           t.top = b.y1;
@@ -150,7 +158,7 @@ export function layoutTvWall(parts: FurnPart[], width: number): TvWallLayout {
     const tw = r.reduce((a, u) => a + u.w, 0);
     let x = clamp(tvX, left + tw / 2, right - tw / 2) - tw / 2;
     for (const u of r) {
-      out.push({ x0: x, x1: x + u.w, y0: y, y1: y + u.h, d: u.d, kind: u.kind });
+      out.push({ x0: x, x1: x + u.w, y0: y, y1: y + u.h, d: u.d, kind: u.kind, form: u.form });
       x += u.w;
     }
     y += Math.max(...r.map((u) => u.h)) + 0.02;

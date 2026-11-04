@@ -3,3 +3,6 @@ dist/
 .vite/
 screenshots/
 *.log
+# Termékfotókból készült helyi textúrák (szerzői jog: nem kerülhetnek a tárolóba és a kirakott oldalra)
+public/textures-local/
+textures-src/

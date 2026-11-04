@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { useMemo } from 'react';
 import type { DoorStyle, HandleFinish, Opening, PipeRun, Radiator, WallUnit } from '../model/types';
 import { mm } from '../lib/geom';
+import type { WoodTex } from '../lib/localTextures';
 import { Box } from './Box';
 
 // Minden elem a fal helyi rendszerében: x a fal mentén, y fel, z a helyiség felé (m).
@@ -108,6 +109,7 @@ export function DoorUnit({
   zones,
   style = 'flat',
   handle = 'steel',
+  tex,
 }: {
   o: Opening;
   t: number;
@@ -118,11 +120,17 @@ export function DoorUnit({
   zones: boolean;
   style?: DoorStyle;
   handle?: HandleFinish;
+  /** Helyi fotótextúra az ajtó dekorjából (tok, takaróléc, ajtólap); a szín ilyenkor a minta. */
+  tex?: WoodTex;
 }) {
   const x0 = mm(o.offset.v);
   const x1 = x0 + mm(o.width.v);
   const y1 = mm(o.bottom.v + o.height.v);
-  const c = tint ?? color;
+  const w = tint ? undefined : tex;
+  const c = tint ?? (w ? '#ffffff' : color);
+  // a mintás felületek (a marás és a kilincs színe a dekor átlagszínéből)
+  const deco = w ? { map: w.tex, mapSize: w.size } : {};
+  const lineColor = tint ?? color;
   const j = 0.03;
   const a = 0.06;
   const leaf = o.leaf;
@@ -139,38 +147,38 @@ export function DoorUnit({
   return (
     <group>
       {/* tok a kávában */}
-      <Box x={[x0, x0 + j]} y={[0, y1]} z={[-t, 0]} color={c} rough={0.5} />
-      <Box x={[x1 - j, x1]} y={[0, y1]} z={[-t, 0]} color={c} rough={0.5} />
-      <Box x={[x0, x1]} y={[y1 - j, y1]} z={[-t, 0]} color={c} rough={0.5} />
+      <Box x={[x0, x0 + j]} y={[0, y1]} z={[-t, 0]} color={c} rough={0.5} {...deco} />
+      <Box x={[x1 - j, x1]} y={[0, y1]} z={[-t, 0]} color={c} rough={0.5} {...deco} />
+      <Box x={[x0, x1]} y={[y1 - j, y1]} z={[-t, 0]} color={c} rough={0.5} {...deco} />
       {o.trim && (
         <>
-          <Box x={[x0 - a, x0]} y={[0, y1 + a]} z={[0, 0.012]} color={c} rough={0.5} />
-          <Box x={[x1, x1 + a]} y={[0, y1 + a]} z={[0, 0.012]} color={c} rough={0.5} />
-          <Box x={[x0 - a, x1 + a]} y={[y1, y1 + a]} z={[0, 0.012]} color={c} rough={0.5} />
+          <Box x={[x0 - a, x0]} y={[0, y1 + a]} z={[0, 0.012]} color={c} rough={0.5} {...deco} />
+          <Box x={[x1, x1 + a]} y={[0, y1 + a]} z={[0, 0.012]} color={c} rough={0.5} {...deco} />
+          <Box x={[x0 - a, x1 + a]} y={[y1, y1 + a]} z={[0, 0.012]} color={c} rough={0.5} {...deco} />
         </>
       )}
       {o.transom && (
-        <Box x={[x0, x1]} y={[y1 + a, mm(o.transom.top.v)]} z={[-0.015, 0.006]} color={c} rough={0.6} />
+        <Box x={[x0, x1]} y={[y1 + a, mm(o.transom.top.v)]} z={[-0.015, 0.006]} color={c} rough={0.6} {...deco} />
       )}
       {showLeaf && leaf && (
         <group position={[hx, 0, away ? -t + 0.045 : -0.045]} rotation={[0, angle, 0]}>
           {style === 'glass' ? (
             <>
               {/* keret és szatinált üvegbetét */}
-              <Box x={span(0, 0.14)} y={[0.008, lh]} z={[-0.02, 0.02]} color={c} rough={0.45} />
-              <Box x={span(lw - 0.14, lw)} y={[0.008, lh]} z={[-0.02, 0.02]} color={c} rough={0.45} />
-              <Box x={span(0.14, lw - 0.14)} y={[0.008, 0.3]} z={[-0.02, 0.02]} color={c} rough={0.45} />
-              <Box x={span(0.14, lw - 0.14)} y={[lh - 0.16, lh]} z={[-0.02, 0.02]} color={c} rough={0.45} />
+              <Box x={span(0, 0.14)} y={[0.008, lh]} z={[-0.02, 0.02]} color={c} rough={0.45} {...deco} />
+              <Box x={span(lw - 0.14, lw)} y={[0.008, lh]} z={[-0.02, 0.02]} color={c} rough={0.45} {...deco} />
+              <Box x={span(0.14, lw - 0.14)} y={[0.008, 0.3]} z={[-0.02, 0.02]} color={c} rough={0.45} {...deco} />
+              <Box x={span(0.14, lw - 0.14)} y={[lh - 0.16, lh]} z={[-0.02, 0.02]} color={c} rough={0.45} {...deco} />
               <Box x={span(0.14, lw - 0.14)} y={[0.3, lh - 0.16]} z={[-0.004, 0.004]} color="#e9ece9" rough={0.15} opacity={0.6} noShadow />
             </>
           ) : (
-            <Box x={span(0, lw)} y={[0.008, lh]} z={[-0.02, 0.02]} color={c} rough={0.45} />
+            <Box x={span(0, lw)} y={[0.008, lh]} z={[-0.02, 0.02]} color={c} rough={0.45} {...deco} />
           )}
           {/* vízszintes marások mindkét oldalon */}
           {style === 'groove' &&
             [0.42, 0.84, 1.26, 1.68].map((y) =>
               [-1, 1].map((side) => (
-                <Box key={`${y}${side}`} x={span(0.07, lw - 0.07)} y={[y, y + 0.006]} z={side > 0 ? [0.02, 0.0215] : [-0.0215, -0.02]} color={shade(c, 0.7)} rough={0.6} noShadow />
+                <Box key={`${y}${side}`} x={span(0.07, lw - 0.07)} y={[y, y + 0.006]} z={side > 0 ? [0.02, 0.0215] : [-0.0215, -0.02]} color={shade(lineColor, 0.7)} rough={0.6} noShadow />
               )),
             )}
           {/* kilincs */}

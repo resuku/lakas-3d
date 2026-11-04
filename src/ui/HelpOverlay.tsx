@@ -27,6 +27,9 @@ export function HelpOverlay() {
           <li>
             <b>Alt</b> nyomva tartva (vagy <b>I</b>): az egér alatti elem – fal, padló, ajtó, lámpa, bútor – pontos terméke; <b>Ctrl</b> (Macen <b>⌘</b>) + kattintás: a termék oldala új lapon. Egy lámpára kattintva ki- és bekapcsol.
           </li>
+          <li>
+            <b>T</b>: <b>termékhű nézet</b> be/ki – semleges stúdiófényben a szemből látott felület a katalógus (termékfotó) színét mutatja. A fényjelenet azt mutatja, milyen lesz a lakás fényében.
+          </li>
         </ul>
         <h3>Javaslatok</h3>
         <ul>

@@ -71,6 +71,24 @@ A `src/data/products/` mappában valós, Magyarországon kapható termékek vann
   termékoldalról (ami ott nincs, hiányzik); a szín fehér hátterű termékfotóból, ha az a színnévhez közeli, egyébként a színnévből becsült.
   Az XXXLutz, a Möbelix és a mömax élő oldala botellenőrzés mögött van, ezért ezek termékei (és a BAUHAUS ajtói, padlói) a
   Wayback Machine mentéseiből származnak: az ár és az elérhetőség a mentés napjára igaz, a `checkedAt` a mentés dátuma, az `archiveUrl` a mentés.
+
+  Dobozbútor-forma (`form`, TV-falnál elemenként a `parts[].form`; típus: `CabinetForm`, `src/model/types.ts`).
+  A forma a termékfotó alapján készül; méret nincs benne, a méret a termék `size` mezőjéből jön. Tartalma:
+  - talp: lábak (szögletes, kerek, kúpos-ferde), keretes alváz, lábazat (beljebb húzva vagy egy síkban), falra szerelt, illetve talp nélkül;
+  - frontok oszloponként: ajtó, fiók, billenőajtó, nyitott rekesz, üvegajtó vagy lamellás betét, relatív magassággal; vagy tolóajtók;
+  - fogantyú: gomb, rúd, fogóbemetszés, fogóvájat, illetve nincs;
+  - kéttónusú bútornál külön test- és frontszín (a fő szín továbbra is a `hex`), alsó polc, magasfényű front.
+
+  Rajzolás: `src/scene/CabinetModel.tsx`. Forma nélküli terméknél és helyőrzőnél a bútortípus alapformája
+  (`src/lib/cabinetForm.ts`): lábakon álló test ajtókkal. 2026-11-04-én a javaslatok, az aljavaslatok és a
+  konszignáció-tervezet által választott 17 dobozbútor kapott formát (6 TV-szekrény, 4 éjjeliszekrény, 7 TV-fal); a
+  színjavítás utáni új nyertesekkel 21 (Zondo Dilune, BRW Nepo, IKEA GILLERSBERG – egyszerűsítve –, Kos V8).
+  A `woodOn` mezővel adható meg kéttónusú bútornál, melyik felületre kerüljön a fotótextúra.
+  A termékfotók a tárolóba nem kerülnek. Ahol a fotó nem egyértelmű, a `note` mező jelzi:
+  - a falra szerelt elem alsó éle feltételezés;
+  - a Geluza és a Genta TV-falnak nincs elemlistája, ezért csak az alsó eleme látszik.
+
+  A `check-data` a formákat is ellenőrzi.
 - `lamps.json`: 49 lámpa (IKEA, Bonami, Praktiker, OBI, JYSK, Watt Webshop): függeszték, mennyezeti lámpa, sín / spotsor, álló-, fali és asztali lámpa, köztük a konszignáció Manie állólámpája. Izzó nélküli lámpánál a modell meleg LED izzóval számol (E27 806 lm, E14 470 lm, GU10 345 lm, G9 kb. 280 lm).
 
 A modellszín eredete minden terméknél jelölve van:
@@ -89,18 +107,10 @@ linkkel. Ha egy felület színét kézzel módosítod, a termék-hozzárendelés
 A J-kezdetű változatok (16 db, J1–J16) javaslatok ezekből a termékekből („kész”, berendezetlen állapot: fal,
 mennyezet, padló, ajtó, függöny); nem jóváhagyott döntések. A számozás és a sorrend a `scripts/gen/numbering.py`-ban van: elöl a kiemelt
 javaslatok (J1–J3, aljavaslatokkal), utánuk a többi. Az azonosító a 2026-11-03 előtti számot őrzi (pl. `j5-melyzold` = J1, `lj5` a világítása),
-hogy a mentett beállítások és a vélemények megmaradjanak; a leírás végén „Korábbi száma: J5.” áll. Áttekintő galéria:
+hogy a mentett beállítások és a vélemények megmaradjanak; a leírás végén „Korábbi száma: J5.” áll.
 
-```bash
-scripts/shot.sh '<lépések>'   # a képek: screenshots/<változat-id>_<nézet>.png, a mentés: {"dump":"variants.json"}
-MSYS_NO_PATHCONV=1 docker run --rm -v "$(pwd -W):/w" -w /w python:3.12-slim \
-  sh -c "pip -q install pillow && python scripts/gallery.py"
-```
-
-Az eredmény: `screenshots/javaslatok.html` (böngészőben megnyitható). A bútor-színvilág és a bútorjavaslat a
-`{"dumpEval":["furniture_fit.json","…window.__lakas.furnitureFit…"]}` és a `furniture_sets.json`
-(`window.__lakas.suggestFurniture`) lépéssel kerül a galériába (csak fejlesztői szerveren érhető el). A nézetek kamerái:
-nappali – Kanapéfal felől / Dolgozó felől / Erkély felől, háló – Ágy felé / Gardrób felé; a képek bútorokkal készülnek.
+A korábbi statikus javaslatgaléria (`public/galeria/`, `scripts/gallery.py`) 2026-11-04-én megszűnt: minden adata
+(leírás, termékek, világítás, bútorjavaslat, színvilág) a programban is látszik. A git történetben megvan.
 
 ## Adatmodell
 
@@ -156,11 +166,34 @@ szkriptek fejlécében olvasható.
 - Egyszerű és részletes nézet (fejléc): az egyszerű a családnak szól – a rétegek, az ellenőrzések, a források és a lámpaszerkesztés rejtve.
   Első megnyitáskor rövid súgó (újra: Súgó gomb); telefonon figyelmeztetés és könnyített megjelenítés.
 - Könnyített megjelenítés (Nézet): árnyéktérképek nélkül, 1-es pixelaránnyal, gyengébb gépekre.
+- Termékhű nézet (Nézet, **T** billentyű; néző-szintű beállítás): a fényjelenet helyett semleges stúdiófény, hogy a szemből
+  látott felület a katalógus színét mutassa, mint a termékfotó. Ilyenkor a 3D nézet sarkában jelzés látszik, a
+  Világítás fül figyelmeztet, a képernyőkép neve `…_termekhu.png`. Felépítés (`StudioLights`, `src/scene/Lights.tsx`):
+  - egyenletes fehér környezet (`scene.environment`, égbolt fele 1, padló fele `STUDIO.ground`);
+  - a kamerából előre világító fény (a forma a néző felé forduló és az oldallapok fényerő-különbségéből látszik);
+  - halvány, meredek felülfény a bútorok alatti árnyékhoz (a mennyezet ilyenkor nem vet árnyékot);
+  - rögzített expozíció; a lámpák és az ablakfény ki van kapcsolva.
+
+  A tónusleképezés a three.js Neutral (Khronos PBR Neutral) mása, de a sötét színekből 0,04 helyett 0,02-t von le
+  (`STUDIO_SPEC`): ennyi fényes visszaverődést ad a stúdiófény a matt felületeken. A normál nézet marad ACES Filmic.
+  Mérés a `Kanapéfal felől` és a `TV-fal felől` nézetben, ΔE2000 a szemből látott felületekre:
+  - termékhű nézet: 0,2–1,5 (TONSTAD TV-szekrény 0,5, sötétzöld fal 0,8);
+  - normál, nappali fényjelenet: 6–7 (a tölgy kifakul, a telítettség −11).
+
+  Eltérés, ami marad:
+  - ferdén látott vízszintes felület: álló nézetből a padló kb. −3 L*, felülnézetből kb. +4 L*;
+  - fehér felület: a Neutral leképezés a csúcsfényt tömöríti, kb. −3 L*;
+  - fényes felület (TV-képernyő): a környezetet tükrözi.
+- Két nézet (Nézet → „Fényjelenet + termékhű”): ugyanaz a javaslat két vásznon, közös kamerával – bal oldalt a
+  Világítás fül fényjelenete, jobb oldalt a termékhű nézet (a vászon rögzített nézete: `Viewport` `studio`, `scene/studio.ts`).
+  Ilyenkor a T billentyű és a termékhű kapcsoló nem kell. A képernyőkép a két vásznat egymás mellé teszi (`…_es_termekhu.png`).
+  2026-11-04-ig ezen a helyen az A/B összehasonlítás (két változat egymás mellett) volt; a tárolt állapot v12 migrációja
+  törli a `compareId`-t, a `viewMode` 'compare' értékéből 'split' lesz.
 - Vélemények: név, kedvenc (★) és megjegyzés változatonként; a konfigurációs fájllal visszaküldhetők, és a
   „Visszajelzések átvétele fájlból…” gombbal egyesíthetők (a saját beállítások maradnak, az ott létrehozott új változatok bekerülnek).
 - Konfiguráció mentése / betöltése (oldalsáv alja): a teljes beállítás JSON-fájlban (`app`, `version`, `savedAt`, `state`);
   régebbi fájlt a tárolt állapottal azonos migráció hoz a mostani formára. A néző-szintű beállítások (név, nézetmód,
-  könnyített megjelenítés, súgó) nem kerülnek a fájlba.
+  könnyített megjelenítés, termékhű nézet, súgó) nem kerülnek a fájlba.
 - Bevásárlólista (Termékek fül, CSV, Excelhez pontosvesszővel): az aktív változat és világítási terv termékei becsült
   mennyiséggel és összeggel (`src/lib/shopping.ts`: padló +10 %, festék 2 réteg / 12 m²/l, függöny kétszeres ráncolás, izzók foglalat szerint).
 - Berendezési javaslat (`src/data/furnishing.ts`, `src/lib/furnish.ts`): a nappaliban kanapé (egyenes ágyazható + puff, vagy L alakú:
@@ -187,7 +220,7 @@ szkriptek fejlécében olvasható.
   elrendezett dekort adja. A dekor színe a változat bútor-színvilágából jön (`autoDecorVariant`; a kedvelt szín csak akkor, ha nem kerülendő),
   a bútor tetejére kerülő elem a választott bútor magasságára. A Javaslat fülön a változat alatti legördülőből választható; váltáskor
   csak az aljavaslat dekorja cserélődik (`origin: 'sub:…'`), a saját elhelyezésű marad. Más J-javaslatra váltva az aljavaslat kikapcsol.
-  A változatválasztóban (oldalsáv és összehasonlító nézet) a kiemelt javaslatok külön csoportban, elöl állnak; utánuk a többi J, végül a
+  A változatválasztóban (oldalsáv) a kiemelt javaslatok külön csoportban, elöl állnak; utánuk a többi J, végül a
   saját változatok (`src/ui/VariantOptions.tsx`).
 - Színellenőrzés (`src/lib/colorClash.ts`): a látható bútortermék, a rögzített színű meglévő bútor vagy a dekorelem színe a változat
   bútor-színvilágában kerülendő → „⚠ Elüt a javaslat színvilágától” figyelmeztetés az ellenőrzésekben, a Javaslat fül összesítőjében, a
@@ -215,7 +248,6 @@ szkriptek fejlécében olvasható.
   ajtók (szín, kialakítás, kilincs), szegély, függöny (anyag, szélesség, hossz, nyitva vagy
   behúzva, áttetsző második réteg), gardróbfront, textil.
   Másolni, átnevezni és exportálni/importálni (JSON) is lehet őket.
-- A/B összehasonlítás: két változat egymás mellett, szinkronizált kamerával.
 - Fényjelenetek: dátum, időpont és égbolt (napállás Budapestre, valós tájolással),
   mennyezeti és kiegészítő lámpák lumennel, színhőmérséklettel és fényerővel,
   expozíció-korrekció. A jelenetek egymáshoz viszonyítva összevethetők, az abszolút
@@ -224,7 +256,7 @@ szkriptek fejlécében olvasható.
   szabad zóna), méretcímkék, nyitott ajtók.
 - Ellenőrzések: függöny és radiátor ütközése (a sarokban is), közlekedősáv szélessége, a színvilágtól elütő bútor és dekor,
   ellentmondások és hiányzó adatok a JSON-ból.
-- Képernyőkép mentése (összehasonlító nézetben a két kép egymás mellé kerül).
+- Képernyőkép mentése (két nézetes módban a két kép egymás mellé kerül).
 
 A színek képernyős közelítések, nem gyártói kódok. Végső döntés előtt fizikai színminta kell.
 
@@ -236,19 +268,100 @@ scripts/shot.sh '[{"shot":"start"},{"click":"Dolgozó"},{"shot":"dolgozo"}]'
 
 Fej nélküli Chromium fut Playwright-konténerben, a képek a `screenshots/` mappába kerülnek.
 A lépések: `click` (gombfelirat), `toggle` (jelölőnégyzet felirata), `select` (`[sorszám, felirat]` vagy `["auto", felirat]`), `wait` (ms),
-`shot` (fájlnév), `eval` (kifejezés kiértékelése a böngészőben; fejlesztői szerveren a `window.__lakas.store` a tárolt állapot), `dump` (a mentett állapot
+`shot` (fájlnév), `eval` (kifejezés kiértékelése a böngészőben; fejlesztői szerveren a `window.__lakas.store` a tárolt állapot, a `window.__lakas.three()` az R3F-állapot – `gl`, `scene`, `camera`), `dump` (a mentett állapot
 kiírása fájlba), `hold` (billentyű nyomva tartása, pl. `["w",1500]`), `drag` (egérhúzás a 3D
 nézetben, pl. `[200,0]`) `clickAt` (kattintás oldalkoordinátán, pl. `[969,107]`) `ctrlClick` (Ctrl + kattintás oldalkoordinátán; a megnyitott új lap címét kiírja) `keyDown` / `keyUp` (billentyű le / fel, pl. `"m"`) `mouseDown` (egérgomb le oldalkoordinátán) `mouseUp` `mouse` (egér mozgatása, pl. `[900,400]`), `download` (`[gombfelirat, fájlnév]`), `upload` (`[fájlmező-szelektor, fájlnév]`), `fill` (`[helykitöltő szöveg, érték]`) és `dumpEval` (`[fájlnév, kifejezés]`). Ha az első lépés `{"helpShot":"név"}`, a nyitó súgóról is kép készül; a súgót a szkript utána bezárja.
+
+### Színhűség mérése
+
+Fejlesztői szerveren a `window.__lakas.probe({ step?, minFacing? })` (`src/lib/colorProbe.ts`) a (bal oldali) 3D nézet
+képpontjait méri az anyag színéhez; két nézetes módban a jobb oldali, termékhű vásznon a `probeB`, az R3F-állapot a
+`three()` / `threeB()`. Hogyan dolgozik:
+- a képernyő rácsán (`step`, alapból 16 px) sugárral keresi a látható felületet;
+- csak a szemből látott felületet veszi (`minFacing`, alapból 0,85), a szellemfalat és az élek közelét kihagyja;
+- textúránál a textúra átlagszíne a viszonyítás.
+
+Felületenként (gyorsinfó-cím + anyagszín) visszaadja: `ref`, `got`, CIEDE2000 `dE`, világosság-eltérés `dL`,
+telítettség-eltérés `dC`, átlagos szemből-látás `facing`, mintaszám `n`. Példa:
+
+```bash
+scripts/shot.sh '[{"click":"Nappali"},{"click":"Nézet"},{"click":"Kanapéfal felől"},{"eval":"window.__lakas.store.getState().setViewer({productView:true}) || 1"},{"wait":2000},{"dumpEval":["probe.json","JSON.stringify(window.__lakas.probe())"]}]'
+```
+
+A `shot.sh` a helyi fotótextúrákat alapból kikapcsolja (lásd lent). Helyi ellenőrzéshez valamelyik lépésbe kell
+egy `{"photoTextures":true}`.
+
+## Helyi fotótextúrák (termékfotóból)
+
+Padló, ajtó és dobozbútor valódi felülete a gyártó vagy a bolt termékfotójából. A képek szerzői jog alatt állnak, ezért
+**csak helyben** vannak: a kimenet (`public/textures-local/`) és a letöltések (`textures-src/`) gitignore-oltak, a
+kirakott oldalra nem kerülnek (a Pages a tárolóból fordít). Ha a mappa hiányzik, a program a sima színeket mutatja.
+A Nézet fülön kapcsolható („Fotótextúrák”, néző-szintű beállítás); a kapcsoló csak akkor látszik, ha vannak ilyen képek.
+
+```bash
+MSYS_NO_PATHCONV=1 docker run --rm -v "$(pwd -W):/w" -w /w python:3.12-slim \
+  sh -c "pip -q install pillow numpy && python -I scripts/textures/prep_textures.py [termékazonosító ...]"
+```
+
+A források a `scripts/textures/sources.json`-ban vannak (URL, kivágás, valós méret – kép nincs benne):
+
+- **floor** – felülnézeti dekorkép.
+  - A szkript a sötét illesztések mentén kikeresi a lapokat; ahol az illesztés világos vagy a kép sötét, `rects` adja
+    meg kézzel. Ellenőrző kép: `textures-src/debug/<id>_planks.jpg`.
+  - A program laponként egy véletlen valódi lapot rajzol a katalógus lapméretével (`lib/floorTexture.ts`): véletlen
+    kivágás és tükrözés, lehetőleg a laphoz illő arányú forrásból.
+  - Hajópadlón és halszálkán működik; a halszálkás dekorkép 45°-kal elforgatva, kézzel kijelölt lapokkal.
+- **wood** – faminta valós méretben (`size`, m). A kép lehet:
+  - egész;
+  - `crop` szerint kivágva;
+  - `quad` szerint (4 sarok, a `ref` méretű képen mérve) perspektívahelyesen kivágva.
+
+  A `mask` sávot (pl. fogantyú) a mellette lévő erezet tükre pótolja. A `same` ugyanazt a dekort adja egy másik
+  terméknek (közös fájl).
+  - A minta ajtón a tokra, a takarólécre és a lapra kerül; dobozbútoron a test- és frontpanelekre, ha a forma nem ad
+    külön színt.
+  - Az UV valós méretű (`Box` `map` + `mapSize`). A mintánál kisebb lap egy ismétlésen belül marad, a legfeljebb 25 %-kal
+    nagyobb nyújtva kerül rá, a még nagyobbon a minta tükrözve ismétlődik.
+
+Közös mezők: `rotate` (fok; függőleges lapoknál 90, halszálkánál −45) és `flat: false` (fényátmenet-kiegyenlítés nélkül).
+A letöltés neve az URL kivonatát is tartalmazza, így más forrásra váltva a szkript újra letölt.
+
+A nagy léptékű fényátmenetet a szkript kiegyenlíti, és jelenti, mennyire tér el a textúra átlagszíne a katalógus színétől.
+
+A szín forrása:
+- Fehér hátterű termékfotó: a textúra színe megbízható.
+- Szobafotó vagy render: a kép fénye nem a bútor színét mutatja. Ilyenkor csak az erezet jön a fotóból, az átlagszín a
+  `matchHex` szerinti referenciára igazodik (Zondo Dilune: a katalógusé; Kos V8: a forma frontszíne).
+
+Állapot 2026-11-04-én: 32 tétel.
+- A J-javaslatok mind a 13 padlója.
+- Ajtók: a 7 fautánzatú ajtó (6 dekor). Az egyszínű fehér és kasmír ajtóknak nem kell minta.
+- Dobozbútorok: TONSTAD TV-szekrény és éjjeliszekrény, TAPDRUP, ALSTED, HOKKSUND, KALLAX, KEVIN, HEMNES, Zondo Dilune,
+  BRW Nepo, IKEA GILLERSBERG (bambusz), Kos V8 (a tölgy frontok és a nyitott dobozok).
+
+Ami kimaradt, és miért:
+- Geluza, BREVAS, Genta: a fa felület a fotón takart, árnyékos vagy túl kicsi.
+- Veneti: a tölgy rész árnyékban van.
+
+2026-11-04: ahol a katalógus színe nagyon eltért a fotótól (főleg a színnévből becsült színeknél), a `hex` a textúra
+átlaga lett (`hexSource: photo-sample`, a régi érték a `note`-ban). ΔE76:
+- TAPDRUP: #d8c19a → #b39c8a (16,9);
+- HEMNES: #d4d1c2 → #f0f0eb (12,2);
+- ALSTED: #c9a56e → #e3be93 (11,6);
+- KEVIN: #c9ad85 → #c8a379 (5,3);
+- Charleston tölgy ajtó: #A18069 → #937159 (5,9). A `variants.ts` újragenerálva; a mentett állapotban a v13 migráció javítja.
+
+A színillesztés ettől 38 helyen mást választ:
+- éjjeliszekrény: a TAPDRUP helyett GILLERSBERG, BRW Nepo vagy HOKKSUND;
+- TV-szekrény: J5/J11/J14-ben az ALSTED helyett Zondo Dilune;
+- TV-fal: J5/J11/J14-ben a Geluza helyett KEVIN.
 
 ## Kirakás (GitHub Pages)
 
 A `main` ágra történő feltöltés után a `.github/workflows/pages.yml` lefordítja (`npm ci`, `npm run build`)
 és kirakja a programot: <https://resuku.github.io/lakas-3d/>. A Vite relatív útvonalakkal fordít (`base: './'`),
-az oldal `noindex` jelzést kap. A galéria a kirakott oldal része (`public/galeria/`):
-
-```bash
-MSYS_NO_PATHCONV=1 docker run --rm -v "$(pwd -W):/w" -w /w python:3.12-slim   sh -c "pip -q install pillow && python scripts/gallery.py --public"
-```
+az oldal `noindex` jelzést kap. A helyi fotótextúrákat (`public/textures-local/`) a build a `dist/`-ből is törli
+(`vite.config.ts`, `noLocalTextures`), így kézi kirakásnál sem kerülnek ki.
 
 Levétel: a tároló Settings → Pages oldalán a kirakás kikapcsolása (vagy `gh api -X DELETE repos/resuku/lakas-3d/pages`).
 A tároló commitjai a GitHub noreply címével készülnek (tárolószintű `git config`).

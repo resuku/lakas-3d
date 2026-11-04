@@ -25,6 +25,10 @@ if (steps[0]?.helpShot) {
 }
 const start = page.getByRole('button', { name: 'Kezdjük', exact: true });
 if (await start.count()) await start.click();
+// A helyi fotótextúrák (termékfotókból) alapból ki vannak kapcsolva, hogy megosztható kép ne
+// készüljön velük; helyi ellenőrzéshez: {"photoTextures":true} bármelyik lépésben.
+const photo = steps.some((s) => s.photoTextures);
+await page.evaluate((on) => window.__lakas?.store?.getState().setViewer({ photoTextures: on }), photo);
 
 page.context().on('page', async (p) => {
   await p.waitForLoadState('commit').catch(() => {});
@@ -83,7 +87,7 @@ for (const s of steps) {
     await page.mouse.up();
   }
   if (s.eval) console.log('eval:', await page.evaluate(s.eval));
-  // A mentett állapot (változatok) kiírása, pl. a javaslatgalériához
+  // A mentett állapot (változatok) kiírása fájlba
   if (s.dump) writeFileSync(`${OUT}/${s.dump}`, await page.evaluate(() => localStorage.getItem('lakas-3d') ?? '{}'));
   // kifejezés eredményének kiírása fájlba, pl. {"dumpEval":["fit.json","JSON.stringify(...)"]}
   if (s.dumpEval) writeFileSync(`${OUT}/${s.dumpEval[0]}`, String(await page.evaluate(s.dumpEval[1])));

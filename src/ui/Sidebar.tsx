@@ -19,6 +19,7 @@ import { ColorClashes, FurnishingPanel, hasFurnishing, VariantFurniture } from '
 import { findSubVariant, subVariantsOf } from '../data/subVariants';
 import { VariantOptions } from './VariantOptions';
 import { DecorPanel } from './DecorPanel';
+import { useLocalTextureCount } from '../lib/localTextures';
 
 const MONTHS = ['jan.', 'febr.', 'márc.', 'ápr.', 'máj.', 'jún.', 'júl.', 'aug.', 'szept.', 'okt.', 'nov.', 'dec.'];
 
@@ -30,7 +31,7 @@ function download(name: string, blob: Blob) {
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
 
-/** Képernyőkép: összehasonlító nézetben a két vászon egymás mellé kerül. */
+/** Képernyőkép: két nézetes módban (fényjelenet + termékhű) a két vászon egymás mellé kerül. */
 function screenshot(name: string) {
   const canvases = [...document.querySelectorAll<HTMLCanvasElement>('.viewport canvas')];
   if (!canvases.length) return;
@@ -528,6 +529,7 @@ function SubSelect({ v }: { v: Variant }) {
 
 export function Sidebar() {
   const s = useStore();
+  const localTex = useLocalTextureCount();
   const tab = s.sidebarTab;
   const room = getRoom(s.roomId);
   const active = useVariant(s.activeId);
@@ -555,9 +557,6 @@ export function Sidebar() {
         <div className="title-row">
           <h1>Lakás 3D</h1>
           <div className="row">
-            <a className="btn" href={`${import.meta.env.BASE_URL}galeria/index.html`} target="_blank" rel="noreferrer" title="A javaslatok képei egy görgethető oldalon (telefonon is)">
-              Galéria
-            </a>
             <button onClick={() => s.setViewer({ helpSeen: false })} title="Rövid használati útmutató">
               Súgó
             </button>
@@ -591,7 +590,8 @@ export function Sidebar() {
       {tab === 'view' && (
         <>
       <Section title="Nézet">
-        <Segmented value={s.viewMode} options={[{ v: 'single', label: 'Egy nézet' }, { v: 'compare', label: 'A / B összehasonlítás' }]} onChange={s.setViewMode} />
+        <Segmented value={s.viewMode} options={[{ v: 'single', label: 'Egy nézet' }, { v: 'split', label: 'Fényjelenet + termékhű' }]} onChange={s.setViewMode} />
+        {s.viewMode === 'split' && <p className="note">Bal oldalt a Világítás fül fényjelenete, jobb oldalt a termékhű nézet (semleges stúdiófény) – ugyanaz a javaslat, közös kamerával.</p>}
         <Segmented
           value={s.whole ? 'whole' : 'room'}
           options={[
@@ -620,8 +620,21 @@ export function Sidebar() {
           {s.walk ? 'Bejárás vége' : 'Bejárás (W A S D + egér)'}
         </button>
         <p className="note">Gyorsinfó: tartsd lenyomva az Alt billentyűt, és vidd az egeret egy elem fölé (I: rögzítés be/ki).</p>
+        {s.viewMode === 'single' && (
+          <Toggle checked={s.productView} onChange={(b) => s.setViewer({ productView: b })} label="Termékhű nézet (T): semleges stúdiófény – a szemből látott felület a katalógus színét mutatja" />
+        )}
+        {localTex > 0 && (
+          <Toggle
+            checked={s.photoTextures}
+            onChange={(b) => s.setViewer({ photoTextures: b })}
+            label={`Fotótextúrák (${localTex} termék: padló, ajtó, bútor a termékfotóból – csak ezen a gépen)`}
+          />
+        )}
         <Toggle checked={s.lowQuality} onChange={(b) => s.setViewer({ lowQuality: b })} label="Könnyített megjelenítés (gyengébb gépen: árnyék nélkül)" />
-        <button className="wide" onClick={() => screenshot(`${room.id}_${active.name.replace(/[^\p{L}\p{N}]+/gu, '_')}_${s.sceneId || 'egyedi'}.png`)}>
+        <button
+          className="wide"
+          onClick={() => screenshot(`${room.id}_${active.name.replace(/[^\p{L}\p{N}]+/gu, '_')}_${s.viewMode === 'split' ? `${s.sceneId || 'egyedi'}_es_termekhu` : s.productView ? 'termekhu' : s.sceneId || 'egyedi'}.png`)}
+        >
           Képernyőkép mentése
         </button>
       </Section>
@@ -654,7 +667,7 @@ export function Sidebar() {
       {tab === 'variant' && (
         <>
       <Section title="Változat (paletta)">
-        <Field label={s.viewMode === 'compare' ? 'Szerkesztett változat (bal oldali nézet)' : 'Aktív változat'}>
+        <Field label="Aktív változat">
           <select value={s.activeId} onChange={(e) => s.setActive(e.target.value)}>
             <VariantOptions
               variants={s.variants}
@@ -712,6 +725,12 @@ export function Sidebar() {
       </Section>
 
       <Section title="Fény">
+        {s.productView && s.viewMode === 'single' && (
+          <p className="note warn-text">
+            A termékhű nézet be van kapcsolva: a 3D nézetben semleges stúdiófény világít, ezek a beállítások ilyenkor nem látszanak.{' '}
+            <button onClick={() => s.setViewer({ productView: false })}>Kikapcsolás (T)</button>
+          </p>
+        )}
         <div className="scene-buttons">
           {SCENES.map((sc) => (
             <button key={sc.id} className={sc.id === s.sceneId ? 'on' : ''} title={sc.hint} onClick={() => s.applyScene(sc.id)}>

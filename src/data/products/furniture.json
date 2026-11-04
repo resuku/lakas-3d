@@ -3633,7 +3633,58 @@
       "url": "https://butorcity.hu/brevas-tv-allvany-rtv2d2s-26762",
       "imageUrl": "https://comfortbutor.cdn.shoprenter.hu/custom/comfortbutor/image/cache/w1719h900/product/BRW/Brevas/brevas-RTV2D2S-allvany.jpg.webp?lastmod=1788944030.1793692696",
       "checkedAt": "2026-11-03",
-      "note": "Meleg homokos/bézs árnyalat."
+      "note": "Meleg homokos/bézs árnyalat.",
+      "form": {
+        "base": "legs",
+        "baseH": 25,
+        "baseColor": "black",
+        "cols": [
+          [
+            "door"
+          ],
+          [
+            "slats"
+          ],
+          [
+            {
+              "k": "open",
+              "h": 0.35
+            },
+            {
+              "k": "flap",
+              "h": 0.65
+            }
+          ],
+          [
+            {
+              "k": "open",
+              "h": 0.35
+            },
+            {
+              "k": "flap",
+              "h": 0.65
+            }
+          ],
+          [
+            "slats"
+          ],
+          [
+            "door"
+          ]
+        ],
+        "colW": [
+          1,
+          0.55,
+          1.1,
+          1.1,
+          0.55,
+          1
+        ],
+        "handle": "none",
+        "bodyHex": "#c19a6b",
+        "src": "photo",
+        "note": "Kasmír frontok, artisan tölgy test és lamellás betétek, fogantyú nélkül; a test színe a színnév alapján becsült (a fotón a teteje kiégett, az oldala árnyékos)."
+      }
     },
     {
       "id": "furn-butorcity-dalva-tv-allvany-rtv4d-mauvella-tolgy-ko",
@@ -3747,7 +3798,28 @@
       "url": "https://www.ikea.com/hu/hu/p/besta-tv-allvany-ajtokkal-feherre-pacolt-toelgy-hatas-selsviken-mfenyu-feh-s59330715/",
       "imageUrl": "https://www.ikea.com/hu/hu/images/products/besta-tv-allvany-ajtokkal-feherre-pacolt-toelgy-hatas-selsviken-mfenyu-feh__0719200_pe731914_s5.jpg?f=u",
       "checkedAt": "2026-11-02",
-      "note": "Láb nincs a csomagban (külön tartozék). Ajánlott tévészélesség max. 182 cm.; akciós ár (régi: 90 590 Ft), 2026.09.01-től érvényes"
+      "note": "Láb nincs a csomagban (külön tartozék). Ajánlott tévészélesség max. 182 cm.; akciós ár (régi: 90 590 Ft), 2026.09.01-től érvényes",
+      "form": {
+        "base": "wall",
+        "baseH": 250,
+        "cols": [
+          [
+            "flap"
+          ],
+          [
+            "flap"
+          ],
+          [
+            "flap"
+          ]
+        ],
+        "handle": "none",
+        "frontHex": "#f1f1ef",
+        "bodyHex": "#d3c4ae",
+        "gloss": true,
+        "src": "photo",
+        "note": "A fotón falra szerelve, fogantyú nélkül (nyomásra nyíló); láb vagy lábazat külön tartozék. Az alsó él 250 mm-en: feltételezés. Selsviken magasfényű fehér frontok, fehérre pácolt tölgyhatású test (színminta a fotóról)."
+      }
     },
     {
       "id": "furn-ikea-besta-tv-allvany-feherre-pacolt-tolgy-ha",
@@ -3795,7 +3867,33 @@
       "url": "https://www.ikea.com/hu/hu/p/besta-tv-allvany-feherre-pacolt-toelgy-hatas-krukmakare-bezs-s19612118/",
       "imageUrl": "https://www.ikea.com/hu/hu/images/products/besta-tv-allvany-feherre-pacolt-toelgy-hatas-krukmakare-bezs__1602838_pe1043752_s5.jpg?f=u",
       "checkedAt": "2026-11-02",
-      "note": "Meleg bézs frontok. Láb külön tartozék.; akciós ár (régi: 96 190 Ft), 2026.09.01-től érvényes"
+      "note": "Meleg bézs frontok. Láb külön tartozék.; akciós ár (régi: 96 190 Ft), 2026.09.01-től érvényes",
+      "form": {
+        "base": "wall",
+        "baseH": 250,
+        "cols": [
+          [
+            "flap"
+          ],
+          [
+            {
+              "k": "open",
+              "h": 0.3
+            },
+            {
+              "k": "drawer",
+              "h": 0.7
+            }
+          ],
+          [
+            "flap"
+          ]
+        ],
+        "handle": "none",
+        "bodyHex": "#d3c4ae",
+        "src": "photo",
+        "note": "A fotón falra szerelve, fogantyú nélkül (nyomásra nyíló); láb vagy lábazat külön tartozék. Az alsó él 250 mm-en: feltételezés. Krukmakare bézs frontok, fehérre pácolt tölgyhatású test (színminta a fotóról, a tető és az oldal átlaga)."
+      }
     },
     {
       "id": "furn-ikea-tonstad-tv-allvany-tolgy-furner-178x37x5",
@@ -3817,7 +3915,18 @@
       "url": "https://www.ikea.com/hu/hu/p/tonstad-tv-allvany-toelgy-furner-00489302/",
       "imageUrl": "https://www.ikea.com/hu/hu/images/products/tonstad-tv-allvany-toelgy-furner__1328115_pe944674_s5.jpg?f=u",
       "checkedAt": "2026-11-02",
-      "note": "Lábazat (plinth), nem láb. Ajánlott tévé max. 170 cm széles. Magasság 54,9 cm, a felső határon.; darabár"
+      "note": "Lábazat (plinth), nem láb. Ajánlott tévé max. 170 cm széles. Magasság 54,9 cm, a felső határon.; darabár",
+      "form": {
+        "base": "plinth",
+        "baseH": 60,
+        "setback": 0,
+        "panel": 25,
+        "sliding": 2,
+        "inset": true,
+        "handle": "slot",
+        "src": "photo",
+        "note": "Két tolóajtó a keretbe süllyesztve, ovális fogóvájattal a külső szélen; alul a fronttal egy síkú lábazati sáv, alatta pár mm-es talpak."
+      }
     },
     {
       "id": "furn-jysk-tv-allvany-alsted-1-ajtos-2-fiokos-tolgy",
@@ -3832,13 +3941,32 @@
       },
       "material": "MDF, melamin, ABS műanyag, acél",
       "colorName": "natúr tölgy",
-      "hex": "#c9a56e",
-      "hexSource": "color-name",
+      "hex": "#e3be93",
+      "hexSource": "photo-sample",
       "price": "47 500 Ft (JYSK, 2026-11-02)",
       "url": "https://jysk.hu/nappali/tv-allvanyok/tv-allvany-alsted-1-ajtos-2-fiokos-tolgyszinu",
       "imageUrl": "https://cdn2.jysk.com/getimage/wd3.large/284243",
       "checkedAt": "2026-11-02",
-      "note": "Acél, melaminfelületű lábak. Értékelők szerint nehéz összeszerelés, ajtóigazítás.; akciós darabár (régi: 59 900 Ft), 2026.11.29-ig"
+      "note": "Acél, melaminfelületű lábak. Értékelők szerint nehéz összeszerelés, ajtóigazítás.; akciós darabár (régi: 59 900 Ft), 2026.11.29-ig A szín 2026-11-04-től a termékfotó frontjáról (a helyi fotótextúra átlaga, fényátmenet kiegyenlítve); korábban #c9a56e (színnévből becsült).",
+      "form": {
+        "base": "frame",
+        "baseH": 110,
+        "leg": "round",
+        "cols": [
+          [
+            "drawer"
+          ],
+          [
+            "door"
+          ],
+          [
+            "drawer"
+          ]
+        ],
+        "handle": "grip",
+        "src": "photo+page",
+        "note": "Három egyforma front fogóbemetszéssel; a termékoldal szerint 1 ajtó és 2 fiók (a fotón nem látszik, melyik melyik)."
+      }
     },
     {
       "id": "furn-jysk-tv-allvany-favrbo-vilagos-tolgyszinu-feh",
@@ -3902,7 +4030,31 @@
       "url": "https://mindigbutor.hu/rtv-aridea-152801",
       "imageUrl": "https://szelespeter.cdn.shoprenter.hu/custom/szelespeter/image/cache/w2148h1125/product/ADRK/5905036429977.jpg.webp",
       "checkedAt": "2026-11-03",
-      "note": "Nagyon alacsony (28 cm), 16 mm laminált lemez. Hideg/tiszta fehér, melegebb színvariáns az oldalon nem látszott."
+      "note": "Nagyon alacsony (28 cm), 16 mm laminált lemez. Hideg/tiszta fehér, melegebb színvariáns az oldalon nem látszott.",
+      "form": {
+        "base": "legs",
+        "baseH": 15,
+        "baseColor": "#9a9a9a",
+        "cols": [
+          [
+            "flap"
+          ],
+          [
+            "open"
+          ],
+          [
+            "flap"
+          ]
+        ],
+        "colW": [
+          1,
+          0.9,
+          1
+        ],
+        "handle": "bar",
+        "handleColor": "steel",
+        "src": "photo"
+      }
     },
     {
       "id": "furn-mindigbutor-solano-rtv-2-tv-allvany-meleg-dio-fekete",
@@ -4307,7 +4459,22 @@
       "url": "https://www.zondo.hu/tv-asztal-szekreny-dilune-180-kezmuves-toelgy-vilagitas-nelkuel-1158203",
       "imageUrl": "https://cdn.mobinterier.com/3/36671473c5e2537719afb3b15d9a876c.jpg",
       "checkedAt": "2026-11-03",
-      "note": "Függesztett modell (falra szerelhető, lábak nélkül). Méretek az oldalon: 180×30×33 cm. LED világítás külön rendelhető."
+      "note": "Függesztett modell (falra szerelhető, lábak nélkül). Méretek az oldalon: 180×30×33 cm. LED világítás külön rendelhető.",
+      "form": {
+        "base": "wall",
+        "baseH": 250,
+        "cols": [
+          [
+            "flap"
+          ],
+          [
+            "flap"
+          ]
+        ],
+        "handle": "none",
+        "src": "photo+page",
+        "note": "Függesztett (a termékoldal szerint falra szerelhető, láb nélküli), két billenőajtó, fogantyú nélkül. Az alsó él 250 mm-en: feltételezés."
+      }
     },
     {
       "id": "furn-zondo-tv-szekreny-asztal-myrtha-200-artisan-to",
@@ -4400,31 +4567,84 @@
           "kind": "low",
           "w": 1400,
           "d": 353,
-          "h": 371
+          "h": 371,
+          "form": {
+            "base": "none",
+            "cols": [
+              [
+                {
+                  "k": "flap",
+                  "h": 0.5
+                },
+                {
+                  "k": "drawer",
+                  "h": 0.5
+                }
+              ],
+              [
+                "open",
+                "open"
+              ]
+            ],
+            "handle": "bar",
+            "handleColor": "steel",
+            "src": "photo"
+          }
         },
         {
           "kind": "tall",
           "w": 500,
           "d": 300,
-          "h": 787
+          "h": 787,
+          "form": {
+            "base": "none",
+            "cols": [
+              [
+                "door"
+              ]
+            ],
+            "handle": "bar",
+            "handleColor": "steel",
+            "src": "photo"
+          }
         },
         {
           "kind": "wall",
           "w": 500,
           "d": 300,
-          "h": 772
+          "h": 772,
+          "form": {
+            "base": "wall",
+            "cols": [
+              [
+                "door"
+              ]
+            ],
+            "handle": "bar",
+            "handleColor": "steel",
+            "src": "photo"
+          }
         },
         {
           "kind": "shelf",
           "w": 786,
           "d": 80,
-          "h": 171
+          "h": 171,
+          "form": {
+            "base": "none",
+            "cols": [
+              [
+                "open"
+              ]
+            ],
+            "src": "photo"
+          }
         }
       ],
       "material": "Laminated particleboard",
       "colorName": "sonoma oak",
-      "hex": "#c9ad85",
-      "hexSource": "color-name",
+      "hex": "#c8a379",
+      "hexSource": "photo-sample",
       "variants": [
         "fehér/tölgyfa artisan"
       ],
@@ -4432,7 +4652,7 @@
       "url": "https://www.biano.hu/termek/v/269442368-nappali-fal-sonoma-tolgy-kevin",
       "imageUrl": "https://static.biano.hu/i/product/1020-1020/8e/1f/b4/51c59543f7cbf9618bce96457d86010b8b8bd83d-nappali-fal-sonoma-tolgy-kevin.jpg",
       "checkedAt": "2026-11-02",
-      "note": "Part positions and wall-mounting heights are not stated on the page; parts list only (sizes from the component list, not from a layout drawing). Floor cabinet 50x78.7x30 and hanging cabinet 50x77.2x30 (w/h/d) as on page; kind labels are guessed. Listing also mentions RTV cabinet and a shelf without sizes. Seller Kondela.; below the 80 000 Ft budget floor"
+      "note": "Part positions and wall-mounting heights are not stated on the page; parts list only (sizes from the component list, not from a layout drawing). Floor cabinet 50x78.7x30 and hanging cabinet 50x77.2x30 (w/h/d) as on page; kind labels are guessed. Listing also mentions RTV cabinet and a shelf without sizes. Seller Kondela.; below the 80 000 Ft budget floor A szín 2026-11-04-től a termékfotó frontjáról (a helyi fotótextúra átlaga, fényátmenet kiegyenlítve); korábban #c9ad85 (színnévből becsült)."
     },
     {
       "id": "furn-biano-primbu-kos-v8-nappali-szekrenysor-feher-artisan",
@@ -4450,19 +4670,65 @@
           "kind": "low",
           "w": 950,
           "d": 390,
-          "h": 400
+          "h": 400,
+          "form": {
+            "base": "legs",
+            "baseH": 20,
+            "baseColor": "#9a9a9a",
+            "cols": [
+              [
+                "flap"
+              ],
+              [
+                "flap"
+              ]
+            ],
+            "handle": "bar",
+            "handleColor": "black",
+            "bodyHex": "#eeeeec",
+            "frontHex": "#c49a6c",
+            "woodOn": "front",
+            "src": "photo",
+            "note": "Fehér test, artisan tölgy billenőajtók fekete rúdfogantyúval (a szín a színnév alapján, a minta a termékfotóból)."
+          }
         },
         {
           "kind": "tall",
           "w": 500,
           "d": 300,
-          "h": 500
+          "h": 500,
+          "form": {
+            "base": "none",
+            "cols": [
+              [
+                "door"
+              ]
+            ],
+            "handle": "bar",
+            "handleColor": "black",
+            "bodyHex": "#eeeeec",
+            "frontHex": "#eeeeec",
+            "src": "photo",
+            "note": "A fotón falra szerelt fehér kocka egy ajtóval; az elrendezés a többi alacsony elem mellé teszi."
+          }
         },
         {
           "kind": "shelf",
           "w": 500,
           "d": 280,
-          "h": 300
+          "h": 300,
+          "form": {
+            "base": "none",
+            "cols": [
+              [
+                "open"
+              ]
+            ],
+            "bodyHex": "#c49a6c",
+            "woodOn": "body",
+            "src": "photo",
+            "note": "Nyitott artisan tölgy doboz."
+          }
         }
       ],
       "material": "16 mm laminated chipboard",
@@ -4536,19 +4802,57 @@
           "w": 1600,
           "d": 330,
           "h": 320,
-          "qty": 2
+          "qty": 2,
+          "form": {
+            "base": "wall",
+            "cols": [
+              [
+                "flap"
+              ]
+            ],
+            "handle": "none",
+            "src": "photo"
+          }
         },
         {
           "kind": "tall",
           "w": 320,
           "d": 330,
-          "h": 1600
+          "h": 1600,
+          "form": {
+            "base": "wall",
+            "baseH": 150,
+            "cols": [
+              [
+                "door"
+              ]
+            ],
+            "handle": "none",
+            "src": "photo",
+            "note": "A fotón falra szerelve; az alsó él magassága becslés."
+          }
         },
         {
           "kind": "tall",
           "w": 320,
           "d": 290,
-          "h": 1600
+          "h": 1600,
+          "form": {
+            "base": "wall",
+            "baseH": 150,
+            "cols": [
+              [
+                "open",
+                "open",
+                "open",
+                "open",
+                "open"
+              ]
+            ],
+            "bodyHex": "#b98f63",
+            "src": "photo",
+            "note": "Nyitott polcoszlop cremona tölgyben (a szín a fotó alapján becsült); a fotón falra szerelve."
+          }
         }
       ],
       "material": "16 mm LTD board, matt laminate",
@@ -4657,7 +4961,31 @@
       "url": "https://butorcity.hu/genta-nappali-sonoma",
       "imageUrl": "https://comfortbutor.cdn.shoprenter.hu/custom/comfortbutor/image/cache/w1719h900/product/Tempo%20Kondela/Nappali%20sor/genta_sonoma2.jpg.webp?lastmod=1707144878.1793692696",
       "checkedAt": "2026-11-03",
-      "note": "Az oldal csak az együttes méretét adja (210×42×180); elemek (parts) nincsenek részletezve."
+      "note": "Az oldal csak az együttes méretét adja (210×42×180); elemek (parts) nincsenek részletezve.",
+      "form": {
+        "base": "none",
+        "cols": [
+          [
+            "flap"
+          ],
+          [
+            "open",
+            "open"
+          ],
+          [
+            "flap"
+          ]
+        ],
+        "colW": [
+          1,
+          1.1,
+          1
+        ],
+        "handle": "none",
+        "frontHex": "#ebe8e1",
+        "src": "photo",
+        "note": "Csak az alsó elem: a termékoldal nem adja meg az elemek méretét. Fehér billenőajtók (a szín a színnév alapján; a szobafotón szürkének látszik), sonoma test."
+      }
     },
     {
       "id": "furn-butorcity-waw-new-nappali-sor-wotan-tolgy-feher",
@@ -4743,19 +5071,94 @@
           "kind": "low",
           "w": 1200,
           "d": 400,
-          "h": 380
+          "h": 380,
+          "form": {
+            "base": "legs",
+            "baseH": 20,
+            "baseColor": "#9a9a9a",
+            "handle": "none",
+            "src": "photo",
+            "cols": [
+              [
+                {
+                  "k": "open",
+                  "h": 0.4
+                },
+                {
+                  "k": "drawer",
+                  "h": 0.6
+                }
+              ],
+              [
+                {
+                  "k": "open",
+                  "h": 0.4
+                },
+                {
+                  "k": "drawer",
+                  "h": 0.6
+                }
+              ]
+            ]
+          }
         },
         {
           "kind": "tall",
           "w": 600,
           "d": 400,
-          "h": 1280
+          "h": 1280,
+          "form": {
+            "base": "legs",
+            "baseH": 20,
+            "baseColor": "#9a9a9a",
+            "handle": "none",
+            "src": "photo",
+            "cols": [
+              [
+                {
+                  "k": "glass",
+                  "h": 0.47
+                },
+                {
+                  "k": "door",
+                  "h": 0.53
+                }
+              ]
+            ]
+          }
         },
         {
           "kind": "tall",
           "w": 600,
           "d": 400,
-          "h": 1920
+          "h": 1920,
+          "form": {
+            "base": "legs",
+            "baseH": 20,
+            "baseColor": "#9a9a9a",
+            "handle": "none",
+            "src": "photo",
+            "cols": [
+              [
+                {
+                  "k": "glass",
+                  "h": 1
+                },
+                {
+                  "k": "open",
+                  "h": 0.5
+                },
+                {
+                  "k": "open",
+                  "h": 0.5
+                },
+                {
+                  "k": "door",
+                  "h": 1.1
+                }
+              ]
+            ]
+          }
         }
       ],
       "material": "Board, glass doors, LACK wall shelves",
@@ -4944,31 +5347,100 @@
           "kind": "tall",
           "w": 490,
           "h": 1970,
-          "side": "left"
+          "side": "left",
+          "form": {
+            "base": "legs",
+            "baseH": 60,
+            "cols": [
+              [
+                "open",
+                "open",
+                "open",
+                "open",
+                "open",
+                "open"
+              ]
+            ],
+            "src": "photo"
+          }
         },
         {
           "kind": "low",
           "w": 1480,
           "d": 470,
           "h": 570,
-          "side": "center"
+          "side": "center",
+          "form": {
+            "base": "legs",
+            "baseH": 70,
+            "cols": [
+              [
+                {
+                  "k": "open",
+                  "h": 0.45
+                },
+                {
+                  "k": "drawer",
+                  "h": 0.55
+                }
+              ],
+              [
+                {
+                  "k": "open",
+                  "h": 0.45
+                },
+                {
+                  "k": "drawer",
+                  "h": 0.55
+                }
+              ],
+              [
+                {
+                  "k": "open",
+                  "h": 0.45
+                },
+                {
+                  "k": "drawer",
+                  "h": 0.55
+                }
+              ]
+            ],
+            "handle": "knob",
+            "handleColor": "black",
+            "src": "photo"
+          }
         },
         {
           "kind": "tall",
           "w": 490,
           "h": 1970,
-          "side": "right"
+          "side": "right",
+          "form": {
+            "base": "legs",
+            "baseH": 60,
+            "cols": [
+              [
+                "open",
+                "open",
+                "open",
+                "open",
+                "open",
+                "open"
+              ]
+            ],
+            "src": "photo"
+          }
         }
       ],
       "material": "Whitewashed solid pine",
       "colorName": "whitewashed pine",
-      "hex": "#d4d1c2",
+      "hex": "#f0f0eb",
       "hexSource": "photo-sample",
       "price": "185 970 Ft (IKEA, 2026-11-02)",
       "url": "https://www.ikea.com/hu/hu/p/hemnes-tv-tarolokombinacio-feherre-pacolt-s89299539/",
       "imageUrl": "https://www.ikea.com/hu/hu/images/products/hemnes-tv-tarolokombinacio-feherre-pacolt__0704200_pe725045_s5.jpg",
       "checkedAt": "2026-11-02",
-      "note": "Two tall bookcases flank the central TV stand (stated on page). Depth given as 37-47 cm (47 used). Bookcase depth not given. TV up to 147 cm wide. No wall-hung parts. 148 + 2x49 = 246 cm while page says 245.; was 229 970 Ft; valid from 2026-09-01"
+      "note": "Two tall bookcases flank the central TV stand (stated on page). Depth given as 37-47 cm (47 used). Bookcase depth not given. TV up to 147 cm wide. No wall-hung parts. 148 + 2x49 = 246 cm while page says 245.; was 229 970 Ft; valid from 2026-09-01 A szín 2026-11-04-től a termékfotó frontjáról (a helyi fotótextúra átlaga, fényátmenet kiegyenlítve); korábban #d4d1c2 (termékfotóból)."
     },
     {
       "id": "furn-ikea-kallax-lack-tv-tarolokombinacio-feherre",
@@ -4987,13 +5459,71 @@
           "kind": "low",
           "w": 1470,
           "d": 390,
-          "h": 600
+          "h": 600,
+          "form": {
+            "base": "none",
+            "panel": 38,
+            "cols": [
+              [
+                "open",
+                "open"
+              ],
+              [
+                "open",
+                "open"
+              ],
+              [
+                "open",
+                "open"
+              ],
+              [
+                "open",
+                "open"
+              ]
+            ],
+            "src": "photo"
+          }
         },
         {
           "kind": "tall",
           "w": 770,
           "d": 390,
-          "h": 1470
+          "h": 1470,
+          "form": {
+            "base": "none",
+            "panel": 38,
+            "cols": [
+              [
+                "open",
+                "open",
+                {
+                  "k": "drawer",
+                  "h": 0.5
+                },
+                {
+                  "k": "drawer",
+                  "h": 0.5
+                },
+                "door"
+              ],
+              [
+                "open",
+                "open",
+                {
+                  "k": "drawer",
+                  "h": 0.5
+                },
+                {
+                  "k": "drawer",
+                  "h": 0.5
+                },
+                "door"
+              ]
+            ],
+            "handle": "knob",
+            "handleColor": "steel",
+            "src": "photo"
+          }
         }
       ],
       "material": "Board, oak-effect foil",
@@ -5257,7 +5787,34 @@
       "archiveUrl": "https://web.archive.org/web/20251009151807/https://www.moemax.hu/p/nappali-szekrenysor-geluza-000687057101",
       "imageUrl": "https://media.moemax.com/i/moemax/PIGkclYO9ifHIhXdrtukGM3w",
       "checkedAt": "2025-10-09",
-      "note": "A Wayback Machine 2025-10-09-i mentéséből; az aktuális ár és elérhetőség ellenőrizendő. Az egyes elemek méretét az oldal nem részletezi; a megadott mélység a teljes összeállításra vonatkozik."
+      "note": "A Wayback Machine 2025-10-09-i mentéséből; az aktuális ár és elérhetőség ellenőrizendő. Az egyes elemek méretét az oldal nem részletezi; a megadott mélység a teljes összeállításra vonatkozik.",
+      "form": {
+        "base": "plinth",
+        "baseH": 240,
+        "setback": 0,
+        "baseColor": "#4b443f",
+        "cols": [
+          [
+            "open"
+          ],
+          [
+            "flap"
+          ],
+          [
+            "open"
+          ]
+        ],
+        "colW": [
+          1,
+          1.6,
+          2.3
+        ],
+        "handle": "bar",
+        "handleColor": "black",
+        "frontHex": "#4b443f",
+        "src": "photo",
+        "note": "Csak az alsó elem: a termékoldal nem adja meg az elemek méretét (a magas polc és a fali polc nincs a modellben). Antracit lábazat és billenőajtó, tölgy test (színminta a fotóról)."
+      }
     },
     {
       "id": "furn-momax-szekrenysor-mailand",
@@ -9689,7 +10246,27 @@
       "url": "https://butorcity.hu/nepo-ejjeliszekreny-sonoma-kom1s",
       "imageUrl": "https://comfortbutor.cdn.shoprenter.hu/custom/comfortbutor/image/cache/w1719h900/product/Nepo%20/nepo_ejjeli_sonoma.jpg.webp?lastmod=1720000246.1793692696",
       "checkedAt": "2026-11-03",
-      "note": "Olcsó, kompakt."
+      "note": "Olcsó, kompakt.",
+      "form": {
+        "base": "plinth",
+        "baseH": 55,
+        "setback": 0,
+        "cols": [
+          [
+            {
+              "k": "open",
+              "h": 0.38
+            },
+            {
+              "k": "drawer",
+              "h": 0.62
+            }
+          ]
+        ],
+        "handle": "bar",
+        "handleColor": "steel",
+        "src": "photo"
+      }
     },
     {
       "id": "furn-ikea-fagelfjallet-ejjeliszekreny-tortfeher",
@@ -9736,7 +10313,19 @@
       "url": "https://www.ikea.com/hu/hu/p/gillersberg-ejjeliszekreny-bambusz-feher-30608983/",
       "imageUrl": "https://www.ikea.com/hu/hu/images/products/gillersberg-ejjeliszekreny-bambusz-feher__1481576_pe1000558_s5.jpg?f=u",
       "checkedAt": "2026-11-02",
-      "note": "Nincs fiókja (az oldal alapján nyitott), de karcsú, lábas, olcsó; az oldalon 39x39x56 is szerepel a címben.; darabár"
+      "note": "Nincs fiókja (az oldal alapján nyitott), de karcsú, lábas, olcsó; az oldalon 39x39x56 is szerepel a címben.; darabár",
+      "form": {
+        "base": "frame",
+        "baseH": 250,
+        "cols": [
+          [
+            "open"
+          ]
+        ],
+        "handle": "none",
+        "src": "photo",
+        "note": "Nyitott bambuszkeret alsó polccal, fehér perforált fém tálcával és oldallapokkal; a modell egyszerűsített (bambusz test, alul keretes alváz, a fehér fémrészek nélkül)."
+      }
     },
     {
       "id": "furn-ikea-tonstad-ejjeliszekreny-tolgy-furner-40x4",
@@ -9761,7 +10350,22 @@
       "url": "https://www.ikea.com/hu/hu/p/tonstad-ejjeliszekreny-toelgy-furner-80489322/",
       "imageUrl": "https://www.ikea.com/hu/hu/images/products/tonstad-ejjeliszekreny-toelgy-furner__1247217_pe922597_s5.jpg?f=u",
       "checkedAt": "2026-11-02",
-      "note": "11 cm szabad hely alatta.; darabár"
+      "note": "11 cm szabad hely alatta.; darabár",
+      "form": {
+        "base": "legs",
+        "baseH": 380,
+        "leg": "round",
+        "inset": true,
+        "panel": 20,
+        "cols": [
+          [
+            "drawer"
+          ]
+        ],
+        "handle": "none",
+        "lowerShelf": 180,
+        "src": "photo"
+      }
     },
     {
       "id": "furn-ikea-tonstad-ejjeliszekreny-tortfeher-40x40x5",
@@ -9808,7 +10412,21 @@
       "url": "https://www.ikea.com/hu/hu/p/tyssedal-ejjeliszekreny-feher-70299959/",
       "imageUrl": "https://www.ikea.com/hu/hu/images/products/tyssedal-ejjeliszekreny-feher__0624430_pe691837_s5.jpg?f=u",
       "checkedAt": "2026-11-02",
-      "note": "16 cm szabad hely alatta; az oldal nem írja külön a lábak anyagát. Hagyományos stílus.; darabár"
+      "note": "16 cm szabad hely alatta; az oldal nem írja külön a lábak anyagát. Hagyományos stílus.; darabár",
+      "form": {
+        "base": "legs",
+        "baseH": 390,
+        "inset": true,
+        "cols": [
+          [
+            "drawer"
+          ]
+        ],
+        "handle": "knob",
+        "handleColor": "steel",
+        "lowerShelf": 250,
+        "src": "photo"
+      }
     },
     {
       "id": "furn-jysk-ejjeliszekreny-hokksund-1-fiokos-natur-t",
@@ -9833,7 +10451,22 @@
       "url": "https://jysk.hu/haloszoba/ejjeliszekrenyek/ejjeliszekreny-hokksund-1-fiokos-natur-tolgy",
       "imageUrl": "https://cdn3.jysk.com/getimage/wd3.large/255971",
       "checkedAt": "2026-11-02",
-      "note": "Valódi furnér és tömör fa láb, ár-érték nyertes. Egy vásárló szerint a fiók lötyög.; darabár, akciós (régi: 24 900 Ft), 2026.11.29-ig"
+      "note": "Valódi furnér és tömör fa láb, ár-érték nyertes. Egy vásárló szerint a fiók lötyög.; darabár, akciós (régi: 24 900 Ft), 2026.11.29-ig",
+      "form": {
+        "base": "legs",
+        "baseH": 380,
+        "leg": "tapered",
+        "inset": true,
+        "panel": 25,
+        "cols": [
+          [
+            "drawer"
+          ]
+        ],
+        "handle": "knob",
+        "handleColor": "brass",
+        "src": "photo"
+      }
     },
     {
       "id": "furn-jysk-ejjeliszekreny-jenslev-1-fiokos-sotet-na",
@@ -9872,8 +10505,8 @@
       },
       "material": "forgácslap, melamin, HDF hátlap, ABS fogantyú",
       "colorName": "világos tölgy",
-      "hex": "#d8c19a",
-      "hexSource": "color-name",
+      "hex": "#b39c8a",
+      "hexSource": "photo-sample",
       "variants": [
         "fehér (3659499)"
       ],
@@ -9881,7 +10514,27 @@
       "url": "https://jysk.hu/haloszoba/ejjeliszekrenyek/ejjeliszekreny-tapdrup-1-fiokos-tolgy",
       "imageUrl": "https://cdn2.jysk.com/getimage/wd3.large/257624",
       "checkedAt": "2026-11-02",
-      "note": "Lábat az oldal nem említ; olcsó, egyszerű.; darabár"
+      "note": "Lábat az oldal nem említ; olcsó, egyszerű.; darabár A szín 2026-11-04-től a termékfotó frontjáról (a helyi fotótextúra átlaga, fényátmenet kiegyenlítve); korábban #d8c19a (színnévből becsült).",
+      "form": {
+        "base": "plinth",
+        "baseH": 50,
+        "setback": 0,
+        "cols": [
+          [
+            {
+              "k": "drawer",
+              "h": 0.55
+            },
+            {
+              "k": "open",
+              "h": 0.45
+            }
+          ]
+        ],
+        "handle": "bar",
+        "handleColor": "steel",
+        "src": "photo"
+      }
     },
     {
       "id": "furn-mindigbutor-azteca-ejjeliszekreny-020-kom2s",

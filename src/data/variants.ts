@@ -177,7 +177,7 @@ export const DEFAULT_VARIANTS: Variant[] = [
     accents: { 'nappali.x1': '#A38061', 'halo.x0': '#C9A887' },
     ceiling: '#FFFBF3',
     floor: { pattern: 'plank', tone: '#B0865C', dir: 'z', plank: { l: 1288, w: 195 } },
-    door: '#A18069',
+    door: '#937159',
     doorStyle: 'flat',
     handle: 'brass',
     skirting: { h: 80, mode: 'door' },

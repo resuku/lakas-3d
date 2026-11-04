@@ -129,6 +129,59 @@ export interface FurnPart {
   y?: number;
   side?: 'left' | 'right' | 'center';
   qty?: number;
+  /** Az elem formája (talp, frontosztás, fogantyú) a termékfotó alapján. */
+  form?: CabinetForm;
+}
+
+/** Frontcella: nyíló ajtó, fiók, billenőajtó, nyitott rekesz, üvegajtó, lamellás díszbetét. */
+export type FrontKind = 'door' | 'drawer' | 'flap' | 'open' | 'glass' | 'slats';
+/** Frontcella, `h`: relatív magasság az oszlopon belül (alapból 1). */
+export type FrontCell = FrontKind | { k: FrontKind; h: number };
+
+/**
+ * Dobozbútor (TV-szekrény, éjjeliszekrény, TV-fal eleme) formája a termékfotó és a termékoldal alapján; a paraméteres
+ * modell (scene/CabinetModel.tsx) ebből rajzol. Méret nincs benne – az a termék `size`-a –, csak arányok és típusok.
+ */
+export interface CabinetForm {
+  /** Talp: lábak, lábazat, keretes alváz (lábak + összekötő keret), falra szerelt, a padlón álló test. */
+  base: 'legs' | 'plinth' | 'frame' | 'wall' | 'none';
+  /** A talp magassága (mm), a teljes magasságon belül; falra szerelt elemnél az alsó él a padló fölött (a magasságon kívül). */
+  baseH?: number;
+  /** Láb: vékony szögletes, kerek, kúpos és kifelé dőlő (skandináv). */
+  leg?: 'square' | 'round' | 'tapered';
+  /** A lábazat beljebb húzása (mm); 0 = a fronttal egy síkban. Alapból 25. */
+  setback?: number;
+  /** A talp színe: 'body' (a testé, alapértelmezés), 'black', 'metal' (a változat fémszíne) vagy hex. */
+  baseColor?: string;
+  /** Alsó polc a lábak között: a polc teteje a padló fölött (mm) – asztalkaszerű éjjeliszekrény. */
+  lowerShelf?: number;
+  /** A keret lapvastagsága (mm), alapból 18. */
+  panel?: number;
+  /** Frontok oszloponként balról jobbra, az oszlopon belül felülről lefelé. */
+  cols?: FrontCell[][];
+  /** Az oszlopok relatív szélessége (hiányában egyenlő). */
+  colW?: number[];
+  /** Tolóajtók száma a teljes szélességen, két síkon (a `cols` helyett). */
+  sliding?: number;
+  /** A frontok a keretbe süllyesztve (a keret körben látszik); alapból ráütve, a testet takarva. */
+  inset?: boolean;
+  /** Fogantyú: nincs (nyomásra nyíló), gomb, rúd, fogóbemetszés a front tetején, függőleges fogóvájat. */
+  handle?: 'none' | 'knob' | 'bar' | 'grip' | 'slot';
+  /** A fogantyú színe: 'black', 'metal', 'brass', 'steel', 'body' vagy hex. */
+  handleColor?: string;
+  /** Kéttónusú bútor: a test, illetve a frontok színe, ha eltér a termék színétől (`hex`). */
+  bodyHex?: string;
+  frontHex?: string;
+  /**
+   * Melyik felületre kerül a helyi fotótextúra (lib/localTextures.ts). Alapból arra, amelynek nincs külön színe
+   * (`bodyHex` / `frontHex`); kéttónusú bútornál itt adható meg, melyik a fotón látható dekor.
+   */
+  woodOn?: 'body' | 'front' | 'all' | 'none';
+  /** Magasfényű front. */
+  gloss?: boolean;
+  /** Honnan: termékfotó (a kép alapján, arányok becsülve), termékoldal (leírás), vagy mindkettő. */
+  src: 'photo' | 'page' | 'photo+page';
+  note?: string;
 }
 
 /** Valós bútortermék a magyar kínálatból; a méret mm-ben, a termékoldal szerint (ami ott nincs, hiányzik). */
@@ -170,6 +223,8 @@ export interface FurnitureProduct {
   lType?: 'chaise' | 'corner';
   /** TV-fal elemei, ha a termékoldal felsorolja. */
   parts?: FurnPart[];
+  /** Dobozbútor formája (TV-szekrény, éjjeliszekrény; elemlista nélküli TV-falnál az alsó elemé). */
+  form?: CabinetForm;
   heightAdjustable?: boolean;
   panelType?: 'slat' | 'hexagon' | 'felt';
   absorption?: string;

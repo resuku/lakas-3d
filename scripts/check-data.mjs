@@ -114,4 +114,32 @@ console.log(`
 Bútorkatalógus: ${furniture.items.length} termék; a javaslat ${furnRefs.length} hivatkozásából ${missingFurn.length} hiányzik.`);
 for (const id of missingFurn) console.log(`  HIÁNYZÓ TERMÉK  ${id}`);
 
-process.exit(failures.length || missingFurn.length ? 1 : 0);
+// Dobozbútor-formák (model/types.ts – CabinetForm): ismert értékek, az oszlopszélességek száma az oszlopokéval egyezik
+const BASES = ['legs', 'plinth', 'frame', 'wall', 'none'];
+const CELLS = ['door', 'drawer', 'flap', 'open', 'glass', 'slats'];
+const HANDLES = ['none', 'knob', 'bar', 'grip', 'slot'];
+const formErrors = [];
+let formCount = 0;
+const checkForm = (where, f) => {
+  formCount++;
+  const err = (m) => formErrors.push(`${where}: ${m}`);
+  if (!BASES.includes(f.base)) err(`ismeretlen talp: ${f.base}`);
+  if (!['photo', 'page', 'photo+page'].includes(f.src)) err(`ismeretlen forrás: ${f.src}`);
+  if (f.handle && !HANDLES.includes(f.handle)) err(`ismeretlen fogantyú: ${f.handle}`);
+  if (f.woodOn && !['body', 'front', 'all', 'none'].includes(f.woodOn)) err(`ismeretlen woodOn: ${f.woodOn}`);
+  if (f.sliding && f.cols) err('tolóajtó és oszlopok egyszerre');
+  if (f.colW && f.colW.length !== (f.cols ?? []).length) err(`colW (${f.colW.length}) ≠ oszlopok (${(f.cols ?? []).length})`);
+  for (const c of (f.cols ?? []).flat()) {
+    const k = typeof c === 'string' ? c : c.k;
+    if (!CELLS.includes(k)) err(`ismeretlen frontcella: ${k}`);
+    if (typeof c !== 'string' && !(c.h > 0)) err(`hibás cellamagasság: ${JSON.stringify(c)}`);
+  }
+};
+for (const p of furniture.items) {
+  if (p.form) checkForm(p.id, p.form);
+  for (const [i, part] of (p.parts ?? []).entries()) if (part.form) checkForm(`${p.id} [${i}. elem]`, part.form);
+}
+console.log(`Dobozbútor-forma: ${formCount} (termék vagy TV-fal-elem); ${formErrors.length} hiba.`);
+for (const e of formErrors) console.log(`  FORMAHIBA  ${e}`);
+
+process.exit(failures.length || missingFurn.length || formErrors.length ? 1 : 0);
