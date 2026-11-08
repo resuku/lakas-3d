@@ -27,8 +27,13 @@
   },
   "north": {
     "wall": "z1",
-    "s": "A",
-    "note": "Az ablakfal a hálóéval azonos homlokzaton van (lakberendezői alaprajz topológiája), ezért északi tájolás feltételezve. Ellenőrzendő."
+    "s": "D",
+    "note": "Az ablakfal a hálóéval azonos, északi homlokzaton van (lakberendezői alaprajz topológiája). A 2026-11-08-i fotómérés (nappali, lásd deg) megerősítette; az iPhone iránytűje az ablak felé 2°-ot és 14°-ot mutatott (Képek/Scan, IMG_0011, IMG_0013), ez is egyezik.",
+    "deg": {
+      "v": 6,
+      "s": "D",
+      "note": "A nappali fotóméréséből (2026-11-08): a homlokzatok párhuzamosak, az északi homlokzat kifelé 6°-ra néz (±2°)."
+    }
   },
   "walls": {
     "z0": { "name": "Ajtófal (közlekedő/étkező felé)", "t": { "v": 100, "s": "A", "note": "Belső fal; vastagság a lakberendezői alaprajzból (legacy), nem mért." } },
@@ -103,6 +108,141 @@
   "accentLights": [
     { "id": "DL-1", "label": "Állólámpa", "kind": "floor", "x": 2180, "z": 2850, "s": "A", "note": "Tervezési helyőrző – nem kiválasztott termék." }
   ],
+  "electrical": [
+    {
+      "id": "D1",
+      "kind": "socket",
+      "label": "Konnektor 1 – ablakfal, a háló felőli sarokban",
+      "state": "existing",
+      "wall": "z1",
+      "a": {
+        "v": 105,
+        "s": "D",
+        "note": "A hálóval közös faltól a konnektor kezdetéig 65 mm (D-M013) + 40 mm (fél szerelvény).",
+        "src": [
+          {
+            "sheet": "30 Dolgozó",
+            "key": "D-M013",
+            "n": 65
+          }
+        ]
+      },
+      "y": {
+        "v": 370,
+        "s": "M",
+        "note": "A padlótól a konnektor kezdetéig (alsó éléig), D-M014; a napló szerint nem ellenőrzött.",
+        "src": [
+          {
+            "sheet": "30 Dolgozó",
+            "key": "D-M014",
+            "n": 370
+          }
+        ]
+      },
+      "yTo": "bottom",
+      "ref": {
+        "v": {
+          "v": 65,
+          "s": "M",
+          "note": "A konnektor kezdetéig; a napló szerint nem ellenőrzött.",
+          "src": [
+            {
+              "sheet": "30 Dolgozó",
+              "key": "D-M013",
+              "n": 65
+            }
+          ]
+        },
+        "from": "a háló felőli faltól",
+        "side": "start"
+      },
+      "photos": [
+        "IMG20260905184303.jpg",
+        "IMG20260905184256.jpg"
+      ]
+    },
+    {
+      "id": "D2",
+      "kind": "socket",
+      "label": "Konnektor 2 – külső oldalfal, az asztal mögött",
+      "state": "existing",
+      "wall": "x1",
+      "a": {
+        "v": 2127,
+        "s": "D",
+        "note": "Az ablakos faltól a konnektor kezdetéig 1264 mm (D-M016): 3431 − 1264 − 40 mm. Az ajtó felőli 1744 mm-es referencia (D-M017) falsíkja nem egyértelmű (1264 + 80 + 1744 = 3088 mm a 3431 mm-es helyiségben).",
+        "src": [
+          {
+            "sheet": "30 Dolgozó",
+            "key": "D-M016",
+            "n": 1264
+          }
+        ]
+      },
+      "y": {
+        "v": 365,
+        "s": "M",
+        "note": "A padlótól kb. 365 mm a konnektor kezdetéig (alsó éléig), D-M015; a napló szerint nem ellenőrzött.",
+        "src": [
+          {
+            "sheet": "30 Dolgozó",
+            "key": "D-M015",
+            "n": 365
+          }
+        ]
+      },
+      "yTo": "bottom",
+      "ref": {
+        "v": {
+          "v": 1264,
+          "s": "M",
+          "note": "A konnektor kezdetéig; a napló szerint nem ellenőrzött.",
+          "src": [
+            {
+              "sheet": "30 Dolgozó",
+              "key": "D-M016",
+              "n": 1264
+            }
+          ]
+        },
+        "from": "az ablakos faltól",
+        "side": "end"
+      },
+      "note": "Az asztal takarja, fotón nem látszik."
+    },
+    {
+      "id": "K1",
+      "kind": "switch",
+      "label": "Kapcsoló – az ajtó mellett, belül",
+      "state": "existing",
+      "wall": "z0",
+      "a": {
+        "v": 170,
+        "s": "A",
+        "note": "Fotóbecslés (IMG20260905184200.jpg): az ajtótok és a háló felőli sarok között."
+      },
+      "y": {
+        "v": 1320,
+        "s": "A",
+        "note": "Feltételezés: a nappali kapcsolóinak magassága (N-M018)."
+      },
+      "photos": [
+        "IMG20260905184200.jpg",
+        "IMG20260905184248.jpg"
+      ]
+    },
+    {
+      "id": "MK1",
+      "kind": "ceiling",
+      "label": "Meglévő mennyezeti lámpakiállás",
+      "state": "existing",
+      "light": "L-D1",
+      "photos": [
+        "IMG20260905184343.jpg"
+      ],
+      "note": "D-M018: a geometriai középtől kb. 250 mm-rel a háló felé (szemre becsült)."
+    }
+  ],
   "cameras": [
     { "name": "Ajtóból", "pos": [750, 1600, 250], "target": [1300, 1100, 3430] },
     { "name": "Ablak felől", "pos": [1750, 1600, 3200], "target": [900, 1000, 0] },
@@ -112,7 +252,7 @@
   "missing": [
     "Ablak és ajtónyílás saroktól mért pozíciója (fotóbecslés).",
     "Radiátor teljes kiállása és alsó élének magassága.",
-    "Konnektorok nincsenek modellezve: a teljes villamos felújítás miatt nem kötöttek (DD-005).",
+    "Villamosság (réteg): a kapcsoló helye fotóbecslés; a 2. konnektor ajtó felőli referenciája (D-M017) nem egyértelmű. A meglévő pontok nem kötöttek (DD-005).",
     "Falvastagságok (legacy alaprajzból)."
   ]
 }

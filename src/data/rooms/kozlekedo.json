@@ -53,7 +53,12 @@
   "north": {
     "wall": "z1",
     "s": "D",
-    "note": "A nappali tájolásából, a szkennelés közös koordinátarendszerén át."
+    "note": "A nappali tájolásából, a szkennelés közös koordinátarendszerén át.",
+    "deg": {
+      "v": 6,
+      "s": "D",
+      "note": "A nappali fotóméréséből (2026-11-08): a homlokzatok párhuzamosak, az északi homlokzat kifelé 6°-ra néz (±2°)."
+    }
   },
   "walls": {
     "z0": {
@@ -401,6 +406,92 @@
     }
   ],
   "accentLights": [],
+  "electrical": [
+    {
+      "id": "K1",
+      "kind": "switch",
+      "label": "Kapcsoló – a WC-ajtó fürdő felőli oldalán",
+      "state": "existing",
+      "wall": "x0",
+      "a": {
+        "v": 1725,
+        "s": "A",
+        "note": "Fotóbecslés (IMG20260908174651.jpg, IMG20260908174641.jpg): közvetlenül a WC-ajtó tokja mellett."
+      },
+      "y": {
+        "v": 1250,
+        "s": "A",
+        "note": "Fotóbecslés."
+      },
+      "photos": [
+        "IMG20260908174651.jpg",
+        "IMG20260908174641.jpg",
+        "IMG20260908174730.jpg"
+      ],
+      "note": "Régi, forgatógombos szerelvény."
+    },
+    {
+      "id": "K2",
+      "kind": "switch",
+      "label": "Kapcsoló – a WC-ajtó előszoba felőli oldalán",
+      "state": "existing",
+      "wall": "x0",
+      "a": {
+        "v": 820,
+        "s": "A",
+        "note": "Fotóbecslés (IMG20260908174651.jpg, a kép jobb szélén)."
+      },
+      "y": {
+        "v": 1300,
+        "s": "A",
+        "note": "Fotóbecslés."
+      },
+      "photos": [
+        "IMG20260908174651.jpg"
+      ]
+    },
+    {
+      "id": "LK",
+      "kind": "wallLight",
+      "label": "Meglévő fali lámpakiállás – a fürdő- és a WC-ajtó között, fent",
+      "state": "existing",
+      "wall": "x0",
+      "a": {
+        "v": 2086,
+        "s": "A",
+        "note": "A fürdőajtótól kb. 100 mm-re az előszoba felé (E-M011); a fotón a két ajtó között.",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "E-M011",
+            "n": 100
+          }
+        ]
+      },
+      "y": {
+        "v": 2170,
+        "s": "A",
+        "note": "A fürdőajtó felett kb. 230 mm (E-M011): 1940 + 230 mm.",
+        "src": [
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "E-M011",
+            "n": 230
+          },
+          {
+            "sheet": "40 Előszoba + ajtók",
+            "key": "E-M009",
+            "n": 1940
+          }
+        ]
+      },
+      "photos": [
+        "IMG20260908174641.jpg",
+        "IMG20260908174651.jpg"
+      ],
+      "note": "Falra szerelt lámpa. A modell mennyezeti lámpahelyőrzője (L-K1) a közlekedő tengelyében van; a lámpák nem változtak."
+    }
+  ],
   "cameras": [
     {
       "name": "Előszoba felől",
@@ -448,6 +539,7 @@
   "missing": [
     "A közlekedő hossza közvetlen méréssel (előszoba vonala → háló felőli fal).",
     "A WC- és fürdőajtó nyitásiránya és zsanéroldala (fotó alapján közelítve).",
-    "Falvastagságok (WC/fürdő fala, háló felőli fal)."
+    "Falvastagságok (WC/fürdő fala, háló felőli fal).",
+    "Villamosság (réteg): a kapcsolók helye fotóbecslés; a fali lámpakiállás az E-M011 közelítő adata."
   ]
 }

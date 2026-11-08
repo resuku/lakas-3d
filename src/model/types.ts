@@ -429,6 +429,39 @@ export interface AccentLight {
   note?: string;
 }
 
+/**
+ * Villamos pont jelzése (Villamosság réteg): dugalj, kapcsoló, mennyezeti vagy fali lámpakiállás, adat- / optikai
+ * bevezetés, elosztótábla, kaputelefon. A teljes alu → réz felújításnál a meglévő pontok helyreferenciák, nem kötöttek.
+ */
+export type ElecKind = 'socket' | 'switch' | 'ceiling' | 'wallLight' | 'data' | 'panel' | 'intercom';
+
+export interface ElecPoint {
+  id: string;
+  kind: ElecKind;
+  label: string;
+  /** existing = meglévő; new = tervezett új kiállás; disused = régi, lezárt, használaton kívüli. */
+  state: 'existing' | 'new' | 'disused';
+  /** Falon lévő pont: a fal, a középpont a fal mentén (az opening offset irányában, mm) és a középpont magassága. */
+  wall?: WallId;
+  a?: Val;
+  y?: Val;
+  /** Mire vonatkozik az `y`: a szerelvény közepére (alapértelmezés) vagy az alsó élére (a napló „konnektor kezdete”). */
+  yTo?: 'center' | 'bottom';
+  /**
+   * Mért vízszintes távolság a legközelebbi tárgytól, ahogy a napló rögzíti (Méretek réteg): az érték, a tárgy
+   * megnevezése („a tok szélétől”) és az oldala a fal mentén (start = a kisebb `a` felé, end = a nagyobb felé).
+   * A szerelvény szélétől mérve.
+   */
+  ref?: { v: Val; from: string; side: 'start' | 'end' };
+  /** Mennyezeti kiállás: a helyiség mennyezeti lámpájának azonosítója (ceilingLights) – a pont a lámpa helyén van. */
+  light?: string;
+  /** Szerelvények száma (dupla dugalj = 2, egymás fölött). */
+  gang?: number;
+  /** Fotók, amelyeken a pont látszik (Képek/… mappa). */
+  photos?: string[];
+  note?: string;
+}
+
 export interface CameraPreset {
   name: string;
   pos: [number, number, number];
@@ -440,7 +473,11 @@ export interface Room {
   name: string;
   source: string;
   size: { x: Val; z: Val; h: Val };
-  north: { wall: WallId; s: Status; note: string };
+  /**
+   * Tájolás: `wall` az északi homlokzat felőli fal; `deg` ennek a falnak a kifelé mutató iránya fokban (északtól kelet
+   * felé). Hiányában 0, vagyis a fal pontosan északra néz.
+   */
+  north: { wall: WallId; s: Status; note: string; deg?: Val };
   walls: Record<WallId, WallDef>;
   openings: Opening[];
   radiators: Radiator[];
@@ -453,6 +490,8 @@ export interface Room {
   furniture?: FurnitureItem[];
   ceilingLights: CeilingLight[];
   accentLights: AccentLight[];
+  /** Villamos pontok jelzése (Villamosság réteg). */
+  electrical?: ElecPoint[];
   cameras: CameraPreset[];
   conflicts: string[];
   missing: string[];

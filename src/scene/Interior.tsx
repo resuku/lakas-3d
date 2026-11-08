@@ -14,6 +14,7 @@ import { mm, roomDims } from '../lib/geom';
 import { STATUS_INFO, worst } from '../lib/status';
 import { Box } from './Box';
 import { FurnitureModel } from './FurnitureModels';
+import { ElectricalCeiling } from './Electrical';
 import { setGhost } from './ghost';
 import { useStudio } from './studio';
 import { ceilingInfo, floorInfo, info, infoUrl } from '../lib/inspect';
@@ -195,6 +196,7 @@ export function Furniture({ room, variant, layers }: { room: Room; variant: Vari
   return (
     <>
       <Furnishing room={room} specs={specs} variant={variant} layers={layers} />
+      {layers.electrical && <ElectricalCeiling room={room} />}
       {(room.furniture ?? []).filter((n) => !hidden.has(n.id)).map((n) => (
         <group key={n.id} userData={info(`${room.name} – ${n.label}`, `${n.sx} × ${n.sz} × ${n.h} mm (${n.s})`, n.note)}>
         <Box

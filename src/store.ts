@@ -23,6 +23,8 @@ export interface Layers {
   furniture: boolean;
   /** Elhelyezett dekorelemek (növények, képek, akusztikus panelek); alapból rejtve. */
   decor: boolean;
+  /** Villamos pontok jelzése (dugaljak, kapcsolók, kiállások – room.electrical); alapból rejtve. */
+  electrical: boolean;
 }
 
 export interface CamPose {
@@ -148,7 +150,7 @@ function initialSettings() {
     activeId: DEFAULT_VARIANTS[0].id,
     sceneId: SCENES[0].id,
     light: clone(SCENES[0].settings),
-    layers: { status: false, zones: false, dims: false, doorsOpen: false, furniture: true, decor: false },
+    layers: { status: false, zones: false, dims: false, doorsOpen: false, furniture: true, decor: false, electrical: false },
     lightPlans: clone(DEFAULT_LIGHT_PLANS),
     // az első javaslat saját világítása (ha van)
     activePlanId: DEFAULT_LIGHT_PLANS.find((p) => p.id === DEFAULT_VARIANTS[0].lightPlanId)?.id ?? DEFAULT_LIGHT_PLANS[0].id,
@@ -163,7 +165,7 @@ function initialSettings() {
 }
 
 /** A mentett állapot verziója (localStorage és konfigurációs fájl). */
-export const STORE_VERSION = 13;
+export const STORE_VERSION = 14;
 
 /** A v6-ban törölt alapváltozatok (halszálkás J3, J12; termék nélküli A/B/C koncepciók) és terveik. */
 const REMOVED_VARIANTS = ['v-meleg', 'v-japandi', 'v-zsalya', 'j3-homok-agyag', 'j12-mediterran'];
@@ -227,6 +229,7 @@ export function smallDevice() {
 //      `compareId` törlődik, a `viewMode` 'compare' értéke 'split' lesz
 // v13: katalógusszín-javítás a termékfotó alapján (DOOR_HEX_FIXES): a mentett változat ajtószíne az újra, ha a
 //      változat ezt az ajtóterméket használja és a színe még a régi katalógusszín (kézi szín nem változik)
+// v14: Villamosság réteg (layers.electrical – alapból rejtve)
 const DOOR_HEX_FIXES: { product: string; from: string; to: string }[] = [{ product: 'door-ajtomester-charleston-tolgy', from: '#A18069', to: '#937159' }];
 const MOVED_FIXTURES: { id: string; from: [number, number]; to: [number, number] }[] = [
   { id: 'etk', from: [1720, 1700], to: [1720, 2050] },
@@ -322,6 +325,7 @@ function migrateState(persisted: unknown, version: number) {
       return fix ? { ...v, door: fix.to } : v;
     });
   }
+  if (version < 14 && s.layers && s.layers.electrical === undefined) s.layers = { ...s.layers, electrical: false };
   return s;
 }
 

@@ -134,6 +134,17 @@ Koordináták: minden helyiségnek saját x/z tengelye van. Ennek leírása a JS
 mezőjében és az Adatok fülön olvasható. A falon mért pozíció mindig a kisebb koordinátájú
 saroktól értendő.
 
+Villamos pontok (`electrical` a helyiség JSON-jában, Villamosság réteg): dugalj, kapcsoló, mennyezeti vagy fali
+lámpakiállás, adat- / optikai bevezetés, elosztótábla, kaputelefon. Falon lévő pontnál `wall`, `a` (a középpont a fal
+mentén, mint az opening `offset`) és `y` (a középpont magassága) – mindkettő `{v, s, note, src}`; mennyezeti kiállásnál
+`light` = a helyiség `ceilingLights` elemének azonosítója (a jel a lámpahelyőrző pontján van). `state`: `existing`
+(meglévő), `new` (tervezett új kiállás), `disused` (régi, lezárt). A teljes alu → réz felújításnál a meglévő pontok
+helyreferenciák. A nappaliban és a dolgozóban a pontok a naplóból valók, a többi helyiségben fotóbecslések (`A`).
+`yTo: "bottom"`: az `y` a szerelvény alsó éléig mért (a napló „konnektor kezdete”); `ref`: a napló mért vízszintes
+távolsága a legközelebbi tárgytól (`from`, pl. „a tok szélétől”; `side`: a tárgy a fal mentén a kisebb vagy a nagyobb
+`a` felé), a szerelvény szélétől. A Méretek és a Villamosság réteg együtt a dugaljaknál és kapcsolóknál méretvonallal
+mutatja a padlótól mért magasságot és – ha van `ref` – a vízszintes távolságot.
+
 A berendezési javaslat (`src/data/furnishing.ts`, kézzel karbantartva) bútor-specifikációkat tartalmaz: típus, befoglaló méret,
 hely és elforgatás a helyiség rendszerében (mm), státusz (`s`), valamint a méret forrása (`basis`: naplósor, lakberendezői
 konszignáció vagy feltételezés). A felmérés JSON-jába nem kerül, és a `check-data` sem ellenőrzi.
@@ -252,8 +263,14 @@ szkriptek fejlécében olvasható.
   mennyezeti és kiegészítő lámpák lumennel, színhőmérséklettel és fényerővel,
   expozíció-korrekció. A jelenetek egymáshoz viszonyítva összevethetők, az abszolút
   fényerő nem hiteles.
+  - Tájolás: a helyiség `north.wall` mezője az északi homlokzat felőli fal, a `north.deg` ennek a kifelé mutató iránya
+    fokban (2026-11-08-i fotómérés: 6°, az erkélyhomlokzat 186°). Az oldalsáv kiírja az ablak tájolását.
+  - A besütő nap (az ablakon belépő közvetlen fényáram) beleszámít az átlagos megvilágításba és az expozícióba, a
+    visszavert része a szórt fénybe (`SUN_BOUNCE_RHO`, `lib/lighting.ts`). Az erkélyfödém és a korlát takarása
+    még nincs a modellben, ezért a napfolt a valóságosnál mélyebbre ér.
 - Rétegek: adatbiztonság-színezés, funkcionális zónák (ajtónyitás, erkélyajtó megközelítése, klíma légárama, a radiátor előtti
-  szabad zóna), méretcímkék, nyitott ajtók.
+  szabad zóna), méretcímkék, nyitott ajtók, villamosság (a meglévő dugaljak, kapcsolók és kiállások, valamint a tervezett
+  új kiállások jelzése színes kerettel, a mennyezeten kereszttel jelölt körrel; a lámpák mellette változatlanul látszanak).
 - Ellenőrzések: függöny és radiátor ütközése (a sarokban is), közlekedősáv szélessége, a színvilágtól elütő bútor és dekor,
   ellentmondások és hiányzó adatok a JSON-ból.
 - Képernyőkép mentése (két nézetes módban a két kép egymás mellé kerül).

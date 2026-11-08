@@ -68,7 +68,12 @@
   "north": {
     "wall": "z0",
     "s": "D",
-    "note": "A háló (és a dolgozó) ablaka északra néz (10 Háló); a szkennelés szerint ezek a helyiségek a dolgozó felőli fal mögött, a szemközti homlokzaton vannak. Az erkély így déli tájolású."
+    "note": "A háló (és a dolgozó) ablaka északra néz (10 Háló); a szkennelés szerint ezek a helyiségek a dolgozó felőli fal mögött, a szemközti homlokzaton vannak. Az erkély így déli tájolású. A 2026-11-08-i fotómérés megerősítette (lásd deg).",
+    "deg": {
+      "v": 6,
+      "s": "D",
+      "note": "A dolgozó felőli (északi) fal kifelé 6°-ra néz, az erkélyhomlokzat 186°-ra (±2°). Fotómérés 2026-11-08 (Képek/Scan, IMG_0010 10:44 és IMG_0012 14:02): a szoba tengelyének és a napfolt széleinek eltűnési pontja, az időponthoz számolt napállással – a két kép 185,2°-ot és 186,2°-ot ad. Az iPhone iránytűje a nappaliban használhatatlan volt (ugyanarra a nézetre 103° és 209°)."
+    }
   },
   "walls": {
     "z0": {
@@ -542,6 +547,418 @@
       "note": "Tervezési helyőrző – nem kiválasztott termék. A kanapé erkély felőli végénél (a korábbi z = 3800 a térelválasztóba esne)."
     }
   ],
+  "electrical": [
+    {
+      "id": "K1",
+      "kind": "switch",
+      "label": "Kapcsoló – az előszoba felőli átjáró mellett",
+      "state": "existing",
+      "wall": "x1",
+      "a": {
+        "v": 4419,
+        "s": "D",
+        "note": "7944 − 3710 mm (a nyílás erkély felőli széle, N-M011) + 85 mm a toktól (N-M018); a tok szélessége a modellben 60 mm (feltételezés), a szerelvény 80 mm-es, a pont a közepe.",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M011",
+            "n": 3710
+          },
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M018",
+            "n": 85
+          }
+        ]
+      },
+      "y": {
+        "v": 1320,
+        "s": "M",
+        "note": "Padlószint felett (N-M018).",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M018",
+            "n": 1320
+          }
+        ]
+      },
+      "ref": {
+        "v": {
+          "v": 85,
+          "s": "M",
+          "src": [
+            {
+              "sheet": "20 Nappali",
+              "key": "N-M018",
+              "n": 85
+            }
+          ]
+        },
+        "from": "a tok szélétől",
+        "side": "start"
+      },
+      "photos": [
+        "IMG20260907111331.jpg",
+        "IMG20260907111436.jpg",
+        "IMG20260907111432.jpg"
+      ]
+    },
+    {
+      "id": "K2",
+      "kind": "switch",
+      "label": "Kapcsoló – a közlekedő felőli átjáró mellett",
+      "state": "existing",
+      "wall": "x1",
+      "a": {
+        "v": 1557,
+        "s": "D",
+        "note": "7944 − 6572 mm (a nyílás erkély felőli széle, N-M012) + 85 mm a toktól (N-M019); a tok szélessége a modellben 60 mm (feltételezés), a szerelvény 80 mm-es, a pont a közepe.",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M012",
+            "n": 6572
+          },
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M019",
+            "n": 85
+          }
+        ]
+      },
+      "y": {
+        "v": 1320,
+        "s": "M",
+        "note": "Padlószint felett (N-M019).",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M019",
+            "n": 1320
+          }
+        ]
+      },
+      "ref": {
+        "v": {
+          "v": 85,
+          "s": "M",
+          "src": [
+            {
+              "sheet": "20 Nappali",
+              "key": "N-M019",
+              "n": 85
+            }
+          ]
+        },
+        "from": "a tok szélétől",
+        "side": "start"
+      },
+      "photos": [
+        "IMG20260907111324.jpg"
+      ]
+    },
+    {
+      "id": "D1",
+      "kind": "socket",
+      "label": "Dugalj 1 – a közlekedő felőli átjáró mellett",
+      "state": "existing",
+      "wall": "x1",
+      "a": {
+        "v": 1542,
+        "s": "D",
+        "note": "7944 − 6572 mm (N-M012) + 70 mm a tok szélétől az erkély felé (N-M013); a tok szélessége a modellben 60 mm (feltételezés), a szerelvény 80 mm-es, a pont a közepe.",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M012",
+            "n": 6572
+          },
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M013",
+            "n": 70
+          }
+        ]
+      },
+      "y": {
+        "v": 215,
+        "s": "M",
+        "note": "A napló szerint 215 mm a padló fölött; hogy alsó él vagy közép, nincs rögzítve – a modell középnek veszi.",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M013",
+            "n": 215
+          }
+        ]
+      },
+      "ref": {
+        "v": {
+          "v": 70,
+          "s": "M",
+          "src": [
+            {
+              "sheet": "20 Nappali",
+              "key": "N-M013",
+              "n": 70
+            }
+          ]
+        },
+        "from": "a tok szélétől",
+        "side": "start"
+      },
+      "photos": [
+        "IMG20260907111324.jpg"
+      ]
+    },
+    {
+      "id": "D2",
+      "kind": "socket",
+      "label": "Dugalj 2 – TV-fal, az átjáró mellett (dupla)",
+      "state": "existing",
+      "wall": "x1",
+      "a": {
+        "v": 4954,
+        "s": "D",
+        "note": "7944 − 3710 mm (N-M011) + 620 mm a tok jobb oldalától (N-M014); a tok szélessége a modellben 60 mm (feltételezés), a szerelvény 80 mm-es, a pont a közepe.",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M011",
+            "n": 3710
+          },
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M014",
+            "n": 620
+          }
+        ]
+      },
+      "y": {
+        "v": 215,
+        "s": "M",
+        "note": "A napló szerint 215 mm a padló fölött; hogy alsó él vagy közép, nincs rögzítve – a modell középnek veszi.",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M014",
+            "n": 215
+          }
+        ]
+      },
+      "ref": {
+        "v": {
+          "v": 620,
+          "s": "M",
+          "src": [
+            {
+              "sheet": "20 Nappali",
+              "key": "N-M014",
+              "n": 620
+            }
+          ]
+        },
+        "from": "a tok szélétől",
+        "side": "start"
+      },
+      "gang": 2,
+      "photos": [
+        "IMG20260907111337.jpg",
+        "IMG20260907111432.jpg",
+        "IMG20260907111525.jpg"
+      ],
+      "note": "Függőleges, kétszerelvényes dugalj; itt csatlakozik a router és a TV."
+    },
+    {
+      "id": "OPT",
+      "kind": "data",
+      "label": "Optikai / internet-bevezetés (fedél nélküli doboz)",
+      "state": "existing",
+      "wall": "x1",
+      "a": {
+        "v": 4790,
+        "s": "A",
+        "note": "Fotóbecslés (IMG20260907111337.jpg): a tok és a Dugalj 2 között, a dugaljhoz közelebb."
+      },
+      "y": {
+        "v": 205,
+        "s": "A",
+        "note": "Fotóbecslés: kb. a Dugalj 2 magasságában."
+      },
+      "photos": [
+        "IMG20260907111337.jpg"
+      ],
+      "note": "Fedél nélküli süllyesztett doboz, belőle vékony fehér kábel megy a routerhez. A user 2026-11-05-én megerősítette, hogy ez az optikai bevezetés – a TV-fal és a router helyét befolyásolja."
+    },
+    {
+      "id": "D3",
+      "kind": "socket",
+      "label": "Dugalj 3 – TV-fal, a radiátor mellett",
+      "state": "existing",
+      "wall": "x1",
+      "a": {
+        "v": 6648,
+        "s": "D",
+        "note": "A Dugalj 2-től 1694 mm az erkély felé (N-M015).",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M015",
+            "n": 1694
+          }
+        ]
+      },
+      "y": {
+        "v": 215,
+        "s": "M",
+        "note": "A napló szerint 215 mm a padló fölött; hogy alsó él vagy közép, nincs rögzítve – a modell középnek veszi.",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M015",
+            "n": 215
+          }
+        ]
+      },
+      "ref": {
+        "v": {
+          "v": 1694,
+          "s": "M",
+          "note": "Relatív távolság a 2. dugaljtól (N-M015).",
+          "src": [
+            {
+              "sheet": "20 Nappali",
+              "key": "N-M015",
+              "n": 1694
+            }
+          ]
+        },
+        "from": "a Dugalj 2-től",
+        "side": "start"
+      },
+      "photos": [
+        "IMG20260907111344.jpg",
+        "IMG20260907111349.jpg"
+      ]
+    },
+    {
+      "id": "D4",
+      "kind": "socket",
+      "label": "Dugalj 4 – hosszú fal, a klíma alatt",
+      "state": "existing",
+      "wall": "x0",
+      "a": {
+        "v": 6690,
+        "s": "D",
+        "note": "Az erkélyfaltól 1214 mm (N-M016): 7944 − 1214 − 40 mm (fél szerelvény).",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M016",
+            "n": 1214
+          }
+        ]
+      },
+      "y": {
+        "v": 215,
+        "s": "M",
+        "note": "A napló szerint 215 mm a padló fölött; hogy alsó él vagy közép, nincs rögzítve – a modell középnek veszi.",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M016",
+            "n": 215
+          }
+        ]
+      },
+      "ref": {
+        "v": {
+          "v": 1214,
+          "s": "M",
+          "src": [
+            {
+              "sheet": "20 Nappali",
+              "key": "N-M016",
+              "n": 1214
+            }
+          ]
+        },
+        "from": "az erkélyfaltól",
+        "side": "end"
+      },
+      "photos": [
+        "IMG20260907111454.jpg"
+      ]
+    },
+    {
+      "id": "D5",
+      "kind": "socket",
+      "label": "Dugalj 5 – hosszú fal",
+      "state": "existing",
+      "wall": "x0",
+      "a": {
+        "v": 5768,
+        "s": "U",
+        "note": "A user szerint (2026-11-05) ez a hely biztosan téves; a pontos helyet később megerősíti. Addig a napló értelmezése szerint: az erkélyfaltól 2136 mm (N-M017): 7944 − 2136 − 40 mm (fél szerelvény).",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M017",
+            "n": 2136
+          }
+        ]
+      },
+      "y": {
+        "v": 215,
+        "s": "M",
+        "note": "A napló szerint 215 mm a padló fölött; hogy alsó él vagy közép, nincs rögzítve – a modell középnek veszi.",
+        "src": [
+          {
+            "sheet": "20 Nappali",
+            "key": "N-M017",
+            "n": 215
+          }
+        ]
+      },
+      "ref": {
+        "v": {
+          "v": 2136,
+          "s": "U",
+          "note": "A napló mért értéke (N-M017), de a user szerint a hely téves – a referencia vagy a fal értelmezése hibás lehet; megerősítésre vár.",
+          "src": [
+            {
+              "sheet": "20 Nappali",
+              "key": "N-M017",
+              "n": 2136
+            }
+          ]
+        },
+        "from": "az erkélyfaltól",
+        "side": "end"
+      },
+      "photos": [
+        "IMG20260907111454.jpg",
+        "IMG20260907111450.jpg"
+      ]
+    },
+    {
+      "id": "MK1",
+      "kind": "ceiling",
+      "label": "Új mennyezeti kiállás – a kanapé és a TV fölött",
+      "state": "new",
+      "light": "L-N1",
+      "note": "User, 2026-11-05: az új terv két külön mennyezeti kiállással számol. Jelenleg nincs mennyezeti kiállás (N-M020: valószínűleg volt, de eltakarták); a gipszkarton koszorú LED-je működik. A pont a modell lámpahelyőrzőjén (L-N1) van, ahol a világítási tervek lámpája is."
+    },
+    {
+      "id": "MK2",
+      "kind": "ceiling",
+      "label": "Új mennyezeti kiállás – az étkező fölött",
+      "state": "new",
+      "light": "L-N2",
+      "note": "User, 2026-11-05. A hely az étkezőasztal javasolt helye fölött (ND-010: kb. 2050 mm a dolgozó felőli faltól), a lámpahelyőrző (L-N2) pontján."
+    }
+  ],
   "cameras": [
     {
       "name": "Dolgozó felől",
@@ -598,7 +1015,8 @@
   ],
   "conflicts": [
     "Hossz: a teljes hossz (7940 / 7948 mm) a user szerint falsíktól falsíkig mért. A szkennelés 7859 mm-t ad (−85 mm), és a közlekedő felőli fal menti láncméretek is rövidebbek (N-M011: 3710 + 886 + 3229 = 7825 mm, N-M012: 6572 + 782 + 457 = 7811 mm). Mivel a szkennelés az erkélyfaltól mért nyíláspozíciókat 2–25 mm-re adja vissza, az eltérés a dolgozó felőli végen van. Lehet, hogy ez a fal nem sík, például a bontandó szekrény mögött beugrik. A modell 7944 mm-rel számol, a közlekedő felőli nyílásokat az erkélyfaltól méri.",
-    "Radiátor: a napló »oldalfali referencia-távolság 2045 mm« adata (N-M010) nem egyeztethető a 95 mm-es sarokponttal. A modell a 2026-11-01-i saroktávolságot követi."
+    "Radiátor: a napló »oldalfali referencia-távolság 2045 mm« adata (N-M010) nem egyeztethető a 95 mm-es sarokponttal. A modell a 2026-11-01-i saroktávolságot követi.",
+    "Dugalj 5: a modell a napló N-M017 sora szerint a hosszú falon, az erkélyfaltól 2136 mm-re mutatja, de a user szerint (2026-11-05) ez biztosan téves; a pontos helyet megerősíti."
   ],
   "missing": [
     "Kontrollmérés a dolgozó felőli falig: a közlekedő felőli fal mentén (a radiátoros saroktól) és a hosszú fal mentén, padló közelében.",
@@ -607,6 +1025,6 @@
     "Radiátor falhézaga és csőbekötése fotóbecslés.",
     "Falvastagságok: a közlekedő felőli kb. 180 mm (szkennelésből levezetve), a többi feltételezés.",
     "A bontott szekrény és gipszkarton helyén a padló- és mennyezet-helyreállítás a modellben nem jelenik meg.",
-    "Dugaljak és kapcsolók nincsenek modellezve: teljes villamos felújítás lesz (alu → réz)."
+    "Villamosság (réteg): a meglévő dugaljak és kapcsolók a napló alapján, a tokhoz mért távolságok 60 mm-es tokszélességgel; a dugaljak 215 mm-es magassága alsó él vagy közép – nincs rögzítve. A teljes alu → réz felújításnál a meglévő pontok csak helyreferenciák."
   ]
 }

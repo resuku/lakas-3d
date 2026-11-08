@@ -404,6 +404,11 @@ select,
   font-weight: 700;
 }
 
+/* villamos pont mérete (Méretek + Villamosság réteg): kétsoros, a szerelvény mellett */
+.elec-label {
+  line-height: 1.35;
+}
+
 /* alsó panel */
 .bottom {
   display: flex;

@@ -63,7 +63,12 @@
   "north": {
     "wall": "z1",
     "s": "M",
-    "note": "Az ablak északi tájolású (10 Háló – Tájolás, rögzített). A lakberendezői alaprajz északi nyila ennek ellentmond; a felmérés az irányadó."
+    "note": "Az ablak északi tájolású (10 Háló – Tájolás, rögzített). A lakberendezői alaprajz északi nyila ennek ellentmond; a felmérés az irányadó, és a 2026-11-08-i fotómérés is ezt adja (lásd deg).",
+    "deg": {
+      "v": 6,
+      "s": "D",
+      "note": "A nappali fotóméréséből (2026-11-08): a homlokzatok párhuzamosak, az északi homlokzat kifelé 6°-ra néz (±2°)."
+    }
   },
   "walls": {
     "z0": {
@@ -478,6 +483,60 @@
       "note": "Tervezési helyőrző éjjeliszekrénnyel – nem kiválasztott termék."
     }
   ],
+  "electrical": [
+    {
+      "id": "K1",
+      "kind": "switch",
+      "label": "Kapcsoló – az ajtófalon, az ajtótól az ágyfal felé",
+      "state": "existing",
+      "wall": "z0",
+      "a": {
+        "v": 1325,
+        "s": "A",
+        "note": "Fotóbecslés (IMG20260905181643.jpg, IMG20260830165011.jpg): kb. 375 mm-re a tok szélétől."
+      },
+      "y": {
+        "v": 1320,
+        "s": "A",
+        "note": "Feltételezés: a nappali kapcsolóinak magassága (N-M018)."
+      },
+      "photos": [
+        "IMG20260905181643.jpg",
+        "IMG20260830165011.jpg",
+        "IMG20260830165054.jpg"
+      ]
+    },
+    {
+      "id": "DR",
+      "kind": "socket",
+      "label": "Régi, lezárt dugalj – az ágy mögött",
+      "state": "disused",
+      "wall": "x0",
+      "a": {
+        "v": 1740,
+        "s": "U",
+        "note": "Az ágy mögött (10 Háló: Régi konnektor, H-019); a pontos hely nincs mérve, és fotó sincs (P-015). Jelzésszerűen az ágy közepe mögött."
+      },
+      "y": {
+        "v": 300,
+        "s": "U",
+        "note": "Nincs mérve; jelzésszerű."
+      },
+      "note": "Használhatatlan és lezárva; a napló szerint az új tervnél nem kell hozzá ragaszkodni. Jelenleg nincs használható fali konnektor a szobában."
+    },
+    {
+      "id": "MK1",
+      "kind": "ceiling",
+      "label": "Meglévő mennyezeti lámpakiállás",
+      "state": "existing",
+      "light": "L-H1",
+      "photos": [
+        "IMG20260905181807.jpg",
+        "IMG20260905181814.jpg"
+      ],
+      "note": "A kiállás helye nincs mérve (H-020); a modellben helyiségközép."
+    }
+  ],
   "cameras": [
     {
       "name": "Ajtóból",
@@ -543,7 +602,8 @@
     "Helyi 20–30 mm-es falvastagítás az ágy mellett (M-036) – nincs modellezve.",
     "Falvastagságok (legacy alaprajzból).",
     "Klíma helye és mérete: három jelölt modellezve (A: ágyfal az ablak felőli sarokban, B: ablakfal a radiátor fölött, C: ajtófal); döntés, típus és teljesítmény még hiányzik.",
-    "Éjjeliszekrények mérete (a modellben becslés)."
+    "Éjjeliszekrények mérete (a modellben becslés).",
+    "Villamosság (réteg): a régi, lezárt dugalj helye az ágy mögött nincs mérve; a kapcsoló helye fotóbecslés."
   ],
   "units": [
     {

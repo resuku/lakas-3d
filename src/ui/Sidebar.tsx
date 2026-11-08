@@ -3,7 +3,8 @@ import { COLOR_NOTE, DOOR_COLORS, FABRICS, PAINTS, TILE_TONES, WOOD_TONES } from
 import { WALL_PANELS } from '../data/products';
 import { getRoom, ROOMS } from '../data/rooms';
 import { SCENES } from '../data/scenes';
-import { computeLighting, formatHour } from '../lib/lighting';
+import { compassLabel, computeLighting, formatHour } from '../lib/lighting';
+import { wallBearing } from '../lib/geom';
 import { roomLampLm } from '../lib/fixtures';
 import { LOCATION } from '../lib/sun';
 import { STATUS_INFO } from '../lib/status';
@@ -20,6 +21,7 @@ import { findSubVariant, subVariantsOf } from '../data/subVariants';
 import { VariantOptions } from './VariantOptions';
 import { DecorPanel } from './DecorPanel';
 import { useLocalTextureCount } from '../lib/localTextures';
+import { ELEC_LEGEND } from '../lib/electrical';
 
 const MONTHS = ['jan.', 'febr.', 'márc.', 'ápr.', 'máj.', 'jún.', 'júl.', 'aug.', 'szept.', 'okt.', 'nov.', 'dec.'];
 
@@ -536,6 +538,17 @@ export function Sidebar() {
   const fileInput = useRef<HTMLInputElement>(null);
   const plan = s.lightPlans.find((p) => p.id === s.activePlanId) ?? s.lightPlans[0];
   const lr = useMemo(() => computeLighting(room, s.light, roomLampLm(room, plan, s.light, s.lampsOff)), [room, s.light, plan, s.lampsOff]);
+  // az ablakos fal(ak) tájolása, pl. „186° (D)”
+  const windowFacing = useMemo(
+    () =>
+      [...new Set(room.openings.filter((o) => o.kind === 'window').map((o) => o.wall))]
+        .map((w) => {
+          const b = wallBearing(room, w);
+          return `${Math.round(b)}° (${compassLabel(b)})`;
+        })
+        .join(', '),
+    [room],
+  );
 
   const exportVariants = () => download('lakas-3d-valtozatok.json', new Blob([JSON.stringify(s.variants, null, 2)], { type: 'application/json' }));
   const importVariants = async (f: File) => {
@@ -655,6 +668,17 @@ export function Sidebar() {
         <Toggle checked={s.layers.zones} onChange={(b) => s.setLayer('zones', b)} label="Funkcionális zónák (ajtónyitás, radiátor)" />
         <Toggle checked={s.layers.dims} onChange={(b) => s.setLayer('dims', b)} label="Méretek" />
         <Toggle checked={s.layers.doorsOpen} onChange={(b) => s.setLayer('doorsOpen', b)} label="Ajtók nyitva" />
+        <Toggle checked={s.layers.electrical} onChange={(b) => s.setLayer('electrical', b)} label="Villamosság (kapcsolók, dugaljak, kiállások)" />
+        {s.layers.electrical && (
+          <div className="legend">
+            {ELEC_LEGEND.map(([label, color]) => (
+              <span key={label}>
+                <i style={{ background: color }} />
+                {label}
+              </span>
+            ))}
+          </div>
+        )}
       </Section>
       )}
       {!s.details && (
@@ -758,6 +782,8 @@ export function Sidebar() {
           <p className="note">
             Nap: {lr.sunAlt.toFixed(0)}° magasan, {lr.sunAz.toFixed(0)}° azimut ({LOCATION.label}).{' '}
             {lr.sunAlt <= 0 ? 'A nap a horizont alatt van.' : lr.sunInFront ? 'A nap az ablak oldalán áll – direkt napfény bejuthat.' : 'A nap az épület másik oldalán – csak szórt égboltfény.'}
+            {windowFacing && ` Az ablak ${windowFacing} felé néz.`}
+            {lr.sunAlt > 0 && ` Átlagos megvilágítás nappal kb. ${Math.round(lr.eDay + lr.eSun)} lux${lr.eSun > 0 ? `, ebből besütő nap ${Math.round(lr.eSun)}` : ''}.`}
           </p>
         </Field>
         <LampControls label="Mennyezeti lámpák (függeszték, plafon, sín)" g={s.light.ceiling} onChange={(g) => s.setLight((l) => ({ ...l, ceiling: g }))} />

@@ -48,7 +48,12 @@
   "north": {
     "wall": "z1",
     "s": "D",
-    "note": "A nappali tájolásából (északi fal = dolgozó felőli fal), a szkennelés közös koordinátarendszerén át."
+    "note": "A nappali tájolásából (északi fal = dolgozó felőli fal), a szkennelés közös koordinátarendszerén át.",
+    "deg": {
+      "v": 6,
+      "s": "D",
+      "note": "A nappali fotóméréséből (2026-11-08): a homlokzatok párhuzamosak, az északi homlokzat kifelé 6°-ra néz (±2°)."
+    }
   },
   "walls": {
     "z0": {
@@ -327,6 +332,100 @@
     }
   ],
   "accentLights": [],
+  "electrical": [
+    {
+      "id": "K1",
+      "kind": "switch",
+      "label": "Kapcsoló – a tároló mellett, a bejárat felőli oldalon",
+      "state": "existing",
+      "wall": "z1",
+      "a": {
+        "v": 715,
+        "s": "A",
+        "note": "Fotóbecslés (IMG20260908174617.jpg, IMG20260908174607.jpg): kb. 145 mm-re a tároló tokjától."
+      },
+      "y": {
+        "v": 1300,
+        "s": "A",
+        "note": "Fotóbecslés."
+      },
+      "photos": [
+        "IMG20260908174617.jpg",
+        "IMG20260908174607.jpg"
+      ]
+    },
+    {
+      "id": "K2",
+      "kind": "switch",
+      "label": "Kapcsoló – a bejárati ajtó mellett, a konyha felőli oldalon",
+      "state": "existing",
+      "wall": "x0",
+      "a": {
+        "v": 210,
+        "s": "A",
+        "note": "Fotóbecslés (IMG20260908174607.jpg): kb. 110 mm-re a bejárati ajtó tokjától."
+      },
+      "y": {
+        "v": 1400,
+        "s": "A",
+        "note": "Fotóbecslés."
+      },
+      "photos": [
+        "IMG20260908174607.jpg",
+        "IMG20260908174625.jpg"
+      ]
+    },
+    {
+      "id": "KT",
+      "kind": "intercom",
+      "label": "Kaputelefon",
+      "state": "existing",
+      "wall": "z0",
+      "a": {
+        "v": 200,
+        "s": "A",
+        "note": "Fotóbecslés (IMG20260908174607.jpg, IMG20260908174625.jpg): a konyhafalon, a bejárati sarok mellett."
+      },
+      "y": {
+        "v": 1450,
+        "s": "A",
+        "note": "Fotóbecslés."
+      },
+      "photos": [
+        "IMG20260908174607.jpg",
+        "IMG20260908174625.jpg"
+      ]
+    },
+    {
+      "id": "EL",
+      "kind": "panel",
+      "label": "Elosztótábla (ABB kiselosztó) – a bejárati ajtó fölött",
+      "state": "existing",
+      "wall": "x0",
+      "a": {
+        "v": 797,
+        "s": "A",
+        "note": "Fotóbecslés (IMG20260908174607.jpg): a bejárati ajtó fölött középen (380 + 834 / 2 mm)."
+      },
+      "y": {
+        "v": 2420,
+        "s": "A",
+        "note": "Fotóbecslés: alsó éle kb. 2290, felső kb. 2550 mm."
+      },
+      "photos": [
+        "IMG20260908174607.jpg"
+      ],
+      "note": "Falon kívüli kiselosztó doboz ABB címkével. Az alu → réz felújításnál a villanyszerelő dönt a cseréjéről és a helyéről."
+    },
+    {
+      "id": "MK1",
+      "kind": "ceiling",
+      "label": "Meglévő mennyezeti lámpakiállás",
+      "state": "existing",
+      "light": "L-E1",
+      "note": "E-M010: kb. 1400 mm a bejárati ajtótól (közelítő)."
+    }
+  ],
   "cameras": [
     {
       "name": "Bejárattól",
@@ -388,6 +487,7 @@
     "Bejárati ajtó lézeres mérete és nyitásiránya (a modell a szkennelt 834 × 2003 mm-es nyílást mutatja).",
     "Tároló szabad nyílása lézerrel (szkennelés 552 mm; tok külső 780 mm).",
     "Falvastagságok (konyhafal, tároló fala, bejárati fal).",
-    "Fűtőtest az előszobában (a fotókon nem látszik; nincs felmérve)."
+    "Fűtőtest az előszobában (a fotókon nem látszik; nincs felmérve).",
+    "Villamosság (réteg): a kapcsolók, a kaputelefon és az elosztó helye fotóbecslés (a napló szerint a meglévő pontokat nem mérjük tovább)."
   ]
 }

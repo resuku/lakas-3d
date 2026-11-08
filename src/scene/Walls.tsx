@@ -17,6 +17,7 @@ import { Wardrobe } from './Wardrobe';
 import { Box } from './Box';
 import { setGhost } from './ghost';
 import { useLocalTextures } from '../lib/localTextures';
+import { ElecWallDims, ElecWallMark } from './Electrical';
 
 const FLOOR_OPENING = 0.001;
 
@@ -212,6 +213,15 @@ function WallContent({ room, f, variant, layers, connected }: { room: Room; f: W
             <PipeUnit p={p} tint={st ? STATUS_INFO[p.s].color : null} />
           </group>
         ))}
+      {layers.electrical &&
+        (room.electrical ?? [])
+          .filter((p) => p.wall === id && !p.light)
+          .map((p) => (
+            <group key={p.id}>
+              <ElecWallMark room={room} p={p} />
+              {layers.dims && <ElecWallDims p={p} />}
+            </group>
+          ))}
       {skH > 0 && (
         <group userData={info('Szegélyléc', `${variant.skirting.h} mm, ${{ wall: 'falszínű', door: 'ajtószínű', white: 'fehér' }[variant.skirting.mode]}`)}>
           <Skirting length={f.length} cuts={cuts} h={skH} color={st ? '#9e9e9e' : skColor} />

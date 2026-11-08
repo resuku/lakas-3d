@@ -5,7 +5,7 @@
 // abszolút fényerőként nem.
 
 import * as THREE from 'three';
-import type { LightSettings, Room } from '../model/types';
+import type { LightSettings, Room, WallId } from '../model/types';
 import { kelvinColor } from './color';
 import { compass, mm, roomDims } from './geom';
 import { sunPosition } from './sun';
@@ -13,6 +13,21 @@ import { sunPosition } from './sun';
 const YEAR = 2026;
 /** Az ablak felületi fényének aránya az égbolt-luminanciához (üveg, keret, takarás). */
 export const WINDOW_FACTOR = 0.6;
+/**
+ * A besütő napfolt visszavert része (világos laminált / parketta padló reflexiója). Kalibrálás 2026-11-08: a napos
+ * nappali és az északi dolgozó fotóinak EXIF-fényértéke 10:44-kor 8,9×, 14:02-kor 7,7× különbséget mutatott; a modell
+ * a besütő nappal 7,1×-et és 6,7×-et ad (nélküle 1,1×-et adott). A fotók ablakot is mutatnak, ezért ez csak durva
+ * egyezés, nem mérés.
+ */
+export const SUN_BOUNCE_RHO = 0.4;
+
+/** A falak kifelé mutató normálisa a helyiség rendszerében. */
+const OUT: Record<WallId, THREE.Vector3> = {
+  z0: new THREE.Vector3(0, 0, -1),
+  z1: new THREE.Vector3(0, 0, 1),
+  x0: new THREE.Vector3(-1, 0, 0),
+  x1: new THREE.Vector3(1, 0, 0),
+};
 
 export interface LightingResult {
   sunAlt: number;
@@ -27,7 +42,11 @@ export interface LightingResult {
   horizon: THREE.Color;
   ground: THREE.Color;
   hemiI: number;
+  /** A belső felületek átlagos megvilágítása (lux) az égboltfénytől. */
   eDay: number;
+  /** Ugyanez a besütő naptól (a napfolttal együtt); árnyékos oldalon 0. */
+  eSun: number;
+  /** Ugyanez a bekapcsolt lámpáktól. */
   eLamps: number;
   exposure: number;
 }
@@ -90,20 +109,22 @@ export function computeLighting(room: Room, ls: LightSettings, lampLm: number): 
     .reduce((a, o) => a + mm(o.width.v) * mm(o.height.v) * (o.kind === 'window' ? 1 : (o.borrowLight ?? 0)), 0);
   const eDay = (Math.PI * skyL * WINDOW_FACTOR * winArea * 1.3) / surfaces;
 
+  // Besütő nap: az ablakon belépő közvetlen fényáram (napfény × az ablak napirányra vetített felülete × áteresztés).
+  // A folt maga a nap fényforrásából látszik; a visszavert része viszont csak így kerül a szórt fénybe, és az
+  // expozíció is a besütő nappal együtt számolt átlaghoz igazodik.
+  const sunFlux = room.openings
+    .filter((o) => o.kind === 'window')
+    .reduce((a, o) => a + sunLux * Math.max(sunDir.dot(OUT[o.wall]), 0) * mm(o.width.v) * mm(o.height.v) * WINDOW_FACTOR, 0);
+  const eSun = (sunFlux * 1.3) / surfaces;
+
   const eLamps = (lampLm * 0.5) / floorArea;
 
   // Expozíció az átlagos megvilágításhoz; 300 lux alatt csak részleges adaptáció,
   // így az esti, tompított jelenet sötétebb is marad.
-  const eRef = Math.max(eDay + eLamps, 3);
+  const eRef = Math.max(eDay + eSun + eLamps, 3);
   const exposure = (1.8 / eRef) * Math.min(1, Math.pow(eRef / 300, 0.25)) * Math.pow(2, ls.ev);
 
-  const sunInFront =
-    sunLux > 0 &&
-    room.openings.some((o) => {
-      if (o.kind !== 'window') return false;
-      const out = { z0: new THREE.Vector3(0, 0, -1), z1: new THREE.Vector3(0, 0, 1), x0: new THREE.Vector3(-1, 0, 0), x1: new THREE.Vector3(1, 0, 0) }[o.wall];
-      return sunDir.dot(out) > 0.05;
-    });
+  const sunInFront = sunLux > 0 && room.openings.some((o) => o.kind === 'window' && sunDir.dot(OUT[o.wall]) > 0.05);
 
   return {
     sunAlt: alt,
@@ -118,11 +139,19 @@ export function computeLighting(room: Room, ls: LightSettings, lampLm: number): 
     horizon,
     ground,
     // ablaktalan helyiségben a beszűrődő fény csak szórt fényként jelenik meg, ezért ott ez viszi a teljes részt
-    hemiI: eDay * (hasWindow ? 0.6 : 1.8) + eLamps * 0.35,
+    // a napfolt visszavert része teljes egészében ide kerül (a nap fényforrása csak a foltot világítja meg)
+    hemiI: eDay * (hasWindow ? 0.6 : 1.8) + eSun * SUN_BOUNCE_RHO + eLamps * 0.35,
     eDay,
+    eSun,
     eLamps,
     exposure,
   };
+}
+
+const COMPASS_16 = ['É', 'ÉÉK', 'ÉK', 'KÉK', 'K', 'KDK', 'DK', 'DDK', 'D', 'DDNy', 'DNy', 'NyDNy', 'Ny', 'NyÉNy', 'ÉNy', 'ÉÉNy'];
+/** Iránytű-fok → 16 irányú égtájjelölés (É, ÉÉK, …). */
+export function compassLabel(deg: number) {
+  return COMPASS_16[Math.round((((deg % 360) + 360) % 360) / 22.5) % 16];
 }
 
 export function formatHour(h: number) {

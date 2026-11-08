@@ -80,7 +80,19 @@ export function wardrobeRangeOnWall(room: Room, wall: WallId): [number, number] 
 /** Égtájvektorok a helyiség rendszerében: N = az északi fal kifelé mutató normálisa. */
 export function compass(room: Room) {
   const f = wallFrames(room)[room.north.wall];
-  const N = f.n.clone().negate();
-  const E = N.clone().cross(new THREE.Vector3(0, 1, 0));
+  const up = new THREE.Vector3(0, 1, 0);
+  // az északi fal kifelé mutató normálisa és a hozzá tartozó „kelet”; a valódi észak ehhez képest `deg` fokkal nyugatra van
+  const n = f.n.clone().negate();
+  const e = n.clone().cross(up);
+  const a = ((room.north.deg?.v ?? 0) * Math.PI) / 180;
+  const N = n.multiplyScalar(Math.cos(a)).addScaledVector(e, -Math.sin(a));
+  const E = N.clone().cross(up);
   return { N, E };
+}
+
+/** Egy fal kifelé mutató iránya iránytű-fokban (északtól kelet felé, 0–360). */
+export function wallBearing(room: Room, wall: WallId) {
+  const { N, E } = compass(room);
+  const out = wallFrames(room)[wall].n.clone().negate();
+  return ((Math.atan2(out.dot(E), out.dot(N)) * 180) / Math.PI + 360) % 360;
 }
