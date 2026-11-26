@@ -1,12 +1,12 @@
 import { FURNISHING, FURNITURE_PROPOSAL } from '../data/furnishing';
 import { findFurniture, FURNITURE_PRODUCTS } from '../data/products';
 import type { FurnCategory, FurnitureProduct, FurnSpec, Variant } from '../model/types';
-import { outOfLimits } from './furnish';
+import { outOfLimits, wontFit } from './furnish';
 import { furnitureFit, furniturePalette, nearestFit, toLch, type FitItem, type FurnitureFit, type FurniturePalette } from './furnitureFit';
 
 // Bútorjavaslat egy színváltozathoz: termékhelyenként a katalógusból a változat színvilágához legjobban illő termék.
-// Heurisztika, nem döntés: a méretkeretbe férő termékek közül a színvilág ítélete (jól megy / elmegy; kerülendő kiesik),
-// a változat bútor-színeihez való közelség, a konszignáció-tervezet (★ / ☆), az ellenőrzött ár és a fotóból vett szín számít.
+// Heurisztika, nem döntés: a mért helyre beférő termékek közül a színvilág ítélete (jól megy / elmegy; kerülendő kiesik),
+// az ajánlott mérettől való eltérés (hátrány, nem kizárás), a változat bútor-színeihez való közelség, a konszignáció-tervezet (★ / ☆), az ellenőrzött ár és a fotóból vett szín számít.
 
 /** Kézi felülírás változatonként (pl. a lakberendező eredeti termékei a J7-ben – j6-tervezoi –, ahol a méretkeretbe férnek). */
 export const FURNITURE_OVERRIDES: Record<string, { picks: Record<string, string>; note: string }> = {
@@ -37,6 +37,8 @@ export interface FurnitureLine {
 }
 
 const VERDICT_SCORE = { good: 3, ok: 1, bad: -100 };
+/** Rangsorolási hátrány az ajánlott mérettől való eltérésenként: az ajánlásnak megfelelő termék előrébb kerül, de az eltérő sem esik ki. */
+const REC_PENALTY = 4;
 const ab = (hex: string) => {
   const c = toLch(hex);
   const r = (c.h * Math.PI) / 180;
@@ -56,6 +58,7 @@ function target(cat: FurnCategory, kind: FurnSpec['kind'], fit: FurnitureFit, pa
     case 'sofaChaise':
       return { lists: [fit.sofa], hex: pal.upholstery.hex };
     case 'ottoman':
+    case 'armchair':
     case 'chair':
       return { lists: [fit.sofa], hex: pal.upholstery2.hex };
     case 'rugLiving':
@@ -83,14 +86,16 @@ export interface RankedProduct {
   nf: FitItem;
 }
 
-/** A termékhely termékei a változathoz illés szerint rangsorolva (a kerülendő színűek nélkül). */
+/** A termékhely termékei a változathoz illés szerint rangsorolva (a kerülendő színűek és a mért helyre be nem férők nélkül).
+ *  Az ajánlott mérettől (napló, feltételezés) eltérő termék nem esik ki, csak hátrébb kerül (REC_PENALTY eltérésenként). */
 export function rankSlot(v: Variant, slot: string, fit = furnitureFit(v), pal = furniturePalette(fit)): RankedProduct[] {
   const spec = slotSpecs().get(slot);
   if (!spec) return [];
   const t = target(spec.category!, spec.kind, fit, pal);
   const prop = FURNITURE_PROPOSAL.find((x) => x.slot === slot);
-  const cands = FURNITURE_PRODUCTS.filter((p) => p.category === spec.category && !outOfLimits(slot, p).length);
-  const prices = cands.map(price).filter((x): x is number => !!x).sort((a, b) => a - b);
+  const cands = FURNITURE_PRODUCTS.filter((p) => p.category === spec.category && !wontFit(slot, p).length);
+  // a drágasági hátrány viszonyítási alapja az ajánlott méretű termékek ára (az eltérő méretűek ne tolják el)
+  const prices = cands.filter((p) => !outOfLimits(slot, p).length).map(price).filter((x): x is number => !!x).sort((a, b) => a - b);
   const median = prices[Math.floor(prices.length / 2)] ?? 0;
   return cands
     .map((p) => {
@@ -103,7 +108,8 @@ export function rankSlot(v: Variant, slot: string, fit = furnitureFit(v), pal = 
         (p.hexSource === 'photo-sample' ? 0.2 : 0) +
         // ND-003: körből oválissá bővíthető asztal az elsődleges irány
         (spec.kind === 'table' && p.shape === 'round' && p.size.ext ? 1 : 0) -
-        (pr ? (median && pr > median * 1.6 ? 1 : 0) : 1.5);
+        (pr ? (median && pr > median * 1.6 ? 1 : 0) : 1.5) -
+        REC_PENALTY * outOfLimits(slot, p).length;
       return { p, s, nf };
     })
     .filter((r) => r.s > -50)

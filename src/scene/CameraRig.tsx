@@ -55,6 +55,9 @@ export function CameraRig({ room, viewId }: { room: Room; viewId: string }) {
   const areas = useMemo(() => walkAreas(whole ? ROOMS : [room], whole), [whole, room]);
   const driving = useRef(false);
   const lastSync = useRef(0);
+  // a bejárás utolsó nézési iránya: a kilépéskor létrejövő OrbitControls már a konstruktorában az origó felé fordítja a
+  // kamerát, ezért az irányt nem a kilépés pillanatában olvassuk ki (2026-11-26-i javítás)
+  const walkDir = useRef<THREE.Vector3 | null>(null);
 
   const apply = (pose: CamPose) => {
     camera.position.set(...pose.pos);
@@ -73,15 +76,22 @@ export function CameraRig({ room, viewId }: { room: Room; viewId: string }) {
 
   // A bejárásból kilépve a keringés a nézési irányban, 1,5 m-re lévő pont körül folytatódik
   useEffect(() => {
-    if (walk || !controls.current) return;
-    const dir = new THREE.Vector3();
-    camera.getWorldDirection(dir);
+    // csak a bejárás végén (a nézet létrejöttekor nem: akkor a másik nézet kamerája az irányadó)
+    if (walk || !controls.current || !walkDir.current) return;
+    const dir = walkDir.current;
+    walkDir.current = null;
     controls.current.target.copy(camera.position).addScaledVector(dir, 1.5);
     controls.current.update();
+    // a két nézetes mód másik nézete is ezt kapja
+    publish({ pos: camera.position.toArray() as CamPose['pos'], target: controls.current.target.toArray() as CamPose['target'] }, viewId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walk, camera]);
 
   useFrame(() => {
-    if (walk) return;
+    if (walk) {
+      walkDir.current = camera.getWorldDirection(walkDir.current ?? new THREE.Vector3());
+      return;
+    }
     const s = useStore.getState().camSync;
     if (s.n !== lastSync.current) {
       lastSync.current = s.n;

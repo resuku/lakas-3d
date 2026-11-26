@@ -7,7 +7,7 @@ export interface ChoiceGroup {
   label: string;
   options: { id: string; label: string; note?: string }[];
   default: string;
-  /** Berendezési lehetőség: az Anyagok fül bútor-csoportjában jelenik meg, és csak bekapcsolt bútoroknál számít. */
+  /** Berendezési lehetőség: a Berendezés fülön jelenik meg, és csak bekapcsolt bútoroknál számít. */
   furniture?: boolean;
 }
 
@@ -61,15 +61,16 @@ export const CHOICE_GROUPS: ChoiceGroup[] = [
       {
         id: 'chaise',
         label: 'L az erkély felé',
-        note: 'ND-007 alternatíva, a user szerint (2026-11-02) az L alak is befér. Az L ága (chaise) az erkélyfal felé: a hosszú faltól legfeljebb kb. 180 cm-re nyúlhat, különben az erkélyajtó vonalába lóg (az ajtómező a modellben 1735 mm-nél kezdődik, fotóbecslés). Az ellenőrzés és a funkcionális zónák réteg ezt mutatja; a katalógus chaise-es kanapéi felcserélhető oldalúak.',
+        note: 'Alapértelmezés (user, 2026-11-26: L alak, 250–270 cm; az irány később dől el). ND-008 (2026-11-02): az L alakú kanapé is befér, mindkét irány vizsgálandó – a nagy sarokkanapé ND-007-es kizárása felülírva. Az L ága (chaise) az erkélyfal felé: a hosszú faltól legfeljebb kb. 180 cm-re nyúlhat, különben az erkélyajtó vonalába lóg (az ajtómező a modellben 1735 mm-nél kezdődik, fotóbecslés). Az ellenőrzés és a funkcionális zónák réteg ezt mutatja; a katalógus chaise-es kanapéi felcserélhető oldalúak.',
       },
       {
         id: 'chaise-etk',
         label: 'L az étkező felé',
-        note: 'Az L ága az étkező (térelválasztó) felé: a kanapé maga is elválasztja a két zónát, ezért a lamellás térelválasztó mögötte elhagyható vagy máshova tehető. Az étkező felől a chaise oldala látszik, a chaise-ről a TV ferdén látszik. Az ág itt hosszabb is lehet (a TV-szekrényig kb. 1,2–1,5 m marad), a közlekedőből (AJ-07) a chaise vége mellett lehet bejutni.',
+        note: 'L alak, 250–270 cm (user, 2026-11-26), az ága az étkező (térelválasztó) felé: a kanapé maga is elválasztja a két zónát, ezért a lamellás térelválasztó mögötte elhagyható vagy máshova tehető. Az étkező felől a chaise oldala látszik, a chaise-ről a TV ferdén látszik. Az ág itt hosszabb is lehet (a TV-szekrényig kb. 1,2–1,5 m marad), a közlekedőből (AJ-07) a chaise vége mellett lehet bejutni.',
       },
     ],
-    default: 'egyenes',
+    // 2026-11-26: a user kérésére az L alak az alapértelmezés (ND-008: az L mindkét irányban vizsgálandó; az egyenes kanapé az ND-007 eredeti iránya)
+    default: 'chaise',
   },
   {
     id: 'nappali-tv',
@@ -117,7 +118,7 @@ export const CHOICE_GROUPS: ChoiceGroup[] = [
       {
         id: 'uj180',
         label: 'új ágy (legalább 180 × 200)',
-        note: 'A user szerint (2026-11-02, este): az ágy nem kötött, nem kell mindenáron megtartani; legalább 180 × 200-as matrachoz, azon túl szabad a választás (200 × 200 is). A napló még a megtartást írja (D-009, K-011) – a következő naplóverzióban, jóváhagyással frissítendő. Termék nélkül 180 × 200-as helyőrző.',
+        note: 'A user szerint (2026-11-02, este): az ágy nem kötött, nem kell mindenáron megtartani; legalább 180 × 200-as matrachoz, azon túl szabad a választás (200 × 200 is). A naplóban: D-024 (felülírja D-009-et; a 2000 × 2000-es matrac – D-010, K-011 – sem kötelező). Termék nélkül 180 × 200-as helyőrző.',
       },
       { id: 'meglevo', label: 'meglévő keret (210 × 200)', note: 'A meglévő egyedi keret (2000 × 2000-es matrachoz); a user szerint nem kötelező megtartani.' },
     ],

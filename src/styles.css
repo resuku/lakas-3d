@@ -8,6 +8,19 @@
   --accent-soft: #efe8de;
   --warn: #b45309;
   --ok: #2e7d32;
+  /* 2026-11-26: sötét téma – a beégetett színek is változók (lent a sötét készlet) */
+  --on-accent: #fff;
+  --on-warn: #fff;
+  --subtle: #faf8f5;
+  --warn-soft: #fbeadb;
+  --info-soft: #e3eefb;
+  --notice-bg: #fff6e8;
+  --overlay: rgba(255, 255, 255, 0.92);
+  --swatch-border: var(--swatch-border);
+  --link: #1a56b0;
+  --shadow: rgba(0, 0, 0, 0.18);
+  --backdrop: rgba(30, 28, 25, 0.45);
+  color-scheme: light;
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-size: 13px;
   color: var(--ink);
@@ -47,7 +60,7 @@ button:hover {
 button.on {
   background: var(--accent);
   border-color: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
 }
 
 button:disabled {
@@ -136,7 +149,7 @@ select,
   color: var(--muted);
 }
 
-/* összecsukható alcsoport (Anyagok fül) */
+/* összecsukható alcsoport (Berendezés fül) */
 .sub {
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -251,7 +264,7 @@ select,
   width: 22px;
   height: 22px;
   padding: 0;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--swatch-border);
   border-radius: 50%;
 }
 
@@ -379,18 +392,18 @@ select,
   gap: 6px;
   padding: 4px 6px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--overlay);
 }
 
 .view-header span {
-  color: #555;
+  color: var(--muted);
 }
 
 .dim-label {
   padding: 2px 6px;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  background: var(--overlay);
+  box-shadow: 0 1px 3px var(--shadow);
   font-size: 12px;
   white-space: nowrap;
   pointer-events: none;
@@ -444,7 +457,7 @@ select,
   padding: 0 6px;
   border-radius: 9px;
   background: var(--warn);
-  color: #fff;
+  color: var(--on-warn);
   font-size: 11px;
 }
 
@@ -562,7 +575,7 @@ th {
   z-index: 5;
   padding: 5px 10px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--overlay);
   white-space: nowrap;
   pointer-events: auto;
 }
@@ -577,9 +590,9 @@ th {
   right: 8px;
   z-index: 5;
   padding: 4px 10px;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--swatch-border);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--overlay);
   font-weight: 600;
 }
 
@@ -595,7 +608,7 @@ th {
 button.danger {
   background: var(--warn);
   border-color: var(--warn);
-  color: #fff;
+  color: var(--on-warn);
 }
 
 .fixture {
@@ -640,8 +653,8 @@ button.danger {
   max-width: 360px;
   padding: 7px 10px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+  background: var(--overlay);
+  box-shadow: 0 2px 10px var(--shadow);
   pointer-events: none;
   font-size: 12.5px;
   line-height: 1.35;
@@ -699,7 +712,7 @@ button.danger {
   width: 12px;
   height: 12px;
   border-radius: 3px;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--swatch-border);
 }
 
 .fit-ease {
@@ -710,7 +723,7 @@ button.danger {
 }
 
 .fit-ease.bad {
-  background: #fbeadb;
+  background: var(--warn-soft);
 }
 
 .warn-text {
@@ -724,7 +737,7 @@ button.danger {
 .clash-box {
   padding: 6px 8px;
   border-radius: 6px;
-  background: #fbeadb;
+  background: var(--warn-soft);
   font-size: 12px;
   line-height: 1.4;
 }
@@ -782,7 +795,7 @@ button.danger {
   align-items: center;
   justify-content: center;
   padding: 16px;
-  background: rgba(30, 28, 25, 0.45);
+  background: var(--backdrop);
 }
 
 .help {
@@ -792,7 +805,7 @@ button.danger {
   padding: 18px 22px;
   border-radius: 12px;
   background: var(--panel);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 8px 30px var(--shadow);
   line-height: 1.45;
 }
 
@@ -828,8 +841,8 @@ button.danger {
   justify-content: space-between;
   padding: 8px 10px;
   border-radius: 8px;
-  background: #fff6e8;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+  background: var(--notice-bg);
+  box-shadow: 0 2px 10px var(--shadow);
 }
 
 .furnish-list {
@@ -859,7 +872,8 @@ button.danger {
 }
 
 .status-chip.product {
-  background: var(--accent, #6d5a3f);
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 .furnish-pick select {
@@ -910,13 +924,13 @@ button.danger {
 .decor-types button.on,
 .decor-list li.on .link-btn {
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
 }
 
 .decor-placing {
   padding: 6px 8px;
   border-radius: 6px;
-  background: #e3eefb;
+  background: var(--info-soft);
   font-size: 12px;
 }
 
@@ -980,7 +994,7 @@ body.placing canvas {
   height: 12px;
   margin-top: 3px;
   border-radius: 3px;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--swatch-border);
 }
 
 .furnish-sugg small {
@@ -993,4 +1007,406 @@ body.move-key canvas {
 
 body.dragging canvas {
   cursor: grabbing;
+}
+
+/* Katalógusszűrő (2026-11-25): keresés + bolt, csoportonként korlátozott mintasor */
+.catalog-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  margin: 5px 0 2px;
+}
+
+.catalog-filter input[type='search'] {
+  flex: 1 1 140px;
+  min-width: 0;
+  font-size: 12px;
+}
+
+.catalog-filter select {
+  flex: 0 1 auto;
+  max-width: 150px;
+  font-size: 12px;
+}
+
+.catalog-filter small {
+  color: var(--muted);
+}
+
+.catalog-group > span small {
+  opacity: 0.7;
+}
+
+.swatch-more {
+  height: 22px;
+  min-width: 22px;
+  padding: 0 4px;
+  font-size: 10px;
+  border-radius: 4px;
+}
+
+/* Kezelőfelület (2026-11-26): eszköztár a 3D nézet fölött, tömör sorok, ráúszó szerkesztő, felugró menük */
+.app {
+  grid-template-columns: 340px 1fr;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+}
+
+.toolbar .room-tabs {
+  display: flex;
+  gap: 0;
+}
+
+.toolbar .room-tabs button {
+  margin-left: -1px;
+  border-radius: 0;
+  padding: 4px 10px;
+  font-size: 13px;
+}
+
+.toolbar .room-tabs button:first-child {
+  margin-left: 0;
+  border-radius: 6px 0 0 6px;
+}
+
+.toolbar .room-tabs button:last-child {
+  border-radius: 0 6px 6px 0;
+}
+
+.tb-sep {
+  width: 1px;
+  height: 20px;
+  margin: 0 2px;
+  background: var(--line);
+}
+
+.tb-select {
+  width: auto;
+  max-width: 190px;
+}
+
+.tb-right {
+  margin-left: auto;
+}
+
+.popover {
+  position: relative;
+  display: inline-block;
+}
+
+.popover-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 300px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: 0 6px 20px var(--shadow);
+  font-weight: 400;
+  text-align: left;
+}
+
+.popover-panel.right {
+  right: 0;
+  left: auto;
+}
+
+.popover-sep {
+  height: 1px;
+  background: var(--line);
+}
+
+.toggle {
+  align-items: flex-start;
+}
+
+.toggle input {
+  margin-top: 2px;
+}
+
+.toggle small {
+  display: block;
+  color: var(--muted);
+  font-size: 11.5px;
+  line-height: 1.35;
+}
+
+.variant-head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.more-text {
+  font-size: 12px;
+}
+
+.more-text > summary {
+  cursor: pointer;
+  color: var(--accent);
+  user-select: none;
+}
+
+.more-text[open] {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.more-text[open] > summary {
+  margin-bottom: 2px;
+}
+
+.row-group {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.row-group-title {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--line);
+  background: var(--subtle);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.row-group > .note,
+.row-group > .more-text,
+.row-group > .field {
+  margin: 8px 10px;
+}
+
+.nav-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  padding: 8px 10px;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: none;
+  text-align: left;
+}
+
+.nav-row:hover {
+  background: var(--accent-soft);
+}
+
+.row-group > .nav-row:last-child,
+.row-group > .lamp-row:last-of-type {
+  border-bottom: none;
+}
+
+.nav-label {
+  flex: 0 0 96px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.nav-swatch {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--swatch-border);
+  border-radius: 4px;
+}
+
+.nav-value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-chevron {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.tab-pad > .nav-row {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+.lamp-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+}
+
+.lamp-row .nav-row {
+  flex: 1;
+  border-bottom: none;
+}
+
+.lamp-row .nav-label {
+  flex-basis: 84px;
+}
+
+.lamp-switch {
+  flex: none;
+  min-width: 34px;
+  margin-left: 8px;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+
+.lamp-row.off .nav-value,
+.lamp-row.off .nav-swatch {
+  opacity: 0.5;
+}
+
+.drawer-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--line);
+  background: var(--subtle);
+}
+
+.drawer-head span {
+  margin-left: auto;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.drawer-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 14px 16px;
+}
+
+.fixture-pos {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.link-btn.inline {
+  display: inline;
+  margin: 0;
+}
+
+.confirm p {
+  margin: 0 0 6px;
+  color: var(--warn);
+}
+
+.side-tabs {
+  margin-top: 4px;
+}
+
+.nav-line {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.nav-row.stacked {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  row-gap: 2px;
+}
+
+.nav-row.stacked .nav-label {
+  grid-column: 1;
+}
+
+.nav-row.stacked .nav-line {
+  grid-column: 1;
+}
+
+.nav-row.stacked .nav-chevron {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+
+.info-mark {
+  color: var(--accent);
+  cursor: help;
+  text-transform: none;
+}
+
+.row-group > .field + .field {
+  margin-top: 0;
+}
+
+.group-actions {
+  padding: 8px 10px;
+}
+
+/* Sötét téma (Beállítások → Téma; a <html data-theme> attribútum, App.tsx). A 3D nézet színei nem változnak. */
+:root[data-theme='dark'] {
+  --bg: #161513;
+  --panel: #201e1b;
+  --ink: #e8e3db;
+  --muted: #a39d93;
+  --line: #3a3631;
+  --accent: #c9ad86;
+  --accent-soft: #2e2924;
+  --warn: #e8954a;
+  --ok: #7cc47f;
+  --on-accent: #1b1916;
+  --on-warn: #1b1916;
+  --subtle: #262320;
+  --warn-soft: #3d2a1b;
+  --info-soft: #1d2b3d;
+  --notice-bg: #3a2f1d;
+  --overlay: rgba(32, 30, 27, 0.92);
+  --swatch-border: rgba(255, 255, 255, 0.22);
+  --link: #8ab4f0;
+  --shadow: rgba(0, 0, 0, 0.5);
+  --backdrop: rgba(0, 0, 0, 0.6);
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+a {
+  color: var(--link);
+}
+
+textarea,
+input[type='search'],
+input[type='text'],
+input:not([type]) {
+  background: var(--panel);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 6px;
 }

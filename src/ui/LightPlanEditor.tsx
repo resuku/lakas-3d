@@ -3,7 +3,12 @@ import { FIXTURE_LABEL, LAMP_PRODUCTS, findLamp, fixtureSpec, lampKey, placehold
 import { roomDims } from '../lib/geom';
 import type { Fixture, FixtureType, LampProduct } from '../model/types';
 import { useStore } from '../store';
-import { Field, Segmented, Slider, Toggle } from './controls';
+import { Field, NavRow, Segmented, Slider, Toggle } from './controls';
+import { useMemo } from 'react';
+import { useCatalogFilter } from './catalogFilter';
+
+const lampText = (p: LampProduct) => `${p.store} ${p.brand ?? ''} ${p.name} ${p.colorName ?? ''}`;
+const lampStore = (p: LampProduct) => p.store;
 
 // Világítási terv szerkesztése az aktuális helyiségben.
 
@@ -58,23 +63,30 @@ function LampInfo({ f }: { f: Fixture }) {
   );
 }
 
-function FixtureCard({ f, roomId, W, L, onChange, onDelete }: { f: Fixture; roomId: string; W: number; L: number; onChange: (f: Fixture) => void; onDelete: () => void }) {
+function FixtureCard({ f, roomId, W, L, onChange, onDelete, details }: { f: Fixture; roomId: string; W: number; L: number; onChange: (f: Fixture) => void; onDelete: () => void; details: boolean }) {
   const off = useStore((s) => !!s.lampsOff[lampKey(roomId, f)]);
   const toggle = useStore((s) => s.toggleLamp);
-  const products = LAMP_PRODUCTS.filter((p) => p.type === f.type);
+  const all = useMemo(() => LAMP_PRODUCTS.filter((p) => p.type === f.type), [f.type]);
+  const { list, bar } = useCatalogFilter(all, lampText, lampStore);
+  // a kiválasztott termék szűrés közben is a listában marad
+  const sel = f.productId ? all.find((p) => p.id === f.productId) : undefined;
+  const products = sel && !list.includes(sel) ? [sel, ...list] : list;
   return (
     <div className={`fixture ${off ? 'off' : ''}`}>
       <div className="fixture-head">
-        <b>{f.label ?? FIXTURE_LABEL[f.type]}</b>
+        <b>{FIXTURE_LABEL[f.type]}</b>
         <button className={off ? '' : 'on'} onClick={() => toggle(lampKey(roomId, f))} title="Ki/be – a 3D nézetben a lámpára kattintva is">
           {off ? 'ki' : 'be'}
         </button>
-        <button onClick={onDelete} title="Lámpa törlése">
-          ✕
-        </button>
+        {details && (
+          <button onClick={onDelete} title="Lámpa törlése">
+            Törlés
+          </button>
+        )}
       </div>
+      {bar}
       <select value={f.productId ?? ''} onChange={(e) => onChange({ ...f, productId: e.target.value || undefined })}>
-        <option value="">általános (termék nélkül)</option>
+        <option value="">általános (termék nélkül){products.length < all.length ? ` – ${products.length} / ${all.length} termék` : ''}</option>
         {products.map((p) => (
           <option key={p.id} value={p.id}>
             {lampLabel(p)}
@@ -82,6 +94,16 @@ function FixtureCard({ f, roomId, W, L, onChange, onDelete }: { f: Fixture; room
         ))}
       </select>
       <LampInfo f={f} />
+      {details && <FixturePosition f={f} W={W} L={L} onChange={onChange} />}
+    </div>
+  );
+}
+
+/** A lámpa helye (tervezői mód): x, z, függeszték alsó éle, falikar magassága, sín iránya. */
+function FixturePosition({ f, W, L, onChange }: { f: Fixture; W: number; L: number; onChange: (f: Fixture) => void }) {
+  return (
+    <div className="fixture-pos">
+      <div className="field-label">Hely</div>
       <Slider value={f.x} min={100} max={Math.round(W) - 100} step={10} onChange={(x) => onChange({ ...f, x })} format={(v) => `x ${v} mm`} />
       <Slider value={f.z} min={100} max={Math.round(L) - 100} step={10} onChange={(z) => onChange({ ...f, z })} format={(v) => `z ${v} mm`} />
       {f.type === 'pendant' && (
@@ -102,114 +124,144 @@ function FixtureCard({ f, roomId, W, L, onChange, onDelete }: { f: Fixture; room
   );
 }
 
-export function LightPlanEditor({ roomId }: { roomId: string }) {
+/** Rendezés: az általános tervek, utánuk a J-, JF-, JS-, JM-, JP- és JR-tervek szám szerint. */
+function planOrder(name: string) {
+  const m = name.match(/^J([RFSMP]?)(\d+)/);
+  return m ? ({ '': 0, F: 300, S: 350, M: 400, P: 450, R: 500 } as Record<string, number>)[m[1]] + Number(m[2]) : 1000;
+}
+
+/** A lakásszintű világítási terv választója (a változathoz illő terv ajánlásával). */
+export function LightPlanPicker() {
   const s = useStore();
-  const room = getRoom(roomId);
   const plan = s.lightPlans.find((p) => p.id === s.activePlanId) ?? s.lightPlans[0];
   const activeVariant = s.variants.find((v) => v.id === s.activeId);
   const suggested = s.lightPlans.find((p) => p.id === activeVariant?.lightPlanId);
-  const fixtures = roomFixtures(plan, room);
-  const { W, L } = roomDims(room);
-  const setFixtures = (fs: Fixture[]) => s.updatePlan(plan.id, (p) => ({ ...p, rooms: { ...p.rooms, [roomId]: fs } }));
-  const own = !!plan.rooms[roomId];
+  return (
+    <Field label="Világítási terv (lakásszintű)">
+      <select value={plan.id} onChange={(e) => s.setActivePlan(e.target.value)}>
+        <optgroup label="Általános tervek">
+          {s.lightPlans
+            .filter((p) => !/^lj[rfsmp]?\d/.test(p.id))
+            .map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
+        </optgroup>
+        <optgroup label="A javaslatokhoz illesztve">
+          {s.lightPlans
+            .filter((p) => /^lj[rfsmp]?\d/.test(p.id))
+            .sort((a, b) => planOrder(a.name) - planOrder(b.name))
+            .map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
+        </optgroup>
+      </select>
+      {suggested && suggested.id !== plan.id && (
+        <button className="wide" onClick={() => s.setActivePlan(suggested.id)}>
+          A változathoz javasolt: {suggested.name}
+        </button>
+      )}
+      {plan.note && (
+        <details className="more-text">
+          <summary>A terv leírása</summary>
+          <p className="variant-note">{plan.note}</p>
+        </details>
+      )}
+      <Toggle checked={s.planFollowsVariant} onChange={s.setPlanFollowsVariant} label="Javaslatváltáskor a hozzá illő terv is" />
+      {s.details && (
+        <div className="row">
+          <button onClick={() => s.duplicatePlan(plan.id)}>Terv másolata</button>
+          <button onClick={() => s.deletePlan(plan.id)} disabled={s.lightPlans.length <= 1}>
+            Terv törlése
+          </button>
+        </div>
+      )}
+    </Field>
+  );
+}
 
+function usePlanRoom(roomId: string) {
+  const s = useStore();
+  const room = getRoom(roomId);
+  const plan = s.lightPlans.find((p) => p.id === s.activePlanId) ?? s.lightPlans[0];
+  const fixtures = roomFixtures(plan, room);
+  const setFixtures = (fs: Fixture[]) => s.updatePlan(plan.id, (p) => ({ ...p, rooms: { ...p.rooms, [roomId]: fs } }));
+  return { s, room, plan, fixtures, setFixtures, own: !!plan.rooms[roomId], ...roomDims(room) };
+}
+
+/** A helyiség lámpái tömör sorokban (ki/be, termék); a sorra kattintva a lámpa szerkesztője nyílik. */
+export function LampRows({ roomId, onOpen }: { roomId: string; onOpen: (fixtureId: string) => void }) {
+  const { s, room, fixtures, setFixtures, own, W, L } = usePlanRoom(roomId);
+  const toggle = s.toggleLamp;
   // teljes fényerőn, minden lámpa bekapcsolva
   const totalLm = fixtures.reduce((a, f) => a + fixtureSpec(f, s.light).lm, 0);
-  const area = W * L;
-  const lx = (totalLm * UF) / area;
+  const lx = (totalLm * UF) / (W * L);
   const target = TARGET_LX[roomId];
-
-  const add = (type: FixtureType) =>
-    setFixtures([
-      ...fixtures,
-      { id: `${type}-${Date.now().toString(36)}`, type, x: Math.round((W * 1000) / 2), z: Math.round((L * 1000) / 2), ...(type === 'track' ? { rot: 90 } : {}) },
-    ]);
-
+  const add = (type: FixtureType) => {
+    const id = `${type}-${Date.now().toString(36)}`;
+    setFixtures([...fixtures, { id, type, x: Math.round((W * 1000) / 2), z: Math.round((L * 1000) / 2), ...(type === 'track' ? { rot: 90 } : {}) }]);
+    onOpen(id);
+  };
   return (
     <>
-      <Field label="Világítási terv (lakásszintű)">
-        <select value={plan.id} onChange={(e) => s.setActivePlan(e.target.value)}>
-          <optgroup label="Általános tervek">
-            {s.lightPlans
-              .filter((p) => !/^lj\d/.test(p.id))
-              .map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.name}
-                </option>
-              ))}
-          </optgroup>
-          <optgroup label="A J-javaslatokhoz illesztve">
-            {s.lightPlans
-              .filter((p) => /^lj\d/.test(p.id))
-              .sort((a, b) => Number(a.name.match(/^J(\d+)/)?.[1] ?? 1000) - Number(b.name.match(/^J(\d+)/)?.[1] ?? 1000))
-              .map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.name}
-                </option>
-              ))}
-          </optgroup>
-        </select>
-        <Toggle checked={s.planFollowsVariant} onChange={s.setPlanFollowsVariant} label="a J-javaslat választásakor a hozzá illő világítás is" />
-        {suggested && suggested.id !== plan.id && (
-          <button className="wide" onClick={() => s.setActivePlan(suggested.id)}>
-            A változathoz javasolt: {suggested.name}
-          </button>
-        )}
-        {plan.note && <p className="variant-note">{plan.note}</p>}
-        {s.details && (
-        <div className="row">
-          <button onClick={() => s.duplicatePlan(plan.id)}>Másolat</button>
-          <button onClick={() => s.deletePlan(plan.id)} disabled={s.lightPlans.length <= 1}>
-            Törlés
-          </button>
-        </div>
-        )}
-      </Field>
-      <Field label={`Lámpák – ${room.name}`}>
-        <p className="note">
-          {fixtures.length} lámpa, teljes fényerőn {Math.round(totalLm)} lm → átlagosan kb. {Math.round(lx)} lx
-          {target ? ` (irányérték ${target[0]}–${target[1]} lx: ${target[2]})` : ''}. Becslés: a fényáram fele jut a padló szintjére.
-          {!own && ' A terv ezt a helyiséget nem részletezi: a felmért helyőrzők látszanak.'}
-        </p>
-        {!s.details && (
-          <ul className="lamp-list">
-            {fixtures.map((f) => {
-              const p = findLamp(f.productId);
-              return (
-                <li key={f.id}>
-                  {f.label ?? FIXTURE_LABEL[f.type]}: {p ? `${p.store} ${p.name}` : 'általános lámpa'}
-                </li>
-              );
-            })}
-          </ul>
-        )}
-        {s.details && fixtures.map((f, i) => (
-          <FixtureCard
-            key={f.id}
-            f={f}
-            roomId={roomId}
-            W={W * 1000}
-            L={L * 1000}
-            onChange={(nf) => setFixtures(fixtures.map((x, j) => (j === i ? nf : x)))}
-            onDelete={() => setFixtures(fixtures.filter((_, j) => j !== i))}
-          />
-        ))}
-        {s.details && (
-        <div className="add-lamps">
-          {ADDABLE.map((t) => (
-            <button key={t} onClick={() => add(t)}>
-              + {FIXTURE_LABEL[t]}
+      {fixtures.map((f) => {
+        const p = findLamp(f.productId);
+        const off = !!s.lampsOff[lampKey(roomId, f)];
+        return (
+          <div key={f.id} className={`lamp-row ${off ? 'off' : ''}`}>
+            <button className={`lamp-switch ${off ? '' : 'on'}`} onClick={() => toggle(lampKey(roomId, f))} title="Ki/be – a 3D nézetben a lámpára kattintva is">
+              {off ? 'ki' : 'be'}
             </button>
-          ))}
-        </div>
-        )}
-        {own && s.details && (
-          <button className="wide" onClick={() => setFixtures(placeholderFixtures(room))}>
-            Vissza a felmért helyekre ebben a helyiségben
-          </button>
-        )}
-        <p className="note">A 3D nézetben a lámpára kattintva az adott lámpa ki- és bekapcsol.</p>
-      </Field>
+            <NavRow label={f.label ?? FIXTURE_LABEL[f.type]} swatch={p?.color} value={p ? `${p.store}: ${p.name}` : 'általános lámpa'} onClick={() => onOpen(f.id)} />
+          </div>
+        );
+      })}
+      <p className="note">
+        {fixtures.length} lámpa, teljes fényerőn {Math.round(totalLm)} lm → átlagosan kb. {Math.round(lx)} lx
+        {target ? ` (irányérték ${target[0]}–${target[1]} lx: ${target[2]})` : ''}. Becslés: a fényáram fele jut a padló szintjére.
+        {!own && ' A terv ezt a helyiséget nem részletezi: a felmért helyőrzők látszanak.'}
+      </p>
+      {s.details && (
+        <details className="more-text">
+          <summary>Lámpa hozzáadása{own ? ', visszaállítás' : ''}</summary>
+          <div className="add-lamps">
+            {ADDABLE.map((t) => (
+              <button key={t} onClick={() => add(t)}>
+                + {FIXTURE_LABEL[t]}
+              </button>
+            ))}
+          </div>
+          {own && (
+            <button className="wide" onClick={() => setFixtures(placeholderFixtures(room))}>
+              Vissza a felmért helyekre ebben a helyiségben
+            </button>
+          )}
+        </details>
+      )}
     </>
+  );
+}
+
+/** Egy lámpa szerkesztője (termék, ki/be; tervezői módban hely és törlés). */
+export function FixtureEditor({ roomId, fixtureId, onDone }: { roomId: string; fixtureId: string; onDone: () => void }) {
+  const { s, fixtures, setFixtures, W, L } = usePlanRoom(roomId);
+  const i = fixtures.findIndex((f) => f.id === fixtureId);
+  if (i < 0) return <p className="note">Ez a lámpa ebben a helyiségben nem szerepel a tervben.</p>;
+  return (
+    <FixtureCard
+      f={fixtures[i]}
+      roomId={roomId}
+      W={W * 1000}
+      L={L * 1000}
+      details={s.details}
+      onChange={(nf) => setFixtures(fixtures.map((x, j) => (j === i ? nf : x)))}
+      onDelete={() => {
+        setFixtures(fixtures.filter((_, j) => j !== i));
+        onDone();
+      }}
+    />
   );
 }

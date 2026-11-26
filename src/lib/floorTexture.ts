@@ -159,17 +159,20 @@ export function makeFloorTexture(
     }
     ctx.restore();
   } else {
-    const ts = plank ? plank.l / 1000 : 0.6;
+    // Lap: a hosszabb oldal a padló irányában; téglalap alakú lapnál (pl. 60 × 120) feles kötés.
+    const tl = plank ? plank.l / 1000 : 0.6;
+    const tw = plank ? plank.w / 1000 : tl;
     const grout = 0.003;
+    const specks = Math.round(60 * ((tl * tw) / 0.36));
     ctx.fillStyle = hslCss(base.h, base.s * 0.6, Math.min(base.l + 0.08, 0.95));
     ctx.fillRect(0, 0, A, B);
-    for (let x = 0; x < A; x += ts) {
-      for (let y = 0; y < B; y += ts) {
+    for (let y = 0, row = 0; y < B; y += tw, row++) {
+      for (let x = tl !== tw && row % 2 ? -tl / 2 : 0; x < A; x += tl) {
         ctx.fillStyle = hslCss(base.h, base.s, base.l + (r() - 0.5) * 0.03);
-        ctx.fillRect(x + grout, y + grout, ts - grout * 2, ts - grout * 2);
-        for (let k = 0; k < 60; k++) {
+        ctx.fillRect(x + grout, y + grout, tl - grout * 2, tw - grout * 2);
+        for (let k = 0; k < specks; k++) {
           ctx.fillStyle = r() < 0.5 ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)';
-          ctx.fillRect(x + r() * ts, y + r() * ts, px * 3, px * 3);
+          ctx.fillRect(x + r() * tl, y + r() * tw, px * 3, px * 3);
         }
       }
     }

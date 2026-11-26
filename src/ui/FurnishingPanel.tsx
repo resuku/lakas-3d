@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { CHOICE_GROUPS } from '../data/choices';
 import { FURNISHING, FURNITURE_PROPOSAL } from '../data/furnishing';
 import { COLOR_SOURCE_LABEL, findFurniture, FURNITURE_PRODUCTS } from '../data/products';
-import { activeFurnishing, outOfLimits, SLOT_LIMITS, type ResolvedSpec } from '../lib/furnish';
+import { activeFurnishing, outOfLimits, SLOT_LIMITS, wontFit, type ResolvedSpec } from '../lib/furnish';
 import { furnitureFit, furniturePalette, nearestFit, type FurnitureFit } from '../lib/furnitureFit';
 import { STATUS_INFO } from '../lib/status';
 import { furnitureLines, suggestFurniture } from '../lib/furnitureSets';
@@ -11,7 +11,11 @@ import { subPicks } from '../lib/subs';
 import { findSubVariant } from '../data/subVariants';
 import type { FurnCategory, FurnitureProduct, Variant } from '../model/types';
 import { useStore } from '../store';
-import { Field, Segmented, Toggle } from './controls';
+import { InfoField, NavRow, RowGroup, Segmented, Toggle } from './controls';
+import { useCatalogFilter } from './catalogFilter';
+
+const furnText = (p: FurnitureProduct) => `${p.store} ${p.brand ?? ''} ${p.name} ${p.colorName ?? ''} ${p.material ?? ''}`;
+const furnStore = (p: FurnitureProduct) => p.store;
 
 // Berendezési javaslat egy helyiségre: a lehetőségek (kanapé, asztal, ágy…), termékhelyenként a katalógusbútor
 // választása, a 3D-ben használt színek és az elemek listája.
@@ -46,9 +50,14 @@ function ProductPicker({ spec, fit, mine }: { spec: ResolvedSpec; fit: Furniture
   const s = useStore();
   const slot = spec.slot!;
   const pick = s.furniturePicks[slot];
-  const list = FURNITURE_PRODUCTS.filter((p) => p.category === spec.category);
-  const fits = list.filter((p) => !outOfLimits(slot, p).length);
-  const over = list.filter((p) => outOfLimits(slot, p).length);
+  const all = useMemo(() => FURNITURE_PRODUCTS.filter((p) => p.category === spec.category), [spec.category]);
+  const { list: found, bar } = useCatalogFilter(all, furnText, furnStore);
+  // a kiválasztott termék szűrés közben is a listában marad
+  const sel = pick ? all.find((x) => x.id === pick) : undefined;
+  const list = sel && !found.includes(sel) ? [sel, ...found] : found;
+  const fits = list.filter((p) => !outOfLimits(slot, p).length && !wontFit(slot, p).length);
+  const over = list.filter((p) => outOfLimits(slot, p).length && !wontFit(slot, p).length);
+  const noRoom = list.filter((p) => wontFit(slot, p).length);
   const p = spec.product;
   const prop = FURNITURE_PROPOSAL.find((x) => x.slot === slot);
   const mark = (id: string) => `${id === mine ? '◆ ' : ''}${prop?.pick === id ? '★ ' : prop?.alt.includes(id) ? '☆ ' : ''}`;
@@ -61,12 +70,15 @@ function ProductPicker({ spec, fit, mine }: { spec: ResolvedSpec; fit: Furniture
   );
   const nf = p ? nearestFit(fitLists(fit, p.category), p.hex) : null;
   const out = p ? outOfLimits(slot, p) : [];
+  const tooBig = p ? wontFit(slot, p) : [];
   return (
     <div className="furnish-pick">
+      {bar}
       <select value={pick ?? ''} onChange={(e) => s.setFurniturePick(slot, e.target.value || undefined)} title={SLOT_LIMITS[slot]?.label}>
         <option value="">helyőrző ({spec.w} × {spec.d} mm)</option>
-        {fits.length > 0 && <optgroup label={`Belefér (${SLOT_LIMITS[slot]?.label ?? 'méretkeret'})`}>{fits.map(opt)}</optgroup>}
-        {over.length > 0 && <optgroup label="Kilóg a méretkeretből">{over.map(opt)}</optgroup>}
+        {fits.length > 0 && <optgroup label={`Az ajánlott méretben (${SLOT_LIMITS[slot]?.label ?? 'nincs megadva'})`}>{fits.map(opt)}</optgroup>}
+        {over.length > 0 && <optgroup label="Eltér az ajánlott mérettől (választható)">{over.map(opt)}</optgroup>}
+        {noRoom.length > 0 && <optgroup label={`Nem fér el (${SLOT_LIMITS[slot]?.fit?.label})`}>{noRoom.map(opt)}</optgroup>}
       </select>
       {prop && pick !== prop.pick && findFurniture(prop.pick) && (
         <button className="link-btn" onClick={() => s.setFurniturePick(slot, prop.pick)} title={prop.why}>
@@ -90,7 +102,12 @@ function ProductPicker({ spec, fit, mine }: { spec: ResolvedSpec; fit: Furniture
             </span>
           )}
           {nf?.verdict === 'bad' && <span className="warn-text">⚠ Elüt a javaslat színvilágától – a {nf.label} minta ehhez a változathoz kerülendő.</span>}
-          {out.length > 0 && <span className="warn-text">Kilóg a méretkeretből: {out.join(', ')}</span>}
+          {tooBig.length > 0 && <span className="warn-text">Nem fér el: {tooBig.join(', ')}</span>}
+          {out.length > 0 && (
+            <span className="note">
+              Eltér az ajánlott mérettől ({out.join(', ')}) – ajánlás, nem tiltás; az ütközéseket az ellenőrzés mutatja.
+            </span>
+          )}
           {p.note && <small>{p.note}</small>}
         </div>
       )}
@@ -98,58 +115,94 @@ function ProductPicker({ spec, fit, mine }: { spec: ResolvedSpec; fit: Furniture
   );
 }
 
-export function FurnishingPanel({ v, roomId }: { v: Variant; roomId: string }) {
+/** A helyiség látható termékhelyei (termékhelyenként az első elem: a 4 szék egy terméket kap). */
+function roomSlots(roomId: string, choices: Record<string, string>, picks: Record<string, string>) {
+  const specs = activeFurnishing(roomId, choices, picks);
+  return { specs, slots: [...new Map(specs.filter((f) => f.slot && f.category).map((f) => [f.slot!, f])).values()] };
+}
+
+/** Egy termékhely választója (kereső, bolt, termék, illeszkedés) – a Berendezés fül sorára kattintva nyílik. */
+export function FurnitureSlotEditor({ v, roomId, slot }: { v: Variant; roomId: string; slot: string }) {
+  const s = useStore();
+  const fit = useMemo(() => furnitureFit(v), [v]);
+  const sugg = useMemo(() => suggestFurniture(v), [v]);
+  const spec = roomSlots(roomId, s.choices, s.furniturePicks).slots.find((f) => f.slot === slot);
+  if (!spec) return <p className="note">Ez a termékhely a mostani lehetőségekkel nem látszik ebben a helyiségben.</p>;
+  return <ProductPicker spec={spec} fit={fit} mine={sugg.picks[slot]} />;
+}
+
+export function FurnishingPanel({ v, roomId, roomName, onOpenSlot }: { v: Variant; roomId: string; roomName: string; onOpenSlot: (slot: string, label: string) => void }) {
   const s = useStore();
   const on = s.layers.furniture;
   const fit = useMemo(() => furnitureFit(v), [v]);
   const pal = useMemo(() => furniturePalette(fit), [fit]);
-  const specs = useMemo(() => activeFurnishing(roomId, s.choices, s.furniturePicks), [roomId, s.choices, s.furniturePicks]);
+  const { specs, slots } = useMemo(() => roomSlots(roomId, s.choices, s.furniturePicks), [roomId, s.choices, s.furniturePicks]);
   const groups = CHOICE_GROUPS.filter((g) => g.furniture && g.roomId === roomId);
-  // termékhelyenként az első látható elem (a 4 szék egy terméket kap)
-  const slots = [...new Map(specs.filter((f) => f.slot && f.category).map((f) => [f.slot!, f])).values()];
   const sugg = useMemo(() => suggestFurniture(v), [v]);
   return (
     <>
-      <Toggle checked={on} onChange={(b) => s.setLayer('furniture', b)} label="Bútorok megjelenítése (minden helyiségben)" />
+      {!on && (
+        <p className="note">
+          A bútorok rejtve vannak.{' '}
+          <button className="link-btn inline" onClick={() => s.setLayer('furniture', true)}>
+            Megjelenítés
+          </button>
+        </p>
+      )}
       {on && (
         <>
-          <p className="note">
-            Termék nélkül befoglaló méretű helyőrző, a szín a Javaslat fül bútor-színvilágából (kárpit {pal.upholstery.label}, szék és puff {pal.upholstery2.label},
-            bútortest {pal.body.label}, fa {pal.wood.label}, szőnyeg {pal.rug.label}, fém {pal.metal.label}). Választott termékkel a termékoldal mérete és
-            színe látszik; a választás a színváltozattól független.
-          </p>
-          {groups.map((g) => {
-            const val = s.choices[g.id] ?? g.default;
-            const opt = g.options.find((o) => o.id === val);
-            return (
-              <Field key={g.id} label={g.label}>
-                <Segmented value={val} options={g.options.map((o) => ({ v: o.id, label: o.label }))} onChange={(o) => s.setChoice(g.id, o)} />
-                {opt?.note && <p className="note">{opt.note}</p>}
-              </Field>
-            );
-          })}
-          {FURNITURE_PRODUCTS.length > 0 && slots.length > 0 && (
-            <div className="row">
-              <button
-                onClick={() => s.setFurniturePicks({ ...s.furniturePicks, ...Object.fromEntries(FURNITURE_PROPOSAL.map((x) => [x.slot, x.pick])) })}
-                title="Minden termékhelyre a konszignáció-tervezet javasolt terméke (★) – javaslat, nem döntés"
-              >
-                Konszignáció-tervezet (★)
-              </button>
-              <button onClick={() => s.setFurniturePicks(sugg.picks)} title={`A(z) ${v.name} változathoz illő bútorok (◆) – a Javaslat fülön részletezve`}>
-                A változat bútorai (◆)
-              </button>
-              <button onClick={() => s.setFurniturePicks({})} disabled={!Object.keys(s.furniturePicks).length} title="Minden bútor vissza a befoglaló méretű helyőrzőre">
-                Mind helyőrző
-              </button>
-            </div>
+          {groups.length > 0 && (
+            <RowGroup title={`Elrendezés – ${roomName.toLowerCase()}`}>
+              {groups.map((g) => {
+                const val = s.choices[g.id] ?? g.default;
+                const opt = g.options.find((o) => o.id === val);
+                return (
+                  <InfoField key={g.id} label={g.label} info={opt?.note}>
+                    <Segmented value={val} options={g.options.map((o) => ({ v: o.id, label: o.label }))} onChange={(o) => s.setChoice(g.id, o)} />
+                  </InfoField>
+                );
+              })}
+            </RowGroup>
           )}
-          {FURNITURE_PRODUCTS.length > 0 &&
-            slots.map((f) => (
-              <Field key={f.slot} label={`${f.label} – termék`}>
-                <ProductPicker spec={f} fit={fit} mine={sugg.picks[f.slot!]} />
-              </Field>
-            ))}
+          {FURNITURE_PRODUCTS.length > 0 && slots.length > 0 && (
+            <RowGroup title={`Termékek – ${roomName.toLowerCase()}`}>
+              {slots.map((f) => {
+                const p = f.product;
+                const mark = p && sugg.picks[f.slot!] === p.id ? '◆ ' : '';
+                return (
+                  <NavRow
+                    key={f.slot}
+                    stacked
+                    label={f.label}
+                    swatch={p?.hex ?? '#ffffff'}
+                    value={p ? `${mark}${p.store}: ${p.name}` : `helyőrző, ${f.w} × ${f.d} mm`}
+                    onClick={() => onOpenSlot(f.slot!, f.label)}
+                  />
+                );
+              })}
+              <div className="row group-actions">
+                <button onClick={() => s.setFurniturePicks(sugg.picks)} title={`A(z) ${v.name} változathoz illő bútorok (◆)`}>
+                  A változat bútorai (◆)
+                </button>
+                <button
+                  onClick={() => s.setFurniturePicks({ ...s.furniturePicks, ...Object.fromEntries(FURNITURE_PROPOSAL.map((x) => [x.slot, x.pick])) })}
+                  title="Minden termékhelyre a konszignáció-tervezet javasolt terméke (★) – javaslat, nem döntés"
+                >
+                  Konszignáció (★)
+                </button>
+                <button onClick={() => s.setFurniturePicks({})} disabled={!Object.keys(s.furniturePicks).length} title="Minden bútor vissza a befoglaló méretű helyőrzőre">
+                  Mind helyőrző
+                </button>
+              </div>
+            </RowGroup>
+          )}
+          <details className="more-text">
+            <summary>Elemek és helyőrzők ({specs.length})</summary>
+            <p className="note">
+              Termék nélkül befoglaló méretű helyőrző, a szín a változat bútor-színvilágából (kárpit {pal.upholstery.label}, szék és puff {pal.upholstery2.label},
+              bútortest {pal.body.label}, fa {pal.wood.label}, szőnyeg {pal.rug.label}, fém {pal.metal.label}). Választott termékkel a termékoldal mérete és
+              színe látszik; a választás a színváltozattól független.
+            </p>
           <ul className="furnish-list">
             {specs.map((f) => (
               <li key={f.id} title={[f.basis, f.note].filter(Boolean).join('\n')}>
@@ -165,6 +218,7 @@ export function FurnishingPanel({ v, roomId }: { v: Variant; roomId: string }) {
               </li>
             ))}
           </ul>
+          </details>
         </>
       )}
     </>
@@ -195,7 +249,7 @@ export function VariantFurniture({ v }: { v: Variant }) {
       <p className="note">
         {sub
           ? `${sub.name}: a választott lehetőségek termékei – ahol az aljavaslat mást kér, a változat rangsorának egy másik, szintén illő terméke (heurisztika, nem döntés).`
-          : 'Termékhelyenként a katalógusból a méretkeretbe férő, a változat színeihez legjobban illő termék (heurisztika, nem döntés; az egyes helyek a lehetőségek szerint látszanak, pl. egyenes vagy L kanapé).'}{' '}
+          : 'Termékhelyenként a katalógusból a változat színeihez legjobban illő, lehetőleg az ajánlott méretű termék (heurisztika, nem döntés; az egyes helyek a lehetőségek szerint látszanak, pl. egyenes vagy L kanapé).'}{' '}
         {sugg.note}
       </p>
       <ul className="furnish-sugg">

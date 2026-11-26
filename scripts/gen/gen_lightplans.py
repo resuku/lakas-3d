@@ -2,23 +2,26 @@
 # Futtatás: MSYS_NO_PATHCONV=1 docker run --rm -v "$(pwd -W):/w" -w /w python:3.12-slim python -X utf8 scripts/gen/gen_lightplans.py
 import json, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from numbering import NUM, key, label
+from numbering import key, label, order
 os.chdir(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # a tároló gyökere
 L = {p['id']: p for p in json.load(open('src/data/products/lamps.json', encoding='utf-8'))['items']}
 
 def pid(fragment):
+    """Pontos azonosító, vagy egyértelmű részlet (a katalógusbővítés óta a rövid részletek többnyire nem egyértelműek)."""
+    if fragment in L:
+        return fragment
     hits = [k for k in L if fragment in k]
     assert len(hits) == 1, (fragment, hits)
     return hits[0]
 
-RANARP = pid('ranarp'); SKURUP_P = pid('skurup-fuggo'); SINNERLIG = pid('sinnerlig'); NARRKOLV = pid('narrkolv')
-MELLOW = pid('mellow'); NYMANE_C = pid('nymane-led-es-mennyezeti'); KABOMBA = pid('kabomba'); BARLAST = pid('barlast')
-NOSUND = pid('nosund'); TRUBB = pid('trubbrufse'); GONZALO = pid('gonzalo'); ALLAN = pid('allan'); LEANA = pid('leana2')
-NYMANE_T = pid('nymane-mennyezeti-spot'); SKURUP_T = pid('skurup-mennyezeti-sin'); EASYT = pid('easyt'); ROGELIO = pid('rogelio')
-NOXELLE = pid('noxelle'); ETNA = pid('etna')
+RANARP = pid('lamp-ikea-ranarp-fuggolampa-fekete-38-cm'); SKURUP_P = pid('skurup-fuggo'); SINNERLIG = pid('lamp-ikea-sinnerlig-fuggolampa-bambusz-kezze'); NARRKOLV = pid('lamp-ikea-narrkolv-fuggolampa-rattan-56-cm')
+MELLOW = pid('mellow'); NYMANE_C = pid('lamp-ikea-nymane-led-es-mennyezeti-lampa-ant'); KABOMBA = pid('kabomba'); BARLAST = pid('lamp-ikea-barlast-led-mennyezeti-falilampa-f')
+NOSUND = pid('nosund'); TRUBB = pid('lamp-ikea-trubbrufse-mennyezeti-lampa-sas-45'); GONZALO = pid('gonzalo'); ALLAN = pid('allan'); LEANA = pid('leana2')
+NYMANE_T = pid('lamp-ikea-nymane-mennyezeti-spot-4-antracit'); SKURUP_T = pid('skurup-mennyezeti-sin'); EASYT = pid('lamp-praktike-eglo-easyt-szpot-szett-gu10-4x10w'); ROGELIO = pid('lamp-praktike-rabalux-rogelio-mennyezeti-lampa-g')
+NOXELLE = pid('lamp-praktike-rabalux-noxelle-mennyezeti-szpot-l'); ETNA = pid('etna')
 MANIE_F = pid('allolampa-manie'); KLOVING = pid('kloving'); KINNAHULT = pid('kinnahult'); TRIPOD = pid('sotetszurke-natur')
-MANIE_W = pid('fali-lampa-manie'); NYMANE_W = pid('nymane-fali'); AMAR = pid('konnektorhoz')
-TERTIAL = pid('tertial'); MONTAGNA = pid('fekete-natur-szinu-asztali'); TVARHAND = pid('tvarhand'); MANIE_T = pid('asztali-lampa-manie')
+MANIE_W = pid('fali-lampa-manie'); NYMANE_W = pid('lamp-ikea-nymane-fali-olvasolampa-antracit'); AMAR = pid('konnektorhoz')
+TERTIAL = pid('tertial'); MONTAGNA = pid('lamp-bonami-fekete-natur-szinu-asztali-lampa-j'); TVARHAND = pid('tvarhand'); MANIE_T = pid('asztali-lampa-manie')
 
 def fx(id, type, x, z, product=None, y=None, rot=None, label=None):
     o = {'id': id, 'type': type}
@@ -81,8 +84,8 @@ PLANS = [
 ]
 
 # --- J-javaslatokhoz illesztett világítás ---
-SERENE = pid('serene'); ANO = pid('ano-natur'); SJOMAKT = pid('sjomakt'); BUNKEFLO = pid('bunkeflo')
-MUSURITA = pid('musurita'); BENICARLO = pid('natur-szinu-allolampa-textil'); SKOTTORP = pid('skottorp')
+SERENE = pid('serene'); ANO = pid('ano-natur'); SJOMAKT = pid('lamp-ikea-sjomakt-fuggolampa-bezs-koris-38-c'); BUNKEFLO = pid('bunkeflo')
+MUSURITA = pid('lamp-praktike-eglo-musurita-led-mennyezeti-lampa'); BENICARLO = pid('lamp-bonami-natur-szinu-allolampa-textil-burav'); SKOTTORP = pid('lamp-ikea-skottorp-skaftet-allolampa-ivelt-v')
 PATRIK = pid('patrik')
 
 def jplan(jid, name, note, dining, lounge, floor, halo_main, halo_read, dol_main, dol_task, hall, corr):
@@ -150,8 +153,126 @@ JPLANS = [
     jplan('j18', 'kakaó és bambusz', 'Bambusz függeszték az étkező fölött, szövetgömb a nappali részen, sötétszürke–natúr állólámpa; a hálóban rattan függeszték és szövet falikarok. A kakaó TV-fal és a karamell bársony mellé meleg, fonott anyagok.',
           (P, SINNERLIG), (P, MELLOW), TRIPOD, (P, NARRKOLV), ('wall', AMAR), (C, NYMANE_C), ('floor', KLOVING), (C, ALLAN), (C, LEANA)),
 ]
-# a megjelenített szám és a sorrend: numbering.py (elöl a kiemelt javaslatok)
-PLANS += sorted(JPLANS, key=lambda p: NUM[key(p['id'])])
+# JR-javaslatok (2026-11-17, meglévő laminálttal): a hasonló színvilágú J-tervek termékeiből
+JPLANS += [
+    jplan('jr1', 'puha, rétegzett greige', 'Opálüveg gömb az étkező fölött, bézs szövet mennyezeti lámpa a nappali részen, pliszírozott szövetburás állólámpa; a hálóban szövet mennyezeti lámpa és falikarok. A greige falakhoz és a meglévő világos padlókhoz textil és opál, kemény kontraszt nélkül.',
+          (P, SERENE), (C, ALLAN), BENICARLO, (C, ALLAN), ('wall', AMAR), (C, MUSURITA), ('table', TERTIAL), (C, ALLAN), (C, BARLAST)),
+    jplan('jr2', 'natúr, könnyed', 'Bambusz függeszték az étkező fölött, szövetgömb a nappali részen, kőris lábú állólámpa; a hálóban fehér–nyír függeszték és szövetburás falikarok, a dolgozóban nyír mennyezeti lámpa. A zsályához és a világos tölgyhöz természetes anyagok, szórt fény.',
+          (P, SINNERLIG), (P, MELLOW), KINNAHULT, (P, BUNKEFLO), ('wall', AMAR), (C, NOSUND), ('table', TERTIAL), (C, LEANA), (C, LEANA)),
+    jplan('jr3', 'meleg, szórt fény a kakaóhoz', 'Bézs–kőris függeszték az étkező fölött, bézs szövet mennyezeti lámpa a nappali részen, sötétszürke–natúr szövetburás állólámpa; a hálóban rattan függeszték és szövet falikarok. A kakaó TV-fal és a travertin mellé meleg textil, fekete és króm nélkül.',
+          (P, SJOMAKT), (C, ALLAN), TRIPOD, (P, NARRKOLV), ('wall', AMAR), (C, NYMANE_C), ('floor', KLOVING), (C, ALLAN), (C, LEANA)),
+    jplan('jr4', 'napfényes, fonott', 'Juta henger az étkező fölött, szövetgömb a nappali részen, natúr szövetburás állólámpa; a hálóban sás mennyezeti lámpa és juta éjjeli lámpák. A terrakotta lap és az agyagos falak mellé fonott anyagok és fehér opál.',
+          (P, ANO), (P, MELLOW), BENICARLO, (C, TRUBB), ('table', MONTAGNA), (C, NOSUND), ('table', TVARHAND), (C, MUSURITA), (C, BARLAST)),
+    jplan('jr5', 'fekete, grafikus', 'Fekete kúpos függeszték az étkező fölött, fekete sín a nappali részen, antracit kétfejű állólámpa; a hálóban fekete–tölgy spotsor és antracit fali olvasólámpák; sínek az előszobában és a közlekedőben. A fekete ajtókhoz fekete lámpatestek.',
+          (P, SKURUP_P), (T, EASYT), KLOVING, (T, NOXELLE), ('wall', NYMANE_W), (T, ROGELIO), ('table', PATRIK), (T, SKURUP_T), (T, EASYT)),
+]
+# JF-javaslatok (2026-11-26, fekete részletek): minden tervben fekete (vagy antracit) lámpatest, a kísérőanyag változik
+# (opál, rattan, sárgaréz, opálüveg, minimál sín, plasztikus formák). Termékek a bővített lamps.json-ból.
+BRUNSTA30 = pid('lamp-ikea-brunsta-havsdjup-fuggolampa-fekete-30-cm-95-755-66'); TAGARP = pid('tagarp')
+NAVLINGE = pid('lamp-ikea-navlinge-led-es-iroasztallampa-fekete-04-044-22')
+BERCESTE = pid('lamp-bonami-fekete-mennyezeti-lampa-fem-buraval-24-cm-berceste-o-1643956')
+KAPPELAND45 = pid('lamp-ikea-kappeland-havsdjup-fuggolampa-fekete-rattan-45-cm-96-040-51')
+KAPPELAND29 = pid('lamp-ikea-kappeland-havsdjup-fuggolampa-fekete-rattan-29-cm-96-172-92')
+RATTAN70 = pid('lamp-bonami-fekete-mennyezeti-lampa-fem-rattan-buraval-10-5x70-c-1711478')
+RATTAN28 = pid('lamp-bonami-fekete-mennyezeti-lampa-fem-rattan-buraval-10x28-cm-1711476')
+TRIPOD_WOOD = pid('lamp-bonami-tripod-wood-fekete-allolampa-fa-labakkal-zuiver-21629')
+PEAK_W = pid('lamp-bonami-fekete-fali-lampa-peak-markslojd'); JUTA_T = pid('lamp-bonami-fekete-natur-szinu-asztali-lampa-juta-buraval-magass-1592182')
+PRIMA = pid('prima-gold'); OPSI = pid('lamp-bonami-matt-fekete-aranyszinu-fem-mennyezeti-lampa-opsi-nov-1938628'); CLOSY = pid('closy')
+TRAMINO = pid('lamp-bonami-fekete-aranyszinu-fali-lampa-20-cm-tramino-opviq-lig-1643994')
+GOLD_T = pid('fekete-aranyszinu-asztali'); GOLD_C = pid('lamp-bonami-fekete-aranyszinu-mennyezeti-lampa-fem-buraval-20-cm-1643978')
+SAMBORD_P = pid('sambord-fuggolampa'); SAMBORD_F = pid('sambord-allo'); SAMBORD_T = pid('sambord-iroasztali')
+RISE_C = pid('rise-markslojd-1540978'); RINGSTA_P = pid('ringsta-havsdjup'); PROFIL_W = pid('lamp-bonami-fekete-kremszinu-fali-lampa-18-cm-profil-opviq-light-1780756')
+MILF = pid('feher-fekete-opaluveg-mennyezeti')
+LENA = pid('lena-fekete'); FOLKBAT = pid('folkbat'); CREST_W = pid('crest-fekete-fali')
+KVALLSDOPP = pid('kvallsdopp-havsdjup'); MARGOT = pid('margot'); DIONE_F = pid('allolampa-fem-buraval-dione')
+JPLANS += [
+    jplan('jf1', 'fekete kupolák, opál fény', 'Takarékos IKEA-terv: kis fekete kupola az étkező fölött, matt fekete opál LED-lámpa a nappali részen, fekete felfelé világító állólámpa; a hálóban ugyanaz a fekete opál lámpa és antracit fali olvasólámpák; a dolgozóban antracit LED-lámpa és fekete LED-es íróasztal-lámpa; az előszobában és a közlekedőben kis fekete fém mennyezeti lámpák.',
+          (P, BRUNSTA30), (C, KABOMBA), TAGARP, (C, KABOMBA), ('wall', NYMANE_W), (C, NYMANE_C), ('table', NAVLINGE), (C, BERCESTE), (C, BERCESTE)),
+    jplan('jf2', 'fekete fém és rattan', 'Fekete–rattan függeszték az étkező fölött, széles fekete–rattan mennyezeti lámpa a nappali részen, fekete burás, fa lábú háromlábú állólámpa; a hálóban kisebb fekete–rattan függeszték és fekete kúpos falikarok; a dolgozóban antracit LED-lámpa és fekete–juta asztali lámpa; az előszobában és a közlekedőben kis fekete–rattan lámpák. A mokka és a taupe mellé meleg fonott anyag.',
+          (P, KAPPELAND45), (C, RATTAN70), TRIPOD_WOOD, (P, KAPPELAND29), ('wall', PEAK_W), (C, NYMANE_C), ('table', JUTA_T), (C, RATTAN28), (C, RATTAN28)),
+    jplan('jf3', 'fekete és sárgaréz', 'Fekete–arany függeszték az étkező fölött, matt fekete–arany mennyezeti lámpa a nappali részen és a hálóban, fekete–arany állólámpa; a hálóban fekete–arany falikarok; a dolgozóban antracit LED-lámpa és fekete–arany asztali lámpa; az előszobában és a közlekedőben kis fekete–arany mennyezeti lámpák. Az olívához és a travertinhez meleg fémfény.',
+          (P, PRIMA), (C, OPSI), CLOSY, (C, OPSI), ('wall', TRAMINO), (C, NYMANE_C), ('table', GOLD_T), (C, GOLD_C), (C, GOLD_C)),
+    jplan('jf4', 'fekete és opálüveg', 'Háromfejű fekete–fehér függeszték az étkező fölött, fekete–opálüveg mennyezeti lámpa a nappali részen, fekete–fehér olvasó állólámpa; a hálóban fekete–fehér kupola és fekete–krém falikarok; a dolgozóban antracit LED-lámpa és fekete–fehér íróasztal-lámpa; az előszobában és a közlekedőben fehér–fekete opál mennyezeti lámpák. Klasszikus, „párizsias”.',
+          (P, SAMBORD_P), (C, RISE_C), SAMBORD_F, (P, RINGSTA_P), ('wall', PROFIL_W), (C, NYMANE_C), ('table', SAMBORD_T), (C, MILF), (C, MILF)),
+    jplan('jf5', 'minimál fekete sínek', 'Fekete kupola az étkező fölött, antracit 4 spotos spotsor a nappali részen, kétfejű fekete spot-állólámpa; a hálóban fekete sín és fekete falikarok; a dolgozóban fekete sín és LED-es íróasztal-lámpa; az előszobában antracit spotsor, a közlekedőben fekete sín. A sötét, tónusos falakhoz irányítható, falmosó fény.',
+          (P, LENA), (T, NYMANE_T), FOLKBAT, (T, SKURUP_T), ('wall', CREST_W), (T, SKURUP_T), ('table', NAVLINGE), (T, NYMANE_T), (T, SKURUP_T)),
+    jplan('jf6', 'plasztikus fekete formák', 'Nagy, 72 cm-es fekete kupola az étkező fölött, fekete fém mennyezeti lámpa a nappali részen, ívelt fekete állólámpa a kanapé fölé; a hálóban fekete kupola és Manie falikarok; a dolgozóban antracit LED-lámpa és Manie asztali lámpa; az előszobában fekete mennyezeti lámpa, a közlekedőben kis fekete lámpák. Kevés, de karakteres darab.',
+          (P, KVALLSDOPP), (C, MARGOT), DIONE_F, (P, LENA), ('wall', MANIE_W), (C, NYMANE_C), ('table', MANIE_T), (C, MARGOT), (C, BERCESTE)),
+]
+# Stílusvonalak (2026-11-26): a JF7–JF12, JS1–JS5, JM1–JM4 és JP1–JP5 javaslatok világítása. Fekete: fekete lámpatestek;
+# skandináv: fehér, nyír, kőris, opál; melegebb világos: sárgaréz, opál, textil; japandi: papír, sás, bambusz, rattan.
+SELMA = pid('lamp-bonami-bezs-papir-fuggolampa-65-cm-selma-jotex-1942526')
+SIV = pid('lamp-bonami-bezs-papir-fuggolampa-60-cm-siv-jotex-1942358')
+MONSHI = pid('lamp-bonami-kremszinu-papir-mennyezeti-lampa-60-cm-monshi-jotex-1941712')
+PAPER_T = pid('lamp-bonami-natur-szinu-asztali-lampa-papir-zsinor-buraval-magas-1569860')
+PAPER_T2 = pid('lamp-bonami-barna-kremszinu-papir-asztali-lampa-magassag-44-cm-m-1942376')
+VARPTROSS_W = pid('lamp-ikea-varptross-falilampa-bambusz-30-cm-06-108-53')
+MANALG_W = pid('lamp-ikea-manalg-falilampa-sas-kezzel-keszult-04-838-92')
+CAFE = pid('lamp-bonami-feher-opaluveg-fuggolampa-30x44-cm-cafe-nordlux-1951514')
+AKTER_F = pid('lamp-ikea-akterspring-allolampa-opalfeh-uveg-sargarez-bev-162-06-143-14')
+OKENSAND = pid('lamp-ikea-okensand-allolampa-bukk-feher-05-415-26')
+OPAL_BRASS_P = pid('lamp-bonami-feher-sargarez-szinu-opaluveg-fuggolampa-54x41-5-cm-1951524')
+BRASS_OPAL_C = pid('lamp-bonami-sargarez-szinu-opaluveg-mennyezeti-lampa-48-5x25-cm-1951268')
+BRASS_TEXTIL_F = pid('lamp-bonami-kremszinu-sargarez-szinu-textil-allolampa-magassag-1-1941546')
+ROE_W = pid('lamp-bonami-feher-sargarez-szinu-fali-lampa-roe-opviq-lights-1709356')
+SOBER_T = pid('lamp-bonami-sober-feher-szinu-sargarez-asztali-lampa-markslojd-1379517')
+OPAL_BRASS_W = pid('lamp-bonami-feher-sargarez-szinu-opaluveg-fali-lampa-21x16x14-5-1951526')
+BAMBOO_P = pid('lamp-bonami-natur-szinu-fuggolampa-bambusz-buraval-42-cm-rodi-bl-1292400')
+WALA_T = pid('lamp-bonami-wala-rattan-asztali-lampa-magassag-35-cm-sulion-1443461')
+LEN_F = pid('lamp-bonami-bezs-sargarez-szinu-len-allolampa-hajlithato-szerkez-1950744')
+OPAL_BRASS_T = pid('lamp-bonami-feher-sargarez-szinu-opaluveg-asztali-lampa-14-5x41-1951614')
+OPAL_T = pid('lamp-bonami-bezs-opaluveg-asztali-lampa-27-5x21-cm-malti-nordlux-1951412')
+BAROMETER = pid('lamp-ikea-barometer-mennyezeti-sin-5-spottal-sargarez-03-646-34')
+SJOMAKT_T = pid('lamp-ikea-sjomakt-iroasztali-lampa-bezs-koris-05-956-66')
+SJOMAKT_F = pid('lamp-ikea-sjomakt-allolampa-2-spottal-bezs-koris-05-956-67')
+JPLANS += [
+    # fekete/antracit vonal
+    jplan('jf7', 'fekete kupola és fekete–rattan', 'Fekete kupola az étkező fölött, fekete–rattan függeszték a nappali részen és a hálóban, fekete felfelé világító állólámpa; antracit fali olvasólámpák, a dolgozóban antracit LED-lámpa és fekete íróasztal-lámpa; az előszobában fekete fém, a közlekedőben kis fekete–rattan lámpák.',
+          (P, RANARP), (P, KAPPELAND45), TAGARP, (P, KAPPELAND29), ('wall', NYMANE_W), (C, NYMANE_C), ('table', NAVLINGE), (C, BERCESTE), (C, RATTAN28)),
+    jplan('jf8', 'fekete kúp és sín', 'Fekete kúpos függeszték az étkező fölött, fekete spotsín a nappali részen, antracit kétfejű állólámpa; a hálóban matt fekete opál LED-lámpa és fekete kúpos falikarok; a dolgozóban Manie asztali lámpa; fekete mennyezeti lámpa az előszobában, sín a közlekedőben.',
+          (P, SKURUP_P), (T, ETNA), KLOVING, (C, KABOMBA), ('wall', PEAK_W), (C, NYMANE_C), ('table', MANIE_T), (C, MARGOT), (T, SKURUP_T)),
+    jplan('jf9', 'nagy fekete kupola, fekete és arany', 'Nagy, 72 cm-es fekete kupola az étkező fölött, matt fekete–arany mennyezeti lámpa a nappali részen, ívelt fekete állólámpa; a hálóban fekete mennyezeti lámpa és fekete–arany falikarok; a dolgozóban fekete–arany asztali lámpa. A sötét dió padlóhoz sok, meleg fény.',
+          (P, KVALLSDOPP), (C, OPSI), DIONE_F, (C, MARGOT), ('wall', TRAMINO), (C, NYMANE_C), ('table', GOLD_T), (C, OPSI), (C, GOLD_C)),
+    jplan('jf10', 'fekete–fehér, skandináv', 'Fekete kupola az étkező fölött, fehér–fekete üveg mennyezeti lámpa a nappali részen, fekete–fehér olvasó állólámpa; a hálóban fekete–fehér kupola és antracit falikarok; fehér–fekete opál lámpák az előszobában és a közlekedőben.',
+          (P, BRUNSTA30), (C, RISE_C), SAMBORD_F, (P, RINGSTA_P), ('wall', NYMANE_W), (C, NYMANE_C), ('table', SAMBORD_T), (C, MILF), (C, MILF)),
+    jplan('jf11', 'fekete fém és fonott anyag', 'Fekete–rattan függeszték az étkező fölött, széles fekete–rattan mennyezeti lámpa a nappali részen, sötétszürke–natúr szövetburás állólámpa; a hálóban sás mennyezeti lámpa és fekete Manie falikarok; fekete–juta asztali lámpa a dolgozóban; kis fekete–rattan lámpák az előszobában és a közlekedőben.',
+          (P, KAPPELAND45), (C, RATTAN70), TRIPOD, (C, TRUBB), ('wall', MANIE_W), (C, NYMANE_C), ('table', JUTA_T), (C, RATTAN28), (C, RATTAN28)),
+    jplan('jf12', 'fekete, arany és opál', 'Fekete–arany függeszték az étkező fölött, sárgaréz opálüveg mennyezeti lámpa a nappali részen, fekete–arany állólámpa; a hálóban matt fekete–arany mennyezeti lámpa és fekete–arany falikarok; kis fekete–arany lámpák az előszobában és a közlekedőben.',
+          (P, PRIMA), (C, BRASS_OPAL_C), CLOSY, (C, OPSI), ('wall', TRAMINO), (C, NYMANE_C), ('table', GOLD_T), (C, GOLD_C), (C, GOLD_C)),
+    # skandináv vonal
+    jplan('js1', 'fehér és nyír', 'Fehér–nyír függeszték az étkező fölött, fehér–natúr LED-lámpa a nappali részen, kőris lábú állólámpa; a hálóban nyír mennyezeti lámpa és szürke asztali lámpák; nyír a dolgozóban, fehér LED-lámpák az előszobában és a közlekedőben.',
+          (P, BUNKEFLO), (C, MUSURITA), KINNAHULT, (C, NOSUND), ('table', TERTIAL), (C, NOSUND), ('table', TERTIAL), (C, BARLAST), (C, BARLAST)),
+    jplan('js2', 'opál és szövet', 'Fehér opálüveg függeszték az étkező fölött, szövetgömb a nappali részen, bükk–fehér állólámpa; a hálóban fehér–nyír függeszték és szövet falikarok; kőris íróasztal-lámpa a dolgozóban.',
+          (P, CAFE), (P, MELLOW), OKENSAND, (P, BUNKEFLO), ('wall', AMAR), (C, NOSUND), ('table', SJOMAKT_T), (C, LEANA), (C, LEANA)),
+    jplan('js3', 'bézs–kőris, hűvösebb fény', 'Bézs–kőris függeszték az étkező fölött, fehér–natúr LED-lámpa a nappali részen, ívelt, világosszürke burás állólámpa; a hálóban bézs szövet mennyezeti lámpa és antracit fali olvasólámpák; fehér LED-lámpák az előszobában és a közlekedőben.',
+          (P, SJOMAKT), (C, MUSURITA), SKOTTORP, (C, ALLAN), ('wall', NYMANE_W), (C, GONZALO), ('table', TERTIAL), (C, BARLAST), (C, BARLAST)),
+    jplan('js4', 'nyír, kőris és opál', 'Fehér–nyír függeszték az étkező fölött, nyír mennyezeti lámpa a nappali részen, kőris kétfejű állólámpa; a hálóban sás mennyezeti lámpa és bézs opál asztali lámpák; kőris íróasztal-lámpa a dolgozóban.',
+          (P, BUNKEFLO), (C, NOSUND), SJOMAKT_F, (C, TRUBB), ('table', OPAL_T), (C, NOSUND), ('table', SJOMAKT_T), (C, LEANA), (C, LEANA)),
+    jplan('js5', 'fekete–fehér kontraszt', 'Kis fekete kupola az étkező fölött, matt fekete opál LED-lámpa a nappali részen, fekete felfelé világító állólámpa; a hálóban fehér–nyír függeszték és antracit falikarok; fekete LED-es íróasztal-lámpa; fehér LED-lámpák az előszobában és a közlekedőben.',
+          (P, BRUNSTA30), (C, KABOMBA), TAGARP, (P, BUNKEFLO), ('wall', NYMANE_W), (C, NYMANE_C), ('table', NAVLINGE), (C, BARLAST), (C, BARLAST)),
+    # melegebb világos vonal
+    jplan('jm1', 'sárgaréz és opál', 'Fehér–sárgaréz opálüveg függeszték az étkező fölött, sárgaréz opál mennyezeti lámpa a nappali részen, krém–sárgaréz textil állólámpa; a hálóban bézs szövet mennyezeti lámpa és fehér–sárgaréz falikarok; sárgaréz asztali lámpa a dolgozóban.',
+          (P, OPAL_BRASS_P), (C, BRASS_OPAL_C), BRASS_TEXTIL_F, (C, ALLAN), ('wall', ROE_W), (C, MUSURITA), ('table', SOBER_T), (C, ALLAN), (C, LEANA)),
+    jplan('jm2', 'bambusz, rattan és len', 'Bambusz függeszték az étkező fölött, szövetgömb a nappali részen, bézs–sárgaréz len állólámpa; a hálóban rattan függeszték és fehér–sárgaréz opál falikarok; opál–sárgaréz asztali lámpa a dolgozóban.',
+          (P, SINNERLIG), (P, MELLOW), LEN_F, (P, NARRKOLV), ('wall', OPAL_BRASS_W), (C, NOSUND), ('table', OPAL_BRASS_T), (C, ALLAN), (C, LEANA)),
+    jplan('jm3', 'opálgömb és sárgaréz sín', 'Opálüveg gömb az étkező fölött, bézs szövet mennyezeti lámpa a nappali részen, opál–sárgaréz állólámpa; a hálóban szövet mennyezeti lámpa és opál–sárgaréz asztali lámpák; sárgaréz opál lámpa az előszobában, sárgaréz spotsín a közlekedőben.',
+          (P, SERENE), (C, ALLAN), AKTER_F, (C, ALLAN), ('table', OPAL_BRASS_T), (C, MUSURITA), ('table', TERTIAL), (C, BRASS_OPAL_C), (T, BAROMETER)),
+    jplan('jm4', 'juta és rattan', 'Juta henger az étkező fölött, szövetgömb a nappali részen, natúr szövetburás állólámpa; a hálóban sás mennyezeti lámpa és rattan asztali lámpák; bambusz asztali lámpa a dolgozóban.',
+          (P, ANO), (P, MELLOW), BENICARLO, (C, TRUBB), ('table', WALA_T), (C, NOSUND), ('table', TVARHAND), (C, ALLAN), (C, LEANA)),
+    # japandi vonal
+    jplan('jp1', 'papír és sás', 'Bézs papír függeszték az étkező fölött, krém papír mennyezeti lámpa a nappali részen, sötétszürke–natúr állólámpa; a hálóban papír függeszték és sás falikarok; papírzsinór asztali lámpa a dolgozóban; sás lámpák az előszobában és a közlekedőben.',
+          (P, SELMA), (C, MONSHI), TRIPOD, (P, SIV), ('wall', MANALG_W), (C, NOSUND), ('table', PAPER_T), (C, TRUBB), (C, TRUBB)),
+    jplan('jp2', 'papír és antracit', 'Bézs–kőris függeszték az étkező fölött, krém papír mennyezeti lámpa a nappali részen, antracit kétfejű állólámpa; a hálóban sás mennyezeti lámpa és antracit falikarok; papír asztali lámpa a dolgozóban.',
+          (P, SJOMAKT), (C, MONSHI), KLOVING, (C, TRUBB), ('wall', NYMANE_W), (C, NYMANE_C), ('table', PAPER_T2), (C, ALLAN), (C, LEANA)),
+    jplan('jp3', 'bambusz és papír', 'Bambusz függeszték az étkező fölött, bézs papír függeszték a nappali részen, fa lábú háromlábú állólámpa; a hálóban papír mennyezeti lámpa és bambusz falikarok; papírzsinór asztali lámpa a dolgozóban.',
+          (P, BAMBOO_P), (P, SIV), TRIPOD_WOOD, (C, MONSHI), ('wall', VARPTROSS_W), (C, NOSUND), ('table', PAPER_T), (C, TRUBB), (C, TRUBB)),
+    jplan('jp4', 'rattan és papír', 'Rattan függeszték az étkező fölött, nagy papír függeszték a nappali részen, sötétszürke–natúr állólámpa; a hálóban sás mennyezeti lámpa és papír asztali lámpák; fekete–juta asztali lámpa a dolgozóban.',
+          (P, NARRKOLV), (P, SELMA), TRIPOD, (C, TRUBB), ('table', PAPER_T2), (C, NYMANE_C), ('table', JUTA_T), (C, ALLAN), (C, ALLAN)),
+    jplan('jp5', 'bambusz, papír és bükk', 'Bambusz függeszték az étkező fölött, krém papír mennyezeti lámpa a nappali részen, bükk–fehér állólámpa; a hálóban papír függeszték és sás falikarok; kőris íróasztal-lámpa a dolgozóban.',
+          (P, SINNERLIG), (C, MONSHI), OKENSAND, (P, SIV), ('wall', MANALG_W), (C, NOSUND), ('table', SJOMAKT_T), (C, LEANA), (C, LEANA)),
+]
+# a megjelenített szám és a sorrend: numbering.py (elöl a kiemelt javaslatok, a JR-javaslatok a végén)
+PLANS += sorted(JPLANS, key=lambda p: order(p['id']))
 
 def lit(v, ind):
     # TypeScript-literál a projekt stílusában (egyszeres idézőjel, idézőjel nélküli kulcsok)

@@ -1,20 +1,17 @@
-import { subVariantsOf } from '../data/subVariants';
-import { DEFAULT_VARIANTS } from '../data/variants';
+import { DEFAULT_VARIANTS, VARIANT_GROUPS } from '../data/variants';
 import type { Variant } from '../model/types';
 
-// A változatválasztó opciói csoportosítva: elöl a kiemelt (aljavaslatos) J-javaslatok, aztán a többi javaslat, végül a
-// saját (másolt, importált) változatok; a csoportokon belül a J-szám szerint.
+// A változatválasztó opciói stílusvonalak szerint csoportosítva (2026-11-26, user): fekete/antracit, skandináv, melegebb
+// világos, japandi, egyéb, alul a meglévő padlót megtartók, a végén a saját (másolt, importált) változatok. A csoportok és
+// a sorrend a generátorból jönnek (scripts/gen/gen_variants.py – VARIANT_GROUPS); kiemelt csoport nincs.
 
 const BASE = new Set(DEFAULT_VARIANTS.map((v) => v.id));
-const num = (v: Variant) => Number(v.name.match(/^J(\d+)\b/)?.[1] ?? 1000);
-const byNum = (vs: Variant[]) => [...vs].sort((a, b) => num(a) - num(b));
 
 export function VariantOptions({ variants, suffix }: { variants: Variant[]; suffix?: (v: Variant) => string }) {
-  const featured = (v: Variant) => subVariantsOf(v.id).length > 0;
+  const byId = new Map(variants.map((v) => [v.id, v]));
   const groups = [
-    { label: 'Kiemelt javaslatok – aljavaslatokkal', items: byNum(variants.filter(featured)) },
-    { label: 'További javaslatok', items: byNum(variants.filter((v) => BASE.has(v.id) && !featured(v))) },
-    { label: 'Saját változatok', items: variants.filter((v) => !BASE.has(v.id) && !featured(v)) },
+    ...VARIANT_GROUPS.map((g) => ({ label: `${g.label} (${g.ids.length})`, items: g.ids.map((id) => byId.get(id)).filter((v): v is Variant => !!v) })),
+    { label: 'Saját változatok', items: variants.filter((v) => !BASE.has(v.id)) },
   ];
   return (
     <>

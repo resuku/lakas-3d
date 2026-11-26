@@ -12,7 +12,9 @@ import type { DecorItem, LightPlan, LightSettings, Variant } from './model/types
 
 /** Egy nézet, vagy két nézet egymás mellett ugyanarról: bal a fényjelenet, jobb a termékhű nézet. */
 export type ViewMode = 'single' | 'split';
-export type SidebarTab = 'view' | 'variant' | 'materials' | 'light' | 'more';
+/** Az oldalsáv fülei (v17 óta feladat szerint): felületek, világítás, berendezés, továbbiak. */
+export type SidebarTab = 'surfaces' | 'light' | 'furnish' | 'more';
+export type Theme = 'system' | 'light' | 'dark';
 
 export interface Layers {
   status: boolean;
@@ -50,7 +52,7 @@ interface State {
   planFollowsVariant: boolean;
   /** Néző-szintű beállítások: csak ezen a gépen, a konfigurációs fájlba nem kerülnek. */
   viewerName: string;
-  /** Részletes (tervezői) nézet: rétegek, ellenőrzések, források, lámpaszerkesztés; egyébként egyszerű nézet. */
+  /** Tervezői mód (Beállítások menü): további rétegek, ellenőrzések, források, lámpák helye, fény finomhangolása. */
   details: boolean;
   /** Könnyített megjelenítés gyengébb gépekhez: árnyék nélkül, kisebb felbontással. */
   lowQuality: boolean;
@@ -59,6 +61,8 @@ interface State {
   /** Helyi fotótextúrák (padló, ajtó, bútor a termékfotóból), ha a gépen vannak (lib/localTextures.ts). */
   photoTextures: boolean;
   helpSeen: boolean;
+  /** Színtéma (Beállítások menü): a rendszer beállítása szerint, világos vagy sötét. A 3D nézetre nem hat. */
+  theme: Theme;
   /** Az oldalsáv aktív füle. */
   sidebarTab: SidebarTab;
   /** Nyitott műszaki lehetőségek választása (data/choices.ts). */
@@ -126,7 +130,7 @@ interface State {
   setMoveKey(on: boolean): void;
   setPlanFollowsVariant(on: boolean): void;
   setFurnitureFollowsVariant(on: boolean): void;
-  setViewer(patch: Partial<Pick<State, 'viewerName' | 'details' | 'lowQuality' | 'productView' | 'photoTextures' | 'helpSeen' | 'sidebarTab'>>): void;
+  setViewer(patch: Partial<Pick<State, 'viewerName' | 'details' | 'lowQuality' | 'productView' | 'photoTextures' | 'helpSeen' | 'sidebarTab' | 'theme'>>): void;
   /** A saját visszajelzés (viewerName néven) az adott változathoz. */
   setFeedback(variantId: string, patch: { fav?: boolean; note?: string }): void;
   /** Más konfigurációs fájljából a visszajelzések (és az ott létrehozott új változatok) átvétele. */
@@ -165,7 +169,7 @@ function initialSettings() {
 }
 
 /** A mentett állapot verziója (localStorage és konfigurációs fájl). */
-export const STORE_VERSION = 14;
+export const STORE_VERSION = 20;
 
 /** A v6-ban törölt alapváltozatok (halszálkás J3, J12; termék nélküli A/B/C koncepciók) és terveik. */
 const REMOVED_VARIANTS = ['v-meleg', 'v-japandi', 'v-zsalya', 'j3-homok-agyag', 'j12-mediterran'];
@@ -197,7 +201,7 @@ function pickPersisted(s: State): Persisted {
 }
 
 /** A böngészőben megmaradó állapot: a konfiguráció + a néző-szintű beállítások. */
-const LOCAL_KEYS = [...PERSISTED_KEYS, 'viewerName', 'details', 'lowQuality', 'productView', 'photoTextures', 'helpSeen', 'sidebarTab'] as const;
+const LOCAL_KEYS = [...PERSISTED_KEYS, 'viewerName', 'details', 'lowQuality', 'productView', 'photoTextures', 'helpSeen', 'sidebarTab', 'theme'] as const;
 function pickLocal(s: State) {
   return Object.fromEntries(LOCAL_KEYS.map((k) => [k, s[k]]));
 }
@@ -230,6 +234,15 @@ export function smallDevice() {
 // v13: katalógusszín-javítás a termékfotó alapján (DOOR_HEX_FIXES): a mentett változat ajtószíne az újra, ha a
 //      változat ezt az ajtóterméket használja és a színe még a régi katalógusszín (kézi szín nem változik)
 // v14: Villamosság réteg (layers.electrical – alapból rejtve)
+// v15: JR-javaslatok (meglévő laminált; jr1–jr5, terveik ljr1–ljr5) a mentett változatok és tervek végére; a változat
+//      járólapos zónája (`hallFloor`) és saját lehetőségei (`choices`) új, nem kötelező mezők
+// v16: JF-javaslatok (fekete részletek; jf1–jf6, terveik ljf1–ljf6) a mentett változatok és tervek végére
+// v20: stílusvonalak (2026-11-26): új javaslatok – JF7–JF12, JS1–JS5, JM1–JM4, JP1–JP5 – és terveik a mentett változatok
+//      és tervek végére (a választó csoportjai a VARIANT_GROUPS-ból jönnek, a tárolt formát nem érintik)
+// v19: a nappali kanapéja alapból L alakú (user, 2026-11-26): a mentett „egyenes” (a korábbi alapérték) „chaise” lesz
+// v18: színtéma (theme: system | light | dark, néző-szintű; alapból a rendszer beállítása). Nincs átalakítás: a hiányzó
+//      kulcs az alapértéket kapja, a konfigurációs fájl betöltése pedig nem írja felül (a téma nem része a fájlnak)
+// v17: új kezelőfelület – az oldalsáv fülei feladat szerint (surfaces, light, furnish, more); a régi fül értéke átfordul
 const DOOR_HEX_FIXES: { product: string; from: string; to: string }[] = [{ product: 'door-ajtomester-charleston-tolgy', from: '#A18069', to: '#937159' }];
 const MOVED_FIXTURES: { id: string; from: [number, number]; to: [number, number] }[] = [
   { id: 'etk', from: [1720, 1700], to: [1720, 2050] },
@@ -326,6 +339,50 @@ function migrateState(persisted: unknown, version: number) {
     });
   }
   if (version < 14 && s.layers && s.layers.electrical === undefined) s.layers = { ...s.layers, electrical: false };
+  if (version < 15) {
+    if (s.variants) {
+      const have = new Set(s.variants.map((v) => v.id));
+      s.variants = [...s.variants, ...clone(DEFAULT_VARIANTS.filter((v) => v.id.startsWith('jr') && !have.has(v.id)))];
+    }
+    if (s.lightPlans) {
+      const have = new Set(s.lightPlans.map((p) => p.id));
+      s.lightPlans = [...s.lightPlans, ...clone(DEFAULT_LIGHT_PLANS.filter((p) => p.id.startsWith('ljr') && !have.has(p.id)))];
+    }
+  }
+  if (version < 16) {
+    if (s.variants) {
+      const have = new Set(s.variants.map((v) => v.id));
+      s.variants = [...s.variants, ...clone(DEFAULT_VARIANTS.filter((v) => v.id.startsWith('jf') && !have.has(v.id)))];
+    }
+    if (s.lightPlans) {
+      const have = new Set(s.lightPlans.map((p) => p.id));
+      s.lightPlans = [...s.lightPlans, ...clone(DEFAULT_LIGHT_PLANS.filter((p) => p.id.startsWith('ljf') && !have.has(p.id)))];
+    }
+  }
+  if (version < 20) {
+    const NEW_V = /^(jf(7|8|9|10|11|12)|js\d+|jm\d+|jp\d+)-/;
+    const NEW_P = /^l(jf(7|8|9|10|11|12)|js\d+|jm\d+|jp\d+)$/;
+    if (s.variants) {
+      const have = new Set(s.variants.map((v) => v.id));
+      s.variants = [...s.variants, ...clone(DEFAULT_VARIANTS.filter((v) => NEW_V.test(v.id) && !have.has(v.id)))];
+    }
+    if (s.lightPlans) {
+      const have = new Set(s.lightPlans.map((p) => p.id));
+      s.lightPlans = [...s.lightPlans, ...clone(DEFAULT_LIGHT_PLANS.filter((p) => NEW_P.test(p.id) && !have.has(p.id)))];
+    }
+  }
+  if (version < 19) {
+    // a korábbi alapérték nem különböztethető meg a tudatos választástól – a kérés szerint mindkettő az új alapra vált
+    const st = s as { choices?: Record<string, string> };
+    if (st.choices?.['nappali-kanape'] === 'egyenes') st.choices = { ...st.choices, 'nappali-kanape': 'chaise' };
+  }
+  if (version < 17) {
+    // Nézet → eszköztár, Javaslat → fejléc (a bútoros része a Berendezés fülre), Anyagok → Felületek
+    const st = s as { sidebarTab?: string };
+    const map: Record<string, SidebarTab> = { view: 'surfaces', variant: 'surfaces', materials: 'surfaces', light: 'light', more: 'more' };
+    if (st.sidebarTab !== undefined) st.sidebarTab = map[st.sidebarTab] ?? 'surfaces';
+  }
+
   return s;
 }
 
@@ -362,8 +419,9 @@ export const useStore = create<State>()(
       lowQuality: smallDevice(),
       productView: false,
       photoTextures: true,
+      theme: 'system',
       helpSeen: false,
-      sidebarTab: 'variant',
+      sidebarTab: 'surfaces',
 
       setRoom: (id) => set((s) => ({ roomId: id, camRequest: { key: '0', n: s.camRequest.n + 1 } })),
       setViewMode: (m) => set({ viewMode: m }),
@@ -375,11 +433,17 @@ export const useStore = create<State>()(
           const follow = s.planFollowsVariant && plan && s.lightPlans.some((p) => p.id === plan);
           // az aljavaslat a saját J-javaslatához tartozik: váltáskor a lehetőségei és a dekorja kikerül
           const leave = s.activeSubId ? { activeSubId: null, choices: subChoices(s.choices, null), decor: s.decor.filter((d) => !isSubDecor(d)), selectedDecor: null } : {};
+          // a változat saját lehetőségei (pl. JR: meglévő ágy és asztal); az előző változatéi az alapértékre állnak vissza
+          const prev = s.variants.find((x) => x.id === s.activeId);
+          const choices = { ...(leave.choices ?? s.choices) };
+          for (const k of Object.keys(prev?.choices ?? {})) choices[k] = DEFAULT_CHOICES[k];
+          Object.assign(choices, v?.choices ?? {});
           return {
             activeId: id,
             ...(follow ? { activePlanId: plan, lampsOff: {} } : {}),
             ...(s.furnitureFollowsVariant && v ? { furniturePicks: suggestFurniture(v).picks } : {}),
             ...leave,
+            choices,
           };
         }),
       updateVariant: (id, fn) => set((s) => ({ variants: s.variants.map((v) => (v.id === id ? fn(clone(v)) : v)) })),

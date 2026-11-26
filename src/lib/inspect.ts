@@ -1,6 +1,7 @@
 import { CURTAIN_TYPE_LABEL, DOOR_STYLE_LABEL, findCurtain, findDoor, findFloor, findPaint } from '../data/products';
 import type { Fixture, LightSettings, Opening, Room, Val, Variant } from '../model/types';
 import { FIXTURE_LABEL, findLamp, fixtureSpec } from './fixtures';
+import { roomFloor, zoneFloor } from './floors';
 import { STATUS_INFO } from './status';
 
 // Gyorsinfó (Alt): rövid leírás az egér alatti elemről. A 3D objektumok `userData.inspect` mezőjében.
@@ -39,16 +40,24 @@ export function wallInfo(room: Room, wallId: string, v: Variant) {
   );
 }
 
-export function floorInfo(room: Room, v: Variant) {
-  if (room.floor && v.floorAll === false) return info(`${room.name} – padló`, 'Eltérő burkolat: járólap', room.floor.note);
-  const f = findFloor(v.products?.floor);
-  const pattern = v.floor.pattern === 'herringbone' ? 'halszálka' : v.floor.pattern === 'tile' ? 'lap' : 'hajópadló';
+/** `zone`: a helyiség járólapos része (nappali dolgozó felőli sávja), ha külön burkolatú. */
+export function floorInfo(room: Room, v: Variant, zone = false) {
+  const spec = zone ? zoneFloor(room, v) : roomFloor(room, v);
+  if (!spec || spec.kind === 'alt') return info(`${room.name} – padló`, 'Eltérő burkolat: járólap', room.floor?.note);
+  const f = findFloor(spec.productId);
+  const pattern = spec.pattern === 'herringbone' ? 'halszálka' : spec.pattern === 'tile' ? 'lap' : 'hajópadló';
+  const title = `${room.name} – ${zone ? 'járólapos sáv' : 'padló'}`;
+  const where = spec.kind === 'hall' ? 'Járólapos zóna (előszoba, közlekedő, nappali dolgozó felőli sávja)' : undefined;
+  if (f?.existing)
+    return info(title, where, `Meglévő: ${f.name} – megmarad`, f.size && `kb. ${f.size.l} × ${f.size.w} mm · ${f.type}`, zone ? room.floorZone?.note : f.note);
   return infoUrl(
     f?.url,
-    `${room.name} – padló`,
-    f ? `${f.store}: ${f.manufacturer} ${f.name}${f.decor ? ` (${f.decor})` : ''}` : `${v.floor.tone} – kézi szín, nincs hozzárendelt termék`,
+    title,
+    where,
+    f ? `${f.store}: ${f.manufacturer} ${f.name}${f.decor ? ` (${f.decor})` : ''}` : `${spec.tone} – kézi szín, nincs hozzárendelt termék`,
     f?.size && `${f.size.l} × ${f.size.w} mm · ${f.type}${f.wear ? ` · ${f.wear}` : ''}`,
     `Minta: ${pattern}${f?.price ? ` · ${priceOf(f.price)}` : ''}`,
+    zone && room.floorZone?.note,
   );
 }
 

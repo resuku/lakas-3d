@@ -101,18 +101,34 @@ export function resolveFurnishing(specs: FurnSpec[], picks: Record<string, strin
   return out;
 }
 
-/** Méretkeret termékhelyenként (mm): a katalógusválasztó ezzel jelzi, mi fér a javasolt helyre. */
+/**
+ * Ajánlott méret termékhelyenként (mm). 2026-11-26 óta ajánlás, nem kizárás (user): a napló döntései és a feltételezett
+ * méretek csak rangsorolnak és jeleznek („eltér az ajánlástól”). Kizárni csak a `fit` – mért geometriából adódó – határ zár.
+ */
 export const SLOT_LIMITS: Record<
   string,
-  { label: string; w?: [number, number]; d?: [number, number]; h?: [number, number]; chaiseD?: [number, number]; mattressMinW?: number }
+  { label: string; w?: [number, number]; d?: [number, number]; h?: [number, number]; chaiseD?: [number, number]; mattressMinW?: number; fit?: { label: string; w?: number } }
 > = {
   'nappali.kanape': { label: 'szélesség 190–235, mélység legfeljebb 100 cm', w: [1900, 2350], d: [0, 1000] },
-  'nappali.kanape-chaise': { label: 'szélesség legfeljebb 260, az L ága legfeljebb kb. 180 cm (az erkély felé ennél hosszabb az erkélyajtó vonalába lóg)', w: [0, 2600], d: [0, 1000], chaiseD: [0, 1800] },
-  'nappali.tvfal': { label: 'legfeljebb 250 cm széles (a radiátortól ~30 cm), az alsó rész legfeljebb 46 cm mély', w: [1600, 2500], d: [0, 460], h: [0, 2600] },
+  // 2026-11-26: a user szerint 250–270 cm-es L alakú kanapé is elfér (korábban legfeljebb 260)
+  'nappali.kanape-chaise': { label: 'szélesség 250–270, az L ága legfeljebb kb. 180 cm (az erkély felé ennél hosszabb az erkélyajtó vonalába lóg)', w: [2500, 2700], d: [0, 1000], chaiseD: [0, 1800] },
+  'nappali.tvfal': {
+    label: 'legfeljebb 250 cm széles (a radiátortól ~30 cm), az alsó rész legfeljebb 46 cm mély',
+    w: [1600, 2500],
+    d: [0, 460],
+    h: [0, 2600],
+    fit: { label: 'a falszakasz a közlekedői átjáró és a radiátor között 281 cm (ND-009)', w: 2810 },
+  },
   'dolgozo.asztal': { label: 'hosszú ág 150–220 cm, mélység legalább 60 cm, rövid ág legfeljebb 125 cm (az ajtó előtt)', w: [1500, 2200], d: [600, 900] },
   'dolgozo.asztal-sziget': { label: 'hosszú ág 150–200 cm, rövid ág legfeljebb 170 cm (a háló felőli falig ≥ 75 cm)', w: [1500, 2000], d: [600, 900] },
   'nappali.puff': { label: '45–100 cm, magasság 35–48 cm', w: [450, 1000], d: [450, 1000], h: [350, 480] },
-  'nappali.tvszekreny': { label: 'ND-006: kb. 180–200 cm széles, 35–45 cm mély, alacsony', w: [1750, 2050], d: [330, 460], h: [0, 600] },
+  'nappali.tvszekreny': {
+    label: 'ND-006: kb. 180–200 cm széles, 35–45 cm mély, alacsony',
+    w: [1750, 2050],
+    d: [330, 460],
+    h: [0, 600],
+    fit: { label: 'a falszakasz a közlekedői átjáró és a radiátor között 281 cm (ND-009)', w: 2810 },
+  },
   'nappali.asztal': { label: 'kör ø legfeljebb 120 vagy zárt hossz legfeljebb 140 cm, bővítve legfeljebb 200 cm', w: [0, 1400], d: [0, 1200] },
   'nappali.szek': { label: 'szélesség legfeljebb 55, mélység legfeljebb 60 cm', w: [0, 550], d: [0, 600] },
   'nappali.szonyeg': { label: '230–300 × 160–200 cm', w: [2300, 3000], d: [1600, 2000] },
@@ -122,7 +138,13 @@ export const SLOT_LIMITS: Record<
   'halo.ejjeli': { label: '35–55 × 30–45 cm, magasság 40–60 cm', w: [350, 550], d: [300, 450], h: [400, 600] },
 };
 
-/** A termék mely méretei lógnak ki a termékhely méretkeretéből (üres = belefér; a hiányzó méret nem számít). */
+/** A termék nem fér el a mért geometria szerint (`fit` határ) – ez az egyetlen kizáró ok; üres = elfér vagy nincs adat. */
+export function wontFit(slot: string, p: FurnitureProduct): string[] {
+  const fit = SLOT_LIMITS[slot]?.fit;
+  return fit?.w && p.size.w && p.size.w > fit.w ? [`szélesség ${Math.round(p.size.w / 10)} cm – ${fit.label}`] : [];
+}
+
+/** A termék mely méretei térnek el a termékhely ajánlott méretétől (üres = megfelel; a hiányzó méret nem számít). Ajánlás, nem kizárás. */
 export function outOfLimits(slot: string, p: FurnitureProduct): string[] {
   const lim = SLOT_LIMITS[slot];
   if (!lim) return [];

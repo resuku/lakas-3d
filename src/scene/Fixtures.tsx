@@ -141,13 +141,27 @@ export function FixtureMesh({ f, room, ls, off, shadows, onToggle }: { f: Fixtur
 
   if (f.type === 'ceiling') {
     const r = spec.d / 2;
+    // szórt (opál, textil) bura: az egész test világít; lefelé világító (fém) test: csak az alja, a palást a test színe
+    const diffuse = spec.emit === 'diffuse';
     return (
       <group {...events}>
         <mesh position={[x, H - spec.h / 2, z]}>
           <cylinderGeometry args={[r, r * 0.94, spec.h, 40]} />
-          <meshStandardMaterial color={housing} emissive={light} emissiveIntensity={glowFor(Math.PI * r * r)} roughness={0.85} />
+          <meshStandardMaterial color={housing} emissive={light} emissiveIntensity={diffuse ? glowFor(Math.PI * r * r) : 0} roughness={0.85} />
         </mesh>
-        {on && (
+        {!diffuse && (
+          <mesh position={[x, H - spec.h - 0.001, z]} rotation={[Math.PI / 2, 0, 0]}>
+            <circleGeometry args={[r * 0.94 * 0.8, 32]} />
+            <meshStandardMaterial color="#fff8ec" emissive={light} emissiveIntensity={glowFor(Math.PI * r * r * 0.6)} side={THREE.DoubleSide} />
+          </mesh>
+        )}
+        {on && !diffuse && (
+          <>
+            <DownSpot position={[x, H - spec.h - 0.01, z]} lm={out.lm * 0.85} color={light} angleDeg={120} shadow={shadows} />
+            <pointLight position={[x, H - spec.h / 2, z]} intensity={(out.lm * 0.15) / (4 * Math.PI)} color={light} decay={2} />
+          </>
+        )}
+        {on && diffuse && (
           <pointLight
             position={[x, H - spec.h - 0.08, z]}
             intensity={(out.lm / (4 * Math.PI)) * 1.5}

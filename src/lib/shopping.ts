@@ -4,6 +4,7 @@ import type { DecorItem, LightPlan, Room, Variant } from '../model/types';
 import { findDecorType } from '../data/decor';
 import { findFurniture } from '../data/products';
 import { curtainLayouts } from './curtain';
+import { hallArea, roomFloor } from './floors';
 import { activeFurnishing } from './furnish';
 import { FIXTURE_LABEL, findLamp, roomFixtures } from './fixtures';
 import { mm, roomDims, WALL_IDS, wallFrames } from './geom';
@@ -61,25 +62,36 @@ export function shoppingList(
   decor: DecorItem[] = [],
 ): ShoppingRow[] {
   const rows: ShoppingRow[] = [];
-  const floorRooms = ROOMS.filter((r) => !r.floor || v.floorAll !== false);
   const area = (r: Room) => mm(r.size.x.v) * mm(r.size.z.v);
 
-  // Padló
-  const fl = findFloor(v.products?.floor);
-  const flArea = floorRooms.reduce((a, r) => a + area(r), 0) * ASSUME.floorWaste;
-  const flPrice = priceNum(fl?.price);
-  rows.push({
-    category: 'Padló',
-    place: floorRooms.map((r) => r.name).join(', '),
-    product: fl ? `${fl.manufacturer} ${fl.name}` : `kézi szín ${v.floor.tone} (nincs termék)`,
-    store: fl?.store ?? '',
-    spec: fl?.size ? `${fl.size.l} × ${fl.size.w} mm, ${fl.type}` : '',
-    qty: `${dec(flArea)} m²`,
-    unitPrice: priceText(fl?.price),
-    total: flPrice ? flPrice * flArea : undefined,
-    note: '10 % ráhagyással; alátét, szegély és dilatációs profil külön',
-    url: fl?.url ?? '',
-  });
+  // Padló: a változat padlója és – ha van – a járólapos zóna külön burkolata (lib/floors.ts)
+  const mainRooms = ROOMS.filter((r) => roomFloor(r, v).kind === 'main');
+  const hallRooms = v.hallFloor ? ROOMS.filter((r) => hallArea(r) > 0) : [];
+  const floorRow = (pid: string | undefined, tone: string, rooms: Room[], m2: number, hall: boolean) => {
+    const fl = findFloor(pid);
+    const place = rooms.map((r) => (hall && !r.floor ? `${r.name} (dolgozó felőli sáv)` : r.name)).join(', ');
+    if (fl?.existing) {
+      rows.push({ category: 'Padló', place, product: `meglévő ${fl.name}`, store: '', spec: fl.type, qty: '–', unitPrice: '', note: 'megmarad, nem kell venni', url: '' });
+      return;
+    }
+    const a = m2 * ASSUME.floorWaste;
+    const price = priceNum(fl?.price);
+    rows.push({
+      category: 'Padló',
+      place,
+      product: fl ? `${fl.manufacturer} ${fl.name}` : `kézi szín ${tone} (nincs termék)`,
+      store: fl?.store ?? '',
+      spec: fl?.size ? `${fl.size.l} × ${fl.size.w} mm, ${fl.type}` : '',
+      qty: `${dec(a)} m²`,
+      unitPrice: priceText(fl?.price),
+      total: price ? price * a : undefined,
+      note: hall ? '10 % ráhagyással; ragasztó, fuga, lábazat és burkolatváltó profil külön' : '10 % ráhagyással; alátét, szegély és dilatációs profil külön',
+      url: fl?.url ?? '',
+    });
+  };
+  const hallInMain = hallRooms.filter((r) => !r.floor).reduce((a, r) => a + hallArea(r), 0);
+  floorRow(v.products?.floor, v.floor.tone, mainRooms, mainRooms.reduce((a, r) => a + area(r), 0) - hallInMain, false);
+  if (v.hallFloor) floorRow(v.products?.hallFloor, v.hallFloor.tone, hallRooms, hallRooms.reduce((a, r) => a + hallArea(r), 0), true);
 
   // Festék és falpanel: alapszín, kiemelt falak, mennyezet
   const paintArea: Record<string, { area: number; places: string[] }> = {};

@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "checkedAt": "2026-11-17",
+    "note": "A lakás meglévő burkolatai (nem bolti termékek). A szín a helyszíni fotó (Képek/Nappali képek) mintavétele a fehér ajtótokhoz igazítva – fényviszonyfüggő becslés; a lapméret fotóbecslés. A JR-javaslatok (meglévő laminálttal) használják."
+  },
+  "items": [
+    {
+      "id": "meglevo-laminalt",
+      "store": "Meglévő",
+      "manufacturer": "",
+      "name": "világos tölgyhatású laminált (10+ éves; háló, nappali, dolgozó)",
+      "type": "laminált (meglévő)",
+      "pattern": "plank",
+      "tone": "light",
+      "hex": "#C9B092",
+      "hexSource": "site-photo",
+      "url": "",
+      "checkedAt": "2026-09-07",
+      "size": { "l": 420, "w": 70 },
+      "existing": true,
+      "note": "10 Háló H-010, 90 Lakásszint G-002: a háló, a nappali és a dolgozó azonos, 10+ éves világos laminált, kisebb, nem feltűnő hibákkal; a háló gardróbja alatt is fut. Szín: IMG20260907111436 (nappali, nappali fény) a fehér ajtótokhoz igazítva, kb. #BFA486–#D1BA9D, a modellben a középérték. Mintázat: háromsávos hatású, kb. 7 cm-es rövid sávok – a modell a sávokat rajzolja (420 × 70 mm, fotóbecslés)."
+    },
+    {
+      "id": "meglevo-jarolap",
+      "store": "Meglévő",
+      "manufacturer": "",
+      "name": "világos bézsesszürke járólap (előszoba, közlekedő, nappali dolgozó felőli sávja)",
+      "type": "járólap (meglévő)",
+      "pattern": "tile",
+      "tone": "grey",
+      "hex": "#CCC3B6",
+      "hexSource": "site-photo",
+      "url": "",
+      "checkedAt": "2026-09-07",
+      "size": { "l": 300, "w": 300 },
+      "existing": true,
+      "note": "90 Lakásszint G-003: a régebbi járólap funkcionális, esztétikailag cserére érett. A nappali bontandó szekrénye alatt is ez van (user, 2026-11-17). Szín: IMG20260907111324 (közlekedő) a fehér tokhoz igazítva; finoman pettyes, szürke fugával. Lapméret: a 886 mm-es átjáróban kb. 3 lap (IMG20260907111331) → kb. 300 × 300 mm (fotóbecslés)."
+    }
+  ]
+}

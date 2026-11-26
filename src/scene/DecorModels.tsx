@@ -525,7 +525,7 @@ export function DecorLayer({ room }: { room: Room }) {
                 if (useStore.getState().placing || e.delta > 4 || e.nativeEvent.ctrlKey || e.nativeEvent.metaKey) return;
                 e.stopPropagation();
                 select(d.id);
-                useStore.getState().setViewer({ sidebarTab: 'materials' });
+                useStore.getState().setViewer({ sidebarTab: 'furnish' });
               }}
             >
               <DecorModel item={d} />
