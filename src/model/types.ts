@@ -117,7 +117,13 @@ export type FurnCategory =
   | 'divider'
   | 'bed'
   | 'deskCorner'
-  | 'acousticPanel';
+  | 'acousticPanel'
+  // 2026-11-25: katalógusbővítés – egyelőre termékhely nélkül (dekorhoz és későbbi berendezéshez)
+  | 'coffeeTable'
+  | 'sideboard'
+  | 'shelf'
+  | 'armchair'
+  | 'shoeCabinet';
 
 /** TV-fal (szekrénysor) eleme: alacsony pad, falra szerelt szekrény, magas oldalszekrény vagy nyitott polc (mm). */
 export interface FurnPart {
@@ -485,6 +491,11 @@ export interface Room {
   units?: WallUnit[];
   /** Eltérő padló lehetősége (pl. járólap az előszobában); csak akkor látszik, ha a változatban floorAll = false. */
   floor?: { pattern: FloorPattern; tone: string; plank?: { l: number; w: number }; note: string };
+  /**
+   * A helyiség járólapos része (nappali: a dolgozó felőli sáv a bontandó szekrény helyével), a helyiség saját
+   * rendszerében. Csak akkor kap külön burkolatot, ha a változatnak van `hallFloor`-ja.
+   */
+  floorZone?: { x0: Val; x1: Val; z0: Val; z1: Val; note: string };
   wardrobe?: Wardrobe;
   beds: Bed[];
   furniture?: FurnitureItem[];
@@ -509,11 +520,12 @@ export type WardrobeFront = 'mirror' | 'white' | 'wood' | 'mirrorWood';
 /**
  * A modellszín eredete: official = gyártói hex/RGB; swatch-image = gyártói színmintaképből mintavételezve;
  * third-party = színadatbázisból; photo-sample = termékfotóból mintavételezve (fényviszonyfüggő);
- * color-name = a termék színnevéből becsülve (pl. fekete lámpatest, ahol a fotó mintavételezése megbízhatatlan).
+ * color-name = a termék színnevéből becsülve (pl. fekete lámpatest, ahol a fotó mintavételezése megbízhatatlan);
+ * site-photo = meglévő burkolat a helyszíni fotóból, a fehér ajtótokhoz igazítva (fényviszonyfüggő becslés).
  */
-export type ColorSource = 'official' | 'swatch-image' | 'third-party' | 'photo-sample' | 'color-name';
+export type ColorSource = 'official' | 'swatch-image' | 'third-party' | 'photo-sample' | 'color-name' | 'site-photo';
 
-export type PaintFamily = 'warmWhite' | 'greige' | 'sand' | 'ochre' | 'terracotta' | 'brown' | 'green' | 'blueGrey' | 'deep';
+export type PaintFamily = 'warmWhite' | 'greige' | 'sand' | 'ochre' | 'terracotta' | 'brown' | 'green' | 'blueGrey' | 'deep' | 'grey' | 'vivid';
 
 export interface PaintProduct {
   id: string;
@@ -544,8 +556,10 @@ export interface FloorProduct {
   size?: { l: number; w: number; t?: number };
   wear?: string;
   bevel?: string;
-  pattern: 'plank' | 'herringbone';
+  pattern: FloorPattern;
   tone: 'light' | 'natural' | 'honey' | 'grey' | 'dark';
+  /** Meglévő burkolat (nem bolti termék): nincs ár, link és beszerzés; a méret és a szín becslés (lásd `note`). */
+  existing?: boolean;
   hex: string;
   hexSource: ColorSource;
   price?: string;
@@ -674,6 +688,13 @@ export interface Variant {
   floor: { pattern: FloorPattern; tone: string; dir: 'x' | 'z'; plank?: { l: number; w: number } };
   /** A változat padlója az eltérő padlólehetőséggel rendelkező helyiségekben (előszoba, közlekedő) is; hiányában igen. */
   floorAll?: boolean;
+  /**
+   * Külön burkolat a járólapos zónában (előszoba, közlekedő és a nappali `floorZone`-ja), pl. a meglévő vagy egy új
+   * járólap. Ha van, a `floorAll` nem számít. Terméke a `products.hallFloor`.
+   */
+  hallFloor?: { pattern: FloorPattern; tone: string; plank?: { l: number; w: number } };
+  /** A változat választásakor beállított műszaki lehetőségek (data/choices.ts), pl. a meglévő ágy és asztal. */
+  choices?: Record<string, string>;
   /** Felületenként kiválasztott katalógustermék (id). Ha a szín kézzel módosul, a hozzárendelés törlődik. */
   products?: ProductSlots;
   /** Rövid indoklás (javaslatoknál). */

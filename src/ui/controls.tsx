@@ -1,5 +1,73 @@
-import type { ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type { Swatch } from '../data/catalog';
+
+/** Felugró menü: gomb + alatta lebegő panel; kattintás a panelen kívül vagy Esc zárja. */
+export function Popover({ label, title, children, align = 'left', className = '' }: { label: ReactNode; title?: string; children: ReactNode; align?: 'left' | 'right'; className?: string }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const down = (e: MouseEvent) => ref.current && !ref.current.contains(e.target as Node) && setOpen(false);
+    const key = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
+    document.addEventListener('mousedown', down);
+    window.addEventListener('keydown', key);
+    return () => {
+      document.removeEventListener('mousedown', down);
+      window.removeEventListener('keydown', key);
+    };
+  }, [open]);
+  return (
+    <div className={`popover ${className}`} ref={ref}>
+      <button className={open ? 'on' : ''} onClick={() => setOpen(!open)} title={title} aria-expanded={open}>
+        {label}
+      </button>
+      {open && <div className={`popover-panel ${align}`}>{children}</div>}
+    </div>
+  );
+}
+
+/** Tömör sor egy beállításhoz: címke, színminta, az aktuális érték; kattintásra megnyílik a szerkesztője. */
+export function NavRow({ label, value, swatch, onClick, title, stacked }: { label: string; value: ReactNode; swatch?: string; onClick: () => void; title?: string; stacked?: boolean }) {
+  // `stacked`: hosszú címkéhez – a címke felül, az érték alatta
+  return (
+    <button className={`nav-row ${stacked ? 'stacked' : ''}`} onClick={onClick} title={title}>
+      <span className="nav-label">{label}</span>
+      <span className="nav-line">
+        {swatch !== undefined && <i className="nav-swatch" style={{ background: swatch }} />}
+        <span className="nav-value">{value}</span>
+      </span>
+      <span className="nav-chevron">›</span>
+    </button>
+  );
+}
+
+/** Mező, amelynek a magyarázata a címke melletti ⓘ jelre víve olvasható (a hosszú megjegyzések helyett). */
+export function InfoField({ label, info, children }: { label: string; info?: string; children: ReactNode }) {
+  return (
+    <div className="field">
+      <div className="field-label">
+        {label}
+        {info && (
+          <span className="info-mark" title={info}>
+            {' '}
+            ⓘ
+          </span>
+        )}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+/** Csoportcím a tömör sorok fölött. */
+export function RowGroup({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <div className="row-group">
+      <div className="row-group-title">{title}</div>
+      {children}
+    </div>
+  );
+}
 
 export function Section({ title, children, open = true }: { title: string; children: ReactNode; open?: boolean }) {
   return (
@@ -10,7 +78,7 @@ export function Section({ title, children, open = true }: { title: string; child
   );
 }
 
-/** Összecsukható alcsoport egy fülön belül (pl. Anyagok: Padló, Függöny). */
+/** Összecsukható alcsoport egy fülön belül (pl. Berendezés: Illő bútorszínek). */
 export function Sub({ title, children, open = false, hint }: { title: string; children: ReactNode; open?: boolean; hint?: string }) {
   return (
     <details className="sub" open={open}>
@@ -65,11 +133,14 @@ export function Segmented<T extends string>({ value, options, onChange }: { valu
   );
 }
 
-export function Toggle({ checked, onChange, label }: { checked: boolean; onChange: (v: boolean) => void; label: string }) {
+export function Toggle({ checked, onChange, label, hint }: { checked: boolean; onChange: (v: boolean) => void; label: string; hint?: string }) {
   return (
-    <label className="toggle">
+    <label className="toggle" title={hint}>
       <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} />
-      {label}
+      <span>
+        {label}
+        {hint && <small>{hint}</small>}
+      </span>
     </label>
   );
 }

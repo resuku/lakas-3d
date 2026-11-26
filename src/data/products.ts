@@ -1,6 +1,7 @@
 import type { ColorSource, CurtainProduct, DoorProduct, DoorStyle, FloorProduct, FurnitureProduct, PaintFamily, PaintProduct, Variant } from '../model/types';
 import paints from './products/paints.json';
 import floors from './products/floors.json';
+import existingFloors from './products/floors-existing.json';
 import doors from './products/doors.json';
 import curtains from './products/curtains.json';
 import panels from './products/panels.json';
@@ -10,7 +11,8 @@ import furniture from './products/furniture.json';
 // A képernyőszín közelítés marad: végső döntés előtt fizikai minta kell.
 
 export const PAINT_PRODUCTS = paints.items as PaintProduct[];
-export const FLOOR_PRODUCTS = floors.items as FloorProduct[];
+/** A meglévő burkolatok (floors-existing.json, `existing: true`) elöl, utánuk a bolti padlók és járólapok. */
+export const FLOOR_PRODUCTS = [...(existingFloors.items as FloorProduct[]), ...(floors.items as FloorProduct[])];
 /** Fa falpanelek kiemelt falra (festékként kezelve: szín, kód, ár). */
 export const WALL_PANELS = panels.items as PaintProduct[];
 export const DOOR_PRODUCTS = doors.items as DoorProduct[];
@@ -28,6 +30,8 @@ export const PAINT_FAMILIES: { id: PaintFamily; label: string }[] = [
   { id: 'green', label: 'Zsálya, olíva' },
   { id: 'blueGrey', label: 'Kékesszürke' },
   { id: 'deep', label: 'Mély akcentus' },
+  { id: 'grey', label: 'Szürke, antracit' },
+  { id: 'vivid', label: 'Élénk színek' },
 ];
 
 export const COLOR_SOURCE_LABEL: Record<ColorSource, string> = {
@@ -36,6 +40,7 @@ export const COLOR_SOURCE_LABEL: Record<ColorSource, string> = {
   'third-party': 'színadatbázisból',
   'photo-sample': 'termékfotóból',
   'color-name': 'színnév alapján',
+  'site-photo': 'helyszíni fotóból (becslés)',
 };
 
 export const DOOR_STYLE_LABEL: Record<DoorStyle, string> = { flat: 'sima', groove: 'vízszintes marás', glass: 'üvegbetétes' };
@@ -78,6 +83,7 @@ export function usedProducts(v: Variant, roomNames: Record<string, { name: strin
     if (slot === 'wall') label = 'Falszín (lakásszintű)';
     else if (slot === 'ceiling') label = 'Mennyezet';
     else if (slot === 'floor') label = 'Padló';
+    else if (slot === 'hallFloor') label = 'Járólapos zóna (előszoba, közlekedő, nappali sáv)';
     else if (slot === 'door') label = 'Beltéri ajtók';
     else if (slot === 'curtain') label = 'Függöny';
     else if (slot === 'sheer') label = 'Függöny – áttetsző réteg';
@@ -86,7 +92,7 @@ export function usedProducts(v: Variant, roomNames: Record<string, { name: strin
       const r = roomNames[roomId];
       label = `Kiemelt fal – ${r ? `${r.name}, ${r.walls[wallId]?.name ?? wallId}` : slot.slice(7)}`;
     }
-    if (slot === 'floor') out.push({ slot, label, floor: findFloor(id) });
+    if (slot === 'floor' || slot === 'hallFloor') out.push({ slot, label, floor: findFloor(id) });
     else if (slot === 'door') out.push({ slot, label, door: findDoor(id) });
     else if (slot === 'curtain' || slot === 'sheer') out.push({ slot, label, curtain: findCurtain(id) });
     else out.push({ slot, label, paint: findPaint(id) });

@@ -65,8 +65,9 @@ const wb = XLSX.read(fs.readFileSync(path.join(DOC_DIR, file)));
 const idx = indexSheets(wb);
 
 console.log(`Tervezési napló: ${file}`);
-// A modell legutóbb a V15-tel összevetve (2026-11-02: berendezési sorok, a geometria nem változott)
-if (version !== 15) console.log(`FIGYELEM: a modell a V15 alapján készült, most V${version} az aktuális – nézd át a változásokat.`);
+// A modell legutóbb a V16-tal összevetve (2026-11-25: csak új sorok – ütemezés, N-M030 tájolás, ND-013–015,
+// D-030–032, Fotóindex; a geometria nem változott)
+if (version !== 16) console.log(`FIGYELEM: a modell a V16 alapján készült, most V${version} az aktuális – nézd át a változásokat.`);
 
 let ok = 0;
 const failures = [];

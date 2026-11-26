@@ -20,6 +20,10 @@ export const WINDOW_FACTOR = 0.6;
  * egyezés, nem mérés.
  */
 export const SUN_BOUNCE_RHO = 0.4;
+/** 300 lux felett a megmaradó (nem kiegyenlített) világosságkülönbség kitevője : a kétszer fényesebb jelenet kb. 15%-kal világosabb (0,3-nál a derült, napos nappali kiégett, a napfolt eltűnt). */
+const ADAPT_HI = 0.2;
+/** A napfolt visszavert fényének a félgömbfénybe kerülő (többszörösen visszavert, szétszórt) része; a többi a foltból fölfelé világít. */
+const SUN_BOUNCE_DIFFUSE = 0.35;
 
 /** A falak kifelé mutató normálisa a helyiség rendszerében. */
 const OUT: Record<WallId, THREE.Vector3> = {
@@ -119,10 +123,13 @@ export function computeLighting(room: Room, ls: LightSettings, lampLm: number): 
 
   const eLamps = (lampLm * 0.5) / floorArea;
 
-  // Expozíció az átlagos megvilágításhoz; 300 lux alatt csak részleges adaptáció,
-  // így az esti, tompított jelenet sötétebb is marad.
-  const eRef = Math.max(eDay + eSun + eLamps, 3);
-  const exposure = (1.8 / eRef) * Math.min(1, Math.pow(eRef / 300, 0.25)) * Math.pow(2, ls.ev);
+  // Expozíció a szórt fényszinthez (2026-11-26): az égboltfény, a napfolt visszavert része és a lámpák. A besütő napfolt
+  // közvetlen fénye nem számít bele – a szem nem a folthoz alkalmazkodik; korábban a derült, napos nappali emiatt
+  // sötétebb lett a borultnál. Az alkalmazkodás részleges: 300 lux alatt az esti, tompított jelenet sötétebb marad,
+  // felette a fényesebb jelenet (derült nap) kissé világosabb is (ADAPT_HI).
+  const eRef = Math.max(eDay + eSun * SUN_BOUNCE_RHO + eLamps, 3);
+  const adapt = eRef < 300 ? Math.pow(eRef / 300, 0.25) : Math.pow(eRef / 300, ADAPT_HI);
+  const exposure = (1.8 / eRef) * adapt * Math.pow(2, ls.ev);
 
   const sunInFront = sunLux > 0 && room.openings.some((o) => o.kind === 'window' && sunDir.dot(OUT[o.wall]) > 0.05);
 
@@ -140,7 +147,9 @@ export function computeLighting(room: Room, ls: LightSettings, lampLm: number): 
     ground,
     // ablaktalan helyiségben a beszűrődő fény csak szórt fényként jelenik meg, ezért ott ez viszi a teljes részt
     // a napfolt visszavert része teljes egészében ide kerül (a nap fényforrása csak a foltot világítja meg)
-    hemiI: eDay * (hasWindow ? 0.6 : 1.8) + eSun * SUN_BOUNCE_RHO + eLamps * 0.35,
+    // 2026-11-26: a napfolt első visszaverődése irányított felületi fény a folt helyén (Lights.tsx – SunBounce); ide csak
+    // a további, szétszórt visszaverődés kerül (SUN_BOUNCE_DIFFUSE)
+    hemiI: eDay * (hasWindow ? 0.6 : 1.8) + eSun * SUN_BOUNCE_RHO * (hasWindow ? SUN_BOUNCE_DIFFUSE : 1) + eLamps * 0.35,
     eDay,
     eSun,
     eLamps,

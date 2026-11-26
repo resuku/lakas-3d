@@ -6,6 +6,7 @@ import type { Bed as BedT, FurnColor, FurnSpec, Room, Val, Variant } from '../mo
 import { COLOR_SOURCE_LABEL } from '../data/products';
 import { useStore, type Layers } from '../store';
 import { makeFloorTexture } from '../lib/floorTexture';
+import { roomFloor, zoneFloor, type FloorSpec } from '../lib/floors';
 import { formLabel } from '../lib/cabinetForm';
 import { useLocalTextures } from '../lib/localTextures';
 import { activeFurnishing, furnishGaps, replacedIds, type ResolvedSpec } from '../lib/furnish';
@@ -21,22 +22,33 @@ import { ceilingInfo, floorInfo, info, infoUrl } from '../lib/inspect';
 import { CLASH_PREFIX, colorClashes } from '../lib/colorClash';
 import { findSubVariant } from '../data/subVariants';
 
-export function FloorAndCeiling({ room, variant }: { room: Room; variant: Variant }) {
-  const { W, L, H } = roomDims(room);
-  // Eltérő padló (pl. járólap), ha a változat padlója kifejezetten nem terjed ki a helyiségre
-  const own = room.floor && variant.floorAll === false ? room.floor : null;
-  const { pattern, tone, plank } = own ?? variant.floor;
-  const dir = variant.floor.dir;
-  const pl = plank?.l;
-  const pw = plank?.w;
-  // helyi fotótextúra a változat padlótermékéhez (a helyiség saját burkolatához nem)
-  const local = useLocalTextures();
-  const photo = own ? null : (local?.floors[variant.products?.floor ?? ''] ?? null);
+/** Padlótextúra a burkolat adataiból; `spec` nélkül nincs (a hívások sorrendje miatt a hook mindig lefut). */
+function useFloorTexture(spec: FloorSpec | null, W: number, L: number, photo: Parameters<typeof makeFloorTexture>[7]) {
+  const pattern = spec?.pattern;
+  const tone = spec?.tone;
+  const dir = spec?.dir;
+  const pl = spec?.plank?.l;
+  const pw = spec?.plank?.w;
   const tex = useMemo(
-    () => makeFloorTexture(pattern, tone, dir, W, L, pl && pw ? { l: pl, w: pw } : undefined, false, photo),
+    () => (pattern && tone && dir && W > 0 && L > 0 ? makeFloorTexture(pattern, tone, dir, W, L, pl && pw ? { l: pl, w: pw } : undefined, false, photo) : null),
     [pattern, tone, dir, W, L, pl, pw, photo],
   );
-  useEffect(() => () => tex.dispose(), [tex]);
+  useEffect(() => () => tex?.dispose(), [tex]);
+  return tex;
+}
+
+export function FloorAndCeiling({ room, variant }: { room: Room; variant: Variant }) {
+  const { W, L, H } = roomDims(room);
+  // a változat padlója, a járólapos zóna burkolata vagy a járólap-helyőrző (lib/floors.ts)
+  const fl = roomFloor(room, variant);
+  const zone = zoneFloor(room, variant);
+  const pattern = fl.pattern;
+  // helyi fotótextúra a hozzárendelt padlótermékhez (a járólap-helyőrzőhöz nincs)
+  const local = useLocalTextures();
+  const photo = local?.floors[fl.productId ?? ''] ?? null;
+  const tex = useFloorTexture(fl, W, L, photo);
+  const zonePhoto = local?.floors[zone?.productId ?? ''] ?? null;
+  const zoneTex = useFloorTexture(zone, zone ? zone.x1 - zone.x0 : 0, zone ? zone.z1 - zone.z0 : 0, zonePhoto);
   const ceiling = useRef<THREE.Mesh>(null);
   const camera = useThree((s) => s.camera);
   const studio = useStudio();
@@ -49,6 +61,17 @@ export function FloorAndCeiling({ room, variant }: { room: Room; variant: Varian
         <planeGeometry args={[W, L]} />
         <meshStandardMaterial map={tex} roughness={pattern === 'tile' ? 0.35 : 0.55} />
       </mesh>
+      {zone && zoneTex && (
+        <mesh
+          rotation={[-Math.PI / 2, 0, 0]}
+          position={[(zone.x0 + zone.x1) / 2, 0.0015, (zone.z0 + zone.z1) / 2]}
+          receiveShadow
+          userData={floorInfo(room, variant, true)}
+        >
+          <planeGeometry args={[zone.x1 - zone.x0, zone.z1 - zone.z0]} />
+          <meshStandardMaterial map={zoneTex} roughness={zone.pattern === 'tile' ? 0.35 : 0.55} polygonOffset polygonOffsetFactor={-1} />
+        </mesh>
+      )}
       {/* A mennyezet árnyékot is vet, különben a nap felülről besütne; termékhű nézetben nem, mert a stúdió felülfénye a
           bútorok alá vet árnyékot. */}
       <mesh ref={ceiling} rotation={[Math.PI / 2, 0, 0]} position={[W / 2, H, L / 2]} castShadow={!studio} receiveShadow userData={ceilingInfo(room, variant)}>

@@ -86,5 +86,5 @@ export function colorClashes(v: Variant, choices: Record<string, string>, picks:
   return out;
 }
 
-/** Rövid sor a helyiség nevével (a Javaslat fül összesítőjéhez). */
+/** Rövid sor a helyiség nevével (a Berendezés fül színellenőrzéséhez). */
 export const clashRow = (c: Clash) => `${getRoom(c.roomId).name}: ${clashText(c)}`;

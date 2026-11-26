@@ -5,7 +5,7 @@ import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLigh
 import type { LightSettings, Room } from '../model/types';
 import { lampKey, roomFixtures } from '../lib/fixtures';
 import { mm, roomDims, toRoom, wallFrames } from '../lib/geom';
-import { WINDOW_FACTOR, type LightingResult } from '../lib/lighting';
+import { SUN_BOUNCE_RHO, WINDOW_FACTOR, type LightingResult } from '../lib/lighting';
 import { useActivePlan, useStore } from '../store';
 import { FixtureMesh } from './Fixtures';
 
@@ -120,6 +120,24 @@ function WindowLight({ position, target, width, height, intensity, color }: { po
 }
 
 /**
+ * A besütő napfolt visszavert fénye (2026-11-26): a padlóra vetülő ablakfolt helyén fölfelé világító felületi fény,
+ * fénysűrűsége ρ·E/π (E: a folt vízszintes megvilágítása az üvegen át). Így a folt körüli mennyezet és falak
+ * világosodnak ki, nem az egész helyiség egyformán (a többszörös visszaverődés a félgömbfényben marad).
+ */
+function SunBounce({ spot, luminance, color }: { spot: { center: THREE.Vector3; t: THREE.Vector3; n: THREE.Vector3; width: number; depth: number }; luminance: number; color: THREE.Color }) {
+  const ref = useRef<THREE.RectAreaLight>(null);
+  useLayoutEffect(() => {
+    const l = ref.current;
+    if (!l) return;
+    // a téglalapfény a helyi −Z irányba világít: Z lefelé, X a fal mentén, Y befelé (a folt mélysége)
+    const z = new THREE.Vector3(0, -1, 0);
+    const y = new THREE.Vector3().crossVectors(z, spot.t).normalize();
+    l.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(spot.t, y, z));
+  }, [spot]);
+  return <rectAreaLight ref={ref} position={spot.center} width={spot.width} height={spot.depth} intensity={luminance} color={color} />;
+}
+
+/**
  * Helyiségenkénti fények a helyiség saját rendszerében: ablakfény és az aktív világítási terv lámpái.
  * @param shadows a lámpák árnyékot vetnek (teljes lakás nézetben a sok fényforrás miatt kikapcsolva)
  */
@@ -143,10 +161,39 @@ export function RoomLights({ room, ls, lr, shadows = true, studio = false }: { r
             target: toRoom(f, cx, cy, 1),
             width: mm(o.width.v),
             height: mm(o.height.v),
+            // a sarokpontok (a napfolt vetítéséhez) és a fal irányai
+            corners: [
+              [mm(o.offset.v), mm(o.bottom.v)],
+              [mm(o.offset.v + o.width.v), mm(o.bottom.v)],
+              [mm(o.offset.v), mm(o.bottom.v + o.height.v)],
+              [mm(o.offset.v + o.width.v), mm(o.bottom.v + o.height.v)],
+            ].map(([x, y]) => toRoom(f, x, y, 0)),
+            t: toRoom(f, 1, 0, 0).sub(toRoom(f, 0, 0, 0)).normalize(),
+            n: toRoom(f, 0, 0, 1).sub(toRoom(f, 0, 0, 0)).normalize(),
           };
         }),
     [room, frames],
   );
+  // a napfolt a padlón: az ablak sarkai a napirány mentén a padlóra vetítve, a helyiségen belülre vágva
+  const { W, L } = roomDims(room);
+  const spots = useMemo(() => {
+    const d = lr.sunDir;
+    if (studio || lr.sunLux <= 0 || d.y <= 0.02) return [];
+    return windows.flatMap((w) => {
+      if (-d.dot(w.n) <= 0.05) return [];
+      const pts = w.corners.map((c) => c.clone().addScaledVector(d, -c.y / d.y)).map((p) => new THREE.Vector3(Math.min(Math.max(p.x, 0), W), 0, Math.min(Math.max(p.z, 0), L)));
+      const along = pts.map((p) => p.dot(w.t));
+      const inward = pts.map((p) => p.dot(w.n));
+      const width = Math.max(...along) - Math.min(...along);
+      const depth = Math.max(...inward) - Math.min(...inward);
+      if (width < 0.05 || depth < 0.05) return [];
+      const center = pts.reduce((a, p) => a.add(p), new THREE.Vector3()).multiplyScalar(1 / pts.length);
+      center.y = 0.02;
+      return [{ id: w.id, center, t: w.t, n: w.n, width, depth }];
+    });
+  }, [windows, lr.sunDir, lr.sunLux, studio, W, L]);
+  // a folt fénysűrűsége: ρ · E / π, E = a nap vízszintes megvilágítása az üvegen át
+  const spotL = (SUN_BOUNCE_RHO * lr.sunLux * Math.max(lr.sunDir.y, 0) * WINDOW_FACTOR) / Math.PI;
   return (
     <>
       {!studio &&
@@ -154,6 +201,9 @@ export function RoomLights({ room, ls, lr, shadows = true, studio = false }: { r
         windows.map((w) => (
           <WindowLight key={w.id} position={w.position} target={w.target} width={w.width} height={w.height} intensity={lr.skyL * WINDOW_FACTOR} color={lr.windowColor} />
         ))}
+      {spots.map((sp) => (
+        <SunBounce key={sp.id} spot={sp} luminance={spotL} color={lr.sunColor} />
+      ))}
       {fixtures.map((f) => {
         const key = lampKey(room.id, f);
         // termékhű nézetben a lámpák csak tárgyként látszanak, fényt nem adnak

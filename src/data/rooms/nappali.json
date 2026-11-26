@@ -505,6 +505,18 @@
       "note": "Meglévő Midea egység; csere tervezett, várhatóan ugyanitt (ND-005)."
     }
   ],
+  "floorZone": {
+    "x0": { "v": 0, "s": "P", "note": "A kanapéfaltól: a bontandó szekrény alatt is járólap van (user, 2026-11-17)." },
+    "x1": { "v": 3443, "s": "P", "note": "A közlekedő felőli falig: a dolgozó felőli átjáró (AJ-08) előtt járólap, az erkély felőli (AJ-07) előtt laminált (IMG20260907111436)." },
+    "z0": { "v": 0, "s": "P", "note": "A dolgozó felőli faltól." },
+    "z1": {
+      "v": 1639,
+      "s": "D",
+      "note": "A járólap–laminált határ a fotók szerint (IMG20260907111436, IMG20260907111442) a bontandó gipszkarton nappali felőli síkjában van; ez az erkélyfaltól 6300–6310 mm (N-M003), a modell 7944 mm-es hosszával z = 7944 − 6305 = 1639 mm. A szkennelés a dolgozó felőli faltól 1679 mm-t ad (W02); a hossz-eltérés ismert (lásd conflicts). Helyszínen ellenőrzendő.",
+      "src": [{ "sheet": "20 Nappali", "key": "N-M003", "n": 6300 }]
+    },
+    "note": "A nappali járólapos sávja a dolgozó felőli végen, teljes szélességben (a meglévő bézsesszürke járólap, mint az előszobában és a közlekedőben; 90 Lakásszint G-003). A berendezési javaslat étkezője ide esik. Csak akkor látszik külön burkolattal, ha a változatnak van járólapos zónája (pl. a JR-javaslatok)."
+  },
   "beds": [],
   "ceilingLights": [
     {

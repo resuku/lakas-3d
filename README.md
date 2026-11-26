@@ -59,8 +59,28 @@ Az első szkennelés (nappali, előszoba, közlekedő; 2026-11-01) tapasztalatai
 
 A `src/data/products/` mappában valós, Magyarországon kapható termékek vannak; ellenőrzés: 2026-11-01.
 
+**Gépi bővítés (2026-11-25/26):** a `scripts/catalog/` gyűjtőszkriptjei (leírás és szabályok: `scripts/catalog/README.md`)
+a boltok nyilvános termékoldalairól gyűjtöttek; a `merge.py` ellenőrzi és olvasztja be a kimenetet (a meglévő, kézzel
+felvett rekord URL / dekor szerint marad). A katalógus így 668 tételről kb. 17 400-ra nőtt:
+
+| Fájl | Előtte | Utána | Új források |
+|---|---|---|---|
+| `paints.json` | 63 | 4230 | Dulux paletta (384, kevert kódok), PPG Trilak (2153), Caparol 3D-System Plus és CaparolColor (1549, német nevek), Poli-Farbe Platinum (94, színmintaképből) |
+| `floors.json` | 52 | 4059 | parkettabirodalom.hu, Parkettawebáruház, Parkettadiszkont, DIEGO, OBI, Praktiker padlók; Mozaik Kerámia, MetrocsempeShop, Csempebolt járólapok |
+| `doors.json` | 46 | 898 | JOLA (dekor + kialakítás szerint összevonva), Ajtógyár (Pascal Optima, Full Doors, Pol-Skone), Dooroutlet, OBI, Praktiker |
+| `lamps.json` | 49 | 4463 | Bonami, OBI, Praktiker, IKEA, Watt Webshop |
+| `curtains.json` | 28 | 750 | Bonami, IKEA, JYSK, DIEGO |
+| `panels.json` | 1 | 161 | Lamellakirály, QWALLZ |
+| `furniture.json` | 427 | 2844 | IKEA, Bútor1 (botellenőrzésig), JYSK; új típusok: dohányzóasztal, tálaló, polc, fotel, cipősszekrény (egyelőre termékhely nélkül) |
+
+Kihagyva: a PORTA, a Zondo és a Westwing (a robots.txt tiltja a Claude-ot), a BAUHAUS és a Biano (botvédelem). A szín a
+termékfotó vagy a dekorkép átlaga (`photo-sample`), festéknél a gyártói érték; hangulatfotónál és fémfényes lámpánál
+közelítés. Az árak a gyűjtés napjára igazak, vásárlás előtt élőben ellenőrizendők. A választók (Felületek, Világítás,
+Berendezés) keresővel és boltszűrővel kezelhetők; csoportonként 60 minta látszik, a többi a „+N” gombbal nyílik. A kirakott
+oldal kódja a katalógussal kb. 11 MB (tömörítve 1,5 MB).
+
 - `paints.json`: 63 falfestékszín (Dulux, Poli-Farbe Platinum, PPG Trilak Héra), színcsaládok szerint.
-- `floors.json`: 43 padló (DIEGO, Parkettadiszkont, Praktiker, OBI, Parkettawebáruház, JOLA – szalagparketta is –, BAUHAUS), halszálkák is.
+- `floors.json`: 52 padló (DIEGO, Parkettadiszkont, Praktiker, OBI, Parkettawebáruház, JOLA – szalagparketta is –, BAUHAUS), halszálkák is; köztük 9 porcelán gres járólap (2026-11-17: Csempebolt, MetrocsempeShop, Mozaik Kerámia, Forma Vivendi) a járólapos zónához. A téglalap alakú lapot a modell feles kötésben rajzolja.
 - `doors.json`: 46 beltéri ajtó (Ajtógyár Pascal Optima dekorok, OBI, Praktiker, Porta, AjtóMester, PORTA gyártói dekorok, JOLA, BAUHAUS), sima, marással díszített és üvegbetétes.
 - `curtains.json`: 28 függöny (IKEA, JYSK, Bonami és kisebb hazai webshopok): sötétítő, fényszűrő és áttetsző.
 - `panels.json`: fa falpanel kiemelt falra (a lakberendezői tervben szereplő Okapi dió).
@@ -99,7 +119,7 @@ A modellszín eredete minden terméknél jelölve van:
 | gyártói színmintából | a gyártó színmintaképéből mintavételezve (Poli-Farbe) |
 | termékfotóból | a termékfotó átlagszíne, háttér nélkül; fényviszonyfüggő közelítés |
 
-Az Anyagok fülön a „Katalógus” részből lehet választani. A padlónál a lapméret, az ajtónál
+A Felületek fülön a sorra kattintva nyíló szerkesztő „Katalógus” részéből lehet választani. A padlónál a lapméret, az ajtónál
 a kialakítás (sima, marással, üvegbetétes) is átkerül a modellbe. A függöny kétrétegű is lehet:
 áttetsző réteg a fal felőli sínen, előtte a vastag függöny. A változatban használt termékek az alsó panel Termékek fülén látszanak, árral és
 linkkel. Ha egy felület színét kézzel módosítod, a termék-hozzárendelés törlődik.
@@ -108,6 +128,41 @@ A J-kezdetű változatok (16 db, J1–J16) javaslatok ezekből a termékekből (
 mennyezet, padló, ajtó, függöny); nem jóváhagyott döntések. A számozás és a sorrend a `scripts/gen/numbering.py`-ban van: elöl a kiemelt
 javaslatok (J1–J3, aljavaslatokkal), utánuk a többi. Az azonosító a 2026-11-03 előtti számot őrzi (pl. `j5-melyzold` = J1, `lj5` a világítása),
 hogy a mentett beállítások és a vélemények megmaradjanak; a leírás végén „Korábbi száma: J5.” áll.
+
+Stílusvonalak (2026-11-26, store v20): a választó nem szám, hanem vonal szerint csoportosít (`VARIANT_GROUPS` a `variants.ts`
+végén; a vonalat a `gen_variants.py` `line` mezője vagy a `LINE_OF` adja, a számozás nem változott):
+
+| Csoport | Javaslatok |
+|---|---|
+| Fekete/antracit vonal (10) | J2, JF4–JF12 (új padlóval) |
+| Skandináv vonal (6) | J13, JS1–JS5 |
+| Melegebb világos vonal (6) | J4, J16, JM1–JM4 |
+| Japandi vonal (6) | J15, JP1–JP5 |
+| Egyéb javaslatok (11) | J1, J3, J5–J12, J14 |
+| Meglévő padlóval (8, alul) | JF1–JF3, JR1–JR5 |
+
+Az új javaslatok (JF7–JF12, JS1–JS5, JM1–JM4, JP1–JP5; terveik `ljf7`…, `ljs1`…, `ljm1`…, `ljp1`…) a bővített katalógusból
+készültek; mindegyikhez saját világítási terv tartozik (fekete: fekete lámpatestek; skandináv: fehér, nyír, opál; melegebb
+világos: sárgaréz, opál, textil; japandi: papír, sás, bambusz).
+
+A JR-javaslatok (JR1–JR5, 2026-11-17; azonosító `jr1-greige` … `jr5-fekete`, terveik `ljr1`–`ljr5`) a meglévő világos
+laminálttal számolnak (háló, nappali, dolgozó), és a meglévő ágyat és nagy asztalat is megtartják (a változat `choices`
+mezője választáskor beállítja). A járólapos zóna (előszoba, közlekedő és a nappali dolgozó felőli sávja) a JR1-ben és a
+JR2-ben a meglévő járólap, a JR3–JR5-ben új járólap. A választóban külön csoportban vannak; a számozás a `numbering.py`-ban.
+
+A JF-javaslatok (JF1–JF6, 2026-11-26, „fekete részletek”; azonosító `jf1-matt-fekete` … `jf6-vilagos-sotetko`, terveik
+`ljf1`–`ljf6`) a J2 (`j17-kontraszt`) vonalát viszik tovább: mindegyikben fekete vagy antracit ajtó, fekete kilincs és
+fekete lámpatestek, a kísérőanyag tervenként más (opál, rattan, sárgaréz, opálüveg, minimál sín, plasztikus formák).
+A JF1–JF3 a meglévő laminálttal (és a meglévő ággyal, asztallal) számol – a JF1-ben a járólap is marad, a JF2-ben antracit,
+a JF3-ban travertin hatású új lap –, a JF4–JF6 új padlóval (natúr tölgy parketta, füstös tölgy vinyl, illetve világos
+tölgy sötét kő előszobával). A termékek a 2026-11-26-i bővített katalógusból valók.
+
+Meglévő burkolat és járólapos zóna:
+- `products/floors-existing.json`: a meglévő laminált és járólap (`existing: true`; szín a helyszíni fotóból a fehér tokhoz
+  igazítva, lapméret fotóbecslés). A padlókatalógus elején „Meglévő burkolat” csoportként; a bevásárlólistán „megmarad”.
+- A változat `hallFloor` mezője (terméke `products.hallFloor`) a járólapos zóna külön burkolata: az előszobában és a
+  közlekedőben a teljes padló, a nappaliban a `floorZone` (a dolgozó felőli fal és a bontandó gipszkarton síkja között, teljes
+  szélességben; N-M003-ból levezetve). A Felületek → Járólapos zóna alatt kapcsolható bármely változatnál; a meglévő járólappal indul.
 
 A korábbi statikus javaslatgaléria (`public/galeria/`, `scripts/gallery.py`) 2026-11-04-én megszűnt: minden adata
 (leírás, termékek, világítás, bútorjavaslat, színvilág) a programban is látszik. A git történetben megvan.
@@ -155,11 +210,21 @@ szkriptek fejlécében olvasható.
 
 ## Funkciók
 
-- Helyiségek: háló, dolgozó, nappali, előszoba és közlekedő. Az előszoba és a közlekedő alapból a lakás padlóját kapja (új burkolat lesz); járólap kapcsolóval mutatható. A nappali a bontás utáni állapotot mutatja (tükrös szekrény és gipszkarton nélkül), a szkennelés, a lézeres napló és a 2026-11-01-i kiegészítő mérések alapján. Az előszoba és a közlekedő két téglalap, köztük teljes magasságú átjáró; a nyílások helye a szkennelésből (S), a méretek a 40-es lapról. Saját (meglévő járólap) padlójuk van; a változat padlója kapcsolóval ide is kiterjeszthető.
+- Helyiségek: háló, dolgozó, nappali, előszoba és közlekedő. Az előszoba és a közlekedő alapból a lakás padlóját kapja (új burkolat lesz); járólap kapcsolóval mutatható. A nappali a bontás utáni állapotot mutatja (tükrös szekrény és gipszkarton nélkül), a szkennelés, a lézeres napló és a 2026-11-01-i kiegészítő mérések alapján. Az előszoba és a közlekedő két téglalap, köztük teljes magasságú átjáró; a nyílások helye a szkennelésből (S), a méretek a 40-es lapról. Saját (járólap-helyőrző) padlójuk van; a változat padlója kapcsolóval ide is kiterjeszthető. Ha a változatnak van járólapos zónája (`hallFloor`), az előszoba, a közlekedő és a nappali dolgozó felőli sávja azt kapja.
 - Teljes lakás nézet: mind az öt helyiség a helyén (`src/data/layout.ts`, a szkennelés közös rendszerében, a háló és a dolgozó az ajtóik alapján illesztve). A kiválasztott helyiség a szerkesztett, a kameragombjai oda visznek. A nem modellezett helyiségek (konyha, fürdő, WC, tároló) ajtaja mögött szürke helyőrző áll.
 - Bejárás: szemmagasságú séta W A S D / nyilakkal, egérhúzással körbenézve (Shift: gyorsabban, Esc: kilépés). A falakon belül marad; teljes lakás nézetben az ajtókon és átjárókon át a szomszéd helyiségbe is át lehet menni.
-- Oldalsáv fülekkel (a fejléc görgetéskor is látszik): Nézet, Javaslat, Anyagok (összecsukható alcsoportok: falak és
-  mennyezet, padló, ajtók és szegély, függöny, bútor), Világítás, Továbbiak. A választott fül a böngészőben megmarad.
+- Kezelőfelület (2026-11-26-i átrendezés, store v17):
+  - Eszköztár a 3D nézet fölött (`src/ui/Toolbar.tsx`): helyiség, teljes lakás, nézőpont, bejárás, fényjelenet, Nézet menü
+    (egy vagy két nézet, termékhű nézet), Rétegek menü (bútor, dekor, ajtók nyitva; tervezői módban adatbiztonság, zónák,
+    méretek, villamosság), képernyőkép.
+  - Oldalsáv (`src/ui/Sidebar.tsx`; a fejléc görgetéskor is látszik): fent a javaslat (választó, aljavaslat, kedvenc, másolat,
+    Műveletek menü: átnevezés, törlés, export, import; „Leírás és vélemények”), alatta négy fül: Felületek, Világítás,
+    Berendezés, Továbbiak. A fülön tömör sorok állnak (címke, színminta, aktuális érték); egy sorra kattintva a szerkesztője a
+    katalógussal az oldalsávra úszik (Vissza vagy Esc). A választott fül a böngészőben megmarad.
+  - Beállítások menü (fejléc): téma, tervezői mód, fotótextúrák, könnyített megjelenítés.
+  - Sötét téma (store v18, néző-szintű `theme`: rendszer / világos / sötét; alapból a rendszer beállítása): a `<html data-theme>`
+    attribútum, a színek változók a `styles.css` elején, a sötét készlet a végén. Az `index.html` már betöltéskor beállítja (nincs
+    világos villanás). A 3D nézetre nem hat.
 - Alaphelyzet (Továbbiak fül): minden beállítás és változat vissza a kezdetire, megerősítéssel.
 - Nyitott lehetőségek (`src/data/choices.ts`): még eldöntetlen műszaki megoldások a színváltozattól
   függetlenül kapcsolva – a háló klímájának három jelölt helye (A ágyfal, B radiátor fölött, C ajtófal)
@@ -170,14 +235,15 @@ szkriptek fejlécében olvasható.
   kerülendő, indoklással), és becsli a beszerezhetőséget. Minden színváltoztatásra újraszámol.
 - A J-javaslatokhoz illesztett világítási tervek (a javaslat számával); a javaslat választásakor a hozzá illő
   világítás bekapcsol (kikapcsolható).
-- Bútorjavaslat változatonként (`src/lib/furnitureSets.ts`): termékhelyenként a katalógusból a méretkeretbe férő, a változat
-  bútor-színvilágához legjobban illő termék (a kerülendő szín kiesik; a változat kárpit-, bútortest-, fa- és szőnyegszínéhez való közelség,
+- Bútorjavaslat változatonként (`src/lib/furnitureSets.ts`): termékhelyenként a katalógusból a változat
+  bútor-színvilágához legjobban illő termék (a kerülendő szín kiesik; az ajánlott mérettől – napló, feltételezés – eltérő termék hátrébb
+  kerül, de nem esik ki; kizárni csak a mért geometria – `SLOT_LIMITS[…].fit` – zár; a változat kárpit-, bútortest-, fa- és szőnyegszínéhez való közelség,
   a konszignáció-tervezet, az ellenőrzött ár és a kör, bővíthető asztal számít). A J7 (`j6-tervezoi`) a lakberendező termékeit kapja, ahol beleférnek
-  (`FURNITURE_OVERRIDES`). A javaslat választásakor a bútorok is cserélődnek (Javaslat fül, kikapcsolható); a választóban ◆ jelöli.
-- Egyszerű és részletes nézet (fejléc): az egyszerű a családnak szól – a rétegek, az ellenőrzések, a források és a lámpaszerkesztés rejtve.
+  (`FURNITURE_OVERRIDES`). A javaslat választásakor a bútorok is cserélődnek (Berendezés fül, kikapcsolható); a választóban ◆ jelöli.
+- Tervezői mód (Beállítások menü; kikapcsolva a családnak szóló egyszerű felület): a további rétegek, az ellenőrzések, a források, a lámpák helye, a lámpa hozzáadása és törlése, valamint a fény finomhangolása csak ebben látszik.
   Első megnyitáskor rövid súgó (újra: Súgó gomb); telefonon figyelmeztetés és könnyített megjelenítés.
-- Könnyített megjelenítés (Nézet): árnyéktérképek nélkül, 1-es pixelaránnyal, gyengébb gépekre.
-- Termékhű nézet (Nézet, **T** billentyű; néző-szintű beállítás): a fényjelenet helyett semleges stúdiófény, hogy a szemből
+- Könnyített megjelenítés (Beállítások): árnyéktérképek nélkül, 1-es pixelaránnyal, gyengébb gépekre.
+- Termékhű nézet (eszköztár → Nézet, **T** billentyű; néző-szintű beállítás): a fényjelenet helyett semleges stúdiófény, hogy a szemből
   látott felület a katalógus színét mutassa, mint a termékfotó. Ilyenkor a 3D nézet sarkában jelzés látszik, a
   Világítás fül figyelmeztet, a képernyőkép neve `…_termekhu.png`. Felépítés (`StudioLights`, `src/scene/Lights.tsx`):
   - egyenletes fehér környezet (`scene.environment`, égbolt fele 1, padló fele `STUDIO.ground`);
@@ -196,7 +262,7 @@ szkriptek fejlécében olvasható.
   - fehér felület: a Neutral leképezés a csúcsfényt tömöríti, kb. −3 L*;
   - fényes felület (TV-képernyő): a környezetet tükrözi.
 - Két nézet (Nézet → „Fényjelenet + termékhű”): ugyanaz a javaslat két vásznon, közös kamerával – bal oldalt a
-  Világítás fül fényjelenete, jobb oldalt a termékhű nézet (a vászon rögzített nézete: `Viewport` `studio`, `scene/studio.ts`).
+  fényjelenet, jobb oldalt a termékhű nézet (a vászon rögzített nézete: `Viewport` `studio`, `scene/studio.ts`).
   Ilyenkor a T billentyű és a termékhű kapcsoló nem kell. A képernyőkép a két vásznat egymás mellé teszi (`…_es_termekhu.png`).
   2026-11-04-ig ezen a helyen az A/B összehasonlítás (két változat egymás mellett) volt; a tárolt állapot v12 migrációja
   törli a `compareId`-t, a `viewMode` 'compare' értékéből 'split' lesz.
@@ -207,8 +273,8 @@ szkriptek fejlécében olvasható.
   könnyített megjelenítés, termékhű nézet, súgó) nem kerülnek a fájlba.
 - Bevásárlólista (Termékek fül, CSV, Excelhez pontosvesszővel): az aktív változat és világítási terv termékei becsült
   mennyiséggel és összeggel (`src/lib/shopping.ts`: padló +10 %, festék 2 réteg / 12 m²/l, függöny kétszeres ráncolás, izzók foglalat szerint).
-- Berendezési javaslat (`src/data/furnishing.ts`, `src/lib/furnish.ts`): a nappaliban kanapé (egyenes ágyazható + puff, vagy L alakú:
-  a chaise az erkély felé – legfeljebb kb. 180 cm-es ággal, az ellenőrzés méri az erkélyajtó vonalához – vagy az étkező felé; sarokkanapénál a rövid ágnak is van háttámlája), a falra szerelt TV alatt alacsony TV-szekrény vagy TV-fal (az elemek
+- Berendezési javaslat (`src/data/furnishing.ts`, `src/lib/furnish.ts`): a nappaliban kanapé (egyenes ágyazható + puff, vagy L alakú –
+  2026-11-26 óta ez az alapértelmezés, 250–270 cm-es méretkerettel, store v19 –: a chaise az erkély felé – legfeljebb kb. 180 cm-es ággal, az ellenőrzés méri az erkélyajtó vonalához – vagy az étkező felé; sarokkanapénál a rövid ágnak is van háttámlája), a falra szerelt TV alatt alacsony TV-szekrény vagy TV-fal (az elemek
   jelzésszerű elrendezésével, `src/lib/tvWall.ts`: a magas elemek a szélekre, a TV közéjük – ha kell, a fal közepétől arrébb –, alatta a pad,
   a falra szerelt elemek a TV mellé, egy magas elem fölé vagy a TV fölé, úgy, hogy a TV-t ne takarják; az eltolást és a szűk rést az ellenőrzés jelzi), szőnyeg, lamellás térelválasztó és étkező
   (kör ø120-as asztal 4 székkel vagy bővítve 196 cm-re); a hálóban szőnyeg, éjjeliszekrények és új, legalább 180 × 200-as ágy (alapból; a meglévő keret választható);
@@ -217,8 +283,9 @@ szkriptek fejlécében olvasható.
   bővített asztal hosszú fal felőli oldalán, zsúrkocsi; a dolgozóban keskeny könyvespolc vagy olvasófotel a háló felőli fal ablak felőli
   végén; az előszobában cipősszekrény vagy ülőpad és keskeny konzolasztal a konyhafalon. Egy elem több feltételhez is köthető (`when`, `unless`).
   Paraméteres modellek befoglaló mérettel, nem termékek; a szín a változat bútor-színvilágából jön (`furniturePalette`).
-  A lehetőségek az Anyagok → Bútor csoportban, a megjelenítés a Nézet fülön kapcsolható. Termékhelyenként (pl. a 4 szék egy hely)
-  katalógusbútor választható a méretkeret szerint szűrve („belefér” / „kilóg”); ekkor a termék mérete és színe látszik, a fal mellé állított
+  A lehetőségek a Berendezés fülön, a megjelenítés az eszköztár Rétegek menüjében kapcsolható. Termékhelyenként (pl. a 4 szék egy hely)
+  katalógusbútor választható, az ajánlott méret szerint csoportosítva („az ajánlott méretben” / „eltér az ajánlott mérettől”, mindkettő
+  választható; „nem fér el” csak mért geometria alapján); ekkor a termék mérete és színe látszik, a fal mellé állított
   bútor háta a falnál marad, a székek az asztalhoz, az éjjeliszekrények az ágyhoz igazodnak. A panel jelzi, hogyan illik a termék színe
   az aktív változathoz (a legközelebbi bútor-színvilág minta ítélete). A „Javasolt termékek (★)” gomb a konszignáció-tervezetet tölti be
   (`FURNITURE_PROPOSAL`: termékhelyenként javasolt termék, alternatívák és indoklás) – javaslat, nem döntés; a V15 napló Konszignáció lapján
@@ -229,16 +296,16 @@ szkriptek fejlécében olvasható.
   társasjáték-est, zöld nappali, galéria, letisztult). A falak, a padló, az ajtók és a textilek a fő javaslatéi; az aljavaslat a bútorlehetőségeket
   (kanapé, TV, asztal, tálaló, polcok, dolgozó, előszoba), a termékeket (a változat saját rangsorának egy másik helye, `rankSlot`) és az előre
   elrendezett dekort adja. A dekor színe a változat bútor-színvilágából jön (`autoDecorVariant`; a kedvelt szín csak akkor, ha nem kerülendő),
-  a bútor tetejére kerülő elem a választott bútor magasságára. A Javaslat fülön a változat alatti legördülőből választható; váltáskor
+  a bútor tetejére kerülő elem a választott bútor magasságára. A fejlécben a javaslat alatti legördülőből választható; váltáskor
   csak az aljavaslat dekorja cserélődik (`origin: 'sub:…'`), a saját elhelyezésű marad. Más J-javaslatra váltva az aljavaslat kikapcsol.
-  A változatválasztóban (oldalsáv) a kiemelt javaslatok külön csoportban, elöl állnak; utánuk a többi J, végül a
-  saját változatok (`src/ui/VariantOptions.tsx`).
+  A változatválasztóban (oldalsáv) a javaslatok stílusvonalak szerint csoportosítva állnak, a végén a saját változatok
+  (`src/ui/VariantOptions.tsx`); kiemelt csoport 2026-11-26 óta nincs.
 - Színellenőrzés (`src/lib/colorClash.ts`): a látható bútortermék, a rögzített színű meglévő bútor vagy a dekorelem színe a változat
-  bútor-színvilágában kerülendő → „⚠ Elüt a javaslat színvilágától” figyelmeztetés az ellenőrzésekben, a Javaslat fül összesítőjében, a
+  bútor-színvilágában kerülendő → „⚠ Elüt a javaslat színvilágától” figyelmeztetés az ellenőrzésekben, a Berendezés fül Színellenőrzés csoportjában, a
   termékválasztóban, a dekorlistában és a gyorsinfóban.
 - Dekorelemek (`src/data/decor.ts`, `src/scene/DecorModels.tsx`, `src/scene/placement.ts`; alapból rejtve): 34 jelzésszerű elem – növények,
   képek és tükrök, dekortárgyak, akusztikus falpanelek (lamellás, hatszög, filc; katalógustermék rendelhető hozzájuk, a bevásárlólistában
-  lapszámmal). Az Anyagok → Dekor csoportban típust választva halvány, áttetsző előnézet követi az egeret, és a falra, a padlóra vagy egy
+  lapszámmal). A Berendezés → Dekor csoportban típust választva halvány, áttetsző előnézet követi az egeret, és a falra, a padlóra vagy egy
   bútor tetejére kattintva kerül a helyére (Esc: mégse). Az M billentyűt nyomva tartva az elem egérrel húzható (a megfogás helyén marad
   az egér alatt; a kamera ilyenkor nem forog); a 3D-ben rákattintva kijelölhető, majd 5 cm-es lépésekkel mozgatható, forgatható,
   átméretezhető, áthelyezhető, másolható és törölhető. A konfigurációs fájlba is bekerül.
@@ -265,9 +332,14 @@ szkriptek fejlécében olvasható.
   fényerő nem hiteles.
   - Tájolás: a helyiség `north.wall` mezője az északi homlokzat felőli fal, a `north.deg` ennek a kifelé mutató iránya
     fokban (2026-11-08-i fotómérés: 6°, az erkélyhomlokzat 186°). Az oldalsáv kiírja az ablak tájolását.
-  - A besütő nap (az ablakon belépő közvetlen fényáram) beleszámít az átlagos megvilágításba és az expozícióba, a
-    visszavert része a szórt fénybe (`SUN_BOUNCE_RHO`, `lib/lighting.ts`). Az erkélyfödém és a korlát takarása
-    még nincs a modellben, ezért a napfolt a valóságosnál mélyebbre ér.
+  - A besütő nap (az ablakon belépő közvetlen fényáram) visszavert része (`SUN_BOUNCE_RHO`, `lib/lighting.ts`) a padlóra
+    vetülő napfolt helyén fölfelé világító felületi fény (`SunBounce`, `scene/Lights.tsx`; ρ·E/π fénysűrűséggel), a
+    többszörös visszaverődés (`SUN_BOUNCE_DIFFUSE`) a félgömbfényben. Az erkélyfödém és a korlát takarása még nincs a
+    modellben, ezért a napfolt a valóságosnál mélyebbre ér.
+  - Expozíció (2026-11-26): a szórt fényszinthez igazodik (égboltfény + a napfolt visszavert része + lámpák), a napfolt
+    közvetlen fénye nem számít bele; 300 lux alatt és felett is részleges az alkalmazkodás (`ADAPT_HI`), így a jelenetek
+    sorrendje a valós fényerőt követi. Korábban a napos, derült nappali sötétebb lett a borultnál (L* 57 kontra 74), most
+    79 kontra 74 (az átlagos képvilágosság a nappali „Erkély felől” nézetéből).
 - Rétegek: adatbiztonság-színezés, funkcionális zónák (ajtónyitás, erkélyajtó megközelítése, klíma légárama, a radiátor előtti
   szabad zóna), méretcímkék, nyitott ajtók, villamosság (a meglévő dugaljak, kapcsolók és kiállások, valamint a tervezett
   új kiállások jelzése színes kerettel, a mennyezeten kereszttel jelölt körrel; a lámpák mellette változatlanul látszanak).
@@ -313,7 +385,7 @@ egy `{"photoTextures":true}`.
 Padló, ajtó és dobozbútor valódi felülete a gyártó vagy a bolt termékfotójából. A képek szerzői jog alatt állnak, ezért
 **csak helyben** vannak: a kimenet (`public/textures-local/`) és a letöltések (`textures-src/`) gitignore-oltak, a
 kirakott oldalra nem kerülnek (a Pages a tárolóból fordít). Ha a mappa hiányzik, a program a sima színeket mutatja.
-A Nézet fülön kapcsolható („Fotótextúrák”, néző-szintű beállítás); a kapcsoló csak akkor látszik, ha vannak ilyen képek.
+A Beállítások menüben kapcsolható („Fotótextúrák”, néző-szintű beállítás); a kapcsoló csak akkor látszik, ha vannak ilyen képek.
 
 ```bash
 MSYS_NO_PATHCONV=1 docker run --rm -v "$(pwd -W):/w" -w /w python:3.12-slim \

@@ -6,6 +6,14 @@
     <!-- családi megosztás: a keresők ne listázzák -->
     <meta name="robots" content="noindex, nofollow" />
     <title>Lakás 3D – tervező</title>
+    <!-- színtéma már a program betöltése előtt (különben sötét témában egy pillanatra világos az oldal); utána App.tsx kezeli -->
+    <script>
+      try {
+        var t = (JSON.parse(localStorage.getItem('lakas-3d') || '{}').state || {}).theme || 'system';
+        if (t === 'system') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

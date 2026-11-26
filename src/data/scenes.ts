@@ -14,19 +14,19 @@ export const SCENES: SceneDef[] = [
   {
     id: 'day-clear',
     name: 'Nappal – derült',
-    hint: 'Október közepe, 13:00. Északi ablaknál nincs direkt nap, csak égboltfény.',
+    hint: 'Október közepe, 13:00, derült. A déli nappaliba (186°) besüt a nap; az északi háló és dolgozó csak égboltfényt kap.',
     settings: { sky: 'clear', month: 10, day: 15, hour: 13, ceiling: off, accent: accentOff, ev: 0 },
   },
   {
     id: 'day-overcast',
     name: 'Nappal – borult',
-    hint: 'November, déli borult ég: lágy, hideg, árnyékmentes fény.',
+    hint: 'November közepe, 12:00, borult: lágy, hidegebb, árnyékmentes fény; a déli és az északi szobák között kicsi a különbség.',
     settings: { sky: 'overcast', month: 11, day: 15, hour: 12, ceiling: off, accent: accentOff, ev: 0 },
   },
   {
     id: 'summer-evening',
     name: 'Nyári este',
-    hint: 'Június 21., 19:45 – az alacsony nap északnyugat felől besüthet az északi ablakon.',
+    hint: 'Június 21., 19:45 – az alacsony nap északnyugat felől besüt a háló és a dolgozó északi ablakán; a déli nappali árnyékban van.',
     settings: { sky: 'clear', month: 6, day: 21, hour: 19.75, ceiling: off, accent: accentOff, ev: 0 },
   },
   {

@@ -19,7 +19,7 @@ export function HelpOverlay() {
             <b>Egér húzása</b>: forgatás, <b>görgő</b>: közelítés, <b>jobb gomb húzása</b>: eltolás.
           </li>
           <li>
-            Fent a <b>helyiség gombjai</b>, a <b>Nézet</b> fülön a kész <b>nézőpontok</b> (pl. „Erkély felől”).
+            A 3D nézet fölötti <b>eszköztáron</b>: a <b>helyiség gombjai</b>, a kész <b>nézőpontok</b> (pl. „Erkély felől”), a <b>fényjelenet</b> (nappal, este…), a <b>Nézet</b> és a <b>Rétegek</b> menü (pl. bútorok, ajtók nyitva) és a képernyőkép.
           </li>
           <li>
             <b>Teljes lakás</b>: minden helyiség a helyén. <b>Bejárás</b>: séta szemmagasságban – <b>W A S D</b> vagy nyilak, egérhúzással körbenézés, Esc: kilépés.
@@ -34,40 +34,40 @@ export function HelpOverlay() {
         <h3>Javaslatok</h3>
         <ul>
           <li>
-            Az oldalsáv <b>Javaslat</b> fülén a <b>J</b> szín- és anyagjavaslatok; a hozzájuk illő világítás és bútorok magától betöltődnek. Az esti hatást a <b>Világítás</b> fül fényjeleneteivel nézd meg.
+            Az oldalsáv tetején választható a <b>javaslat</b>, stílusvonalak szerint csoportosítva: fekete/antracit, skandináv, melegebb világos, japandi, egyéb, alul a meglévő padlót megtartók. A hozzá illő világítás és bútorok magától betöltődnek. A <b>Leírás és vélemények</b> alatt olvasható, mit tartalmaz. Az esti hatást az eszköztár fényjelenetével nézd meg.
           </li>
           <li>
-            Ugyanott a <b>Bútorok színvilága</b> mutatja, milyen színű kanapé és bútor illik az adott javaslathoz.
+            A <b>Berendezés</b> fül <b>Illő bútorszínek</b> csoportja mutatja, milyen színű kanapé és bútor illik az adott javaslathoz.
           </li>
           <li>
-            Bátran kísérletezz: a <b>Másolat</b> gombbal saját változatot készíthetsz, a színeket az <b>Anyagok</b> fülön állíthatod.
+            Bátran kísérletezz: a <b>Másolat</b> gombbal saját változatot készíthetsz. A <b>Felületek</b> fülön egy sorra (fal, padló, ajtó…) kattintva nyílik a katalógus; a <b>Vissza</b> gomb (vagy Esc) visz vissza a listához.
           </li>
         </ul>
         <h3>Berendezés és dekor</h3>
         <ul>
           <li>
-            Az <b>Anyagok</b> fül <b>Bútor</b> csoportjában választható a kanapé (egyenes vagy L alakú), a TV alatti szekrény vagy TV-fal, az asztal és az ágy, hozzájuk valós termék is (<b>◆</b> a javaslathoz illő, <b>★</b> a tervezet).
+            A <b>Berendezés</b> fülön választható a kanapé (egyenes vagy L alakú), a TV alatti szekrény vagy TV-fal, az asztal és az ágy, hozzájuk valós termék is (<b>◆</b> a javaslathoz illő, <b>★</b> a tervezet).
           </li>
           <li>
-            A <b>kiemelt javaslatoknál</b> (J1–J3, a választó elején) a <b>Javaslat</b> fülön <b>aljavaslat</b> is választható (pl. J1-B): ugyanaz a szín- és anyagirány, más bútorokkal és előre elrendezett dekorral. A saját dekor megmarad.
+            Néhány javaslatnál (J1, J2, J3) a javaslat alatt <b>aljavaslat</b> is választható (pl. J1-B): ugyanaz a szín- és anyagirány, más bútorokkal és előre elrendezett dekorral. A saját dekor megmarad.
           </li>
           <li>
             A <b>⚠ Elüt a javaslat színvilágától</b> jelzés olyan bútort vagy dekort mutat, amelynek a színe ehhez a javaslathoz kerülendő – figyelmeztetés, nem tiltás.
           </li>
           <li>
-            A <b>Dekor</b> csoportban növény, kép, tükör vagy akusztikus panel tehető ki: válaszd ki, a halvány előnézettel keresd meg a helyét, és kattints (Esc: mégse). Mozgatás: <b>M</b> nyomva tartva húzd az elemet.
+            A Berendezés fül <b>Dekor</b> csoportjában növény, kép, tükör vagy akusztikus panel tehető ki: válaszd ki, a halvány előnézettel keresd meg a helyét, és kattints (Esc: mégse). Mozgatás: <b>M</b> nyomva tartva húzd az elemet.
           </li>
         </ul>
         <h3>Véleményezés</h3>
         <ul>
           <li>
-            Írd be a <b>neved</b>, jelöld a kedvenceidet <b>★</b>-gal, és írj megjegyzést a változatokhoz.
+            Jelöld a kedvenceidet a <b>☆ Kedvenc</b> gombbal; a <b>Leírás és vélemények</b> alatt írd be a <b>neved</b>, és írj megjegyzést a változathoz.
           </li>
           <li>
             A <b>Továbbiak</b> fülön a <b>Konfiguráció mentése</b> gombbal egy fájlba mented – ezt küldd vissza. A beállításaid ebben a böngészőben is megmaradnak.
           </li>
         </ul>
-        <p className="note">A színek képernyős közelítések, a mennyiségek és árak becslések. A Súgó gombbal ez az ablak bármikor újra előhozható.</p>
+        <p className="note">A színek képernyős közelítések, a mennyiségek és árak becslések. A Súgó gombbal ez az ablak bármikor újra előhozható. A tervezői részletek (méretek, források, ellenőrzések) a Beállítások menüben kapcsolhatók be.</p>
         <button className="on" onClick={close}>
           Kezdjük
         </button>

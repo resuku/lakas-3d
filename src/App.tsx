@@ -1,6 +1,8 @@
+import { useLayoutEffect } from 'react';
 import { Viewport } from './scene/RoomScene';
 import { BottomPanel } from './ui/BottomPanel';
 import { Sidebar } from './ui/Sidebar';
+import { Toolbar } from './ui/Toolbar';
 import { useStore } from './store';
 import { InspectTip, useInspectKeys, useMoveKey, useProductViewKey } from './scene/Inspector';
 import { HelpOverlay, SmallScreenNotice } from './ui/HelpOverlay';
@@ -9,7 +11,7 @@ import { HelpOverlay, SmallScreenNotice } from './ui/HelpOverlay';
 function ViewHeader({ studio }: { studio: boolean }) {
   const name = useStore((s) => s.variants.find((v) => v.id === s.activeId)?.name ?? '');
   return (
-    <div className="view-header" title={studio ? 'Semleges stúdiófény: a szemből látott felület a katalógus (termékfotó) színét mutatja.' : 'A Világítás fül fényjelenete: milyen lesz a lakás fényében.'}>
+    <div className="view-header" title={studio ? 'Semleges stúdiófény: a szemből látott felület a katalógus (termékfotó) színét mutatja.' : 'A fényjelenet (eszköztár): milyen lesz a lakás fényében.'}>
       <b>{studio ? 'Termékhű nézet' : 'Fényjelenet'}</b>
       <span>{name}</span>
     </div>
@@ -40,7 +42,23 @@ function ProductViewBadge() {
   );
 }
 
+/** Színtéma: a `<html data-theme>` attribútum (styles.css); „rendszer” esetén követi az operációs rendszer beállítását. */
+function useTheme() {
+  const theme = useStore((s) => s.theme);
+  useLayoutEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const apply = () => {
+      document.documentElement.dataset.theme = theme === 'system' ? (mq.matches ? 'dark' : 'light') : theme;
+    };
+    apply();
+    if (theme !== 'system') return;
+    mq.addEventListener('change', apply);
+    return () => mq.removeEventListener('change', apply);
+  }, [theme]);
+}
+
 export default function App() {
+  useTheme();
   useInspectKeys();
   useMoveKey();
   useProductViewKey();
@@ -51,6 +69,7 @@ export default function App() {
     <div className="app">
       <Sidebar />
       <main className="main">
+        <Toolbar />
         <div className={`viewports ${split ? 'split' : ''}`}>
           <div className="viewport">
             {split && <ViewHeader studio={false} />}

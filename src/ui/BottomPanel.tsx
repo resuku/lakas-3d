@@ -10,7 +10,7 @@ import { shoppingCsv, shoppingList, shoppingTotal } from '../lib/shopping';
 export function BottomPanel() {
   const details = useStore((s) => s.details);
   const [tabState, setTab] = useState<'checks' | 'data' | 'products' | 'off'>(details ? 'checks' : 'off');
-  // egyszerű nézetben csak a Termékek fül
+  // tervezői mód nélkül csak a Termékek fül
   const tab = !details && (tabState === 'checks' || tabState === 'data') ? 'products' : tabState;
   const roomId = useStore((s) => s.roomId);
   const activeId = useStore((s) => s.activeId);
@@ -92,7 +92,7 @@ export function BottomPanel() {
         <div className="table-wrap">
           {used.length === 0 ? (
             <p className="note" style={{ padding: 10 }}>
-              Ebben a változatban nincs katalógustermék. A Felületek panelen a „Katalógus” részből választhatsz valós festéket, padlót, ajtót és függönyt.
+              Ebben a változatban nincs katalógustermék. A Felületek fülön egy sorra kattintva a katalógusból választhatsz valós festéket, padlót, ajtót és függönyt.
             </p>
           ) : (
             <table>
@@ -113,7 +113,9 @@ export function BottomPanel() {
                   const name = p
                     ? `${p.brand} ${p.line} – ${p.name}`
                     : f
-                      ? `${f.store}: ${f.manufacturer} ${f.name}`
+                      ? f.existing
+                        ? `Meglévő ${f.name} – megmarad`
+                        : `${f.store}: ${f.manufacturer} ${f.name}`
                       : d
                         ? `${d.store}: ${d.manufacturer} ${d.line} – ${d.name}`
                         : c
@@ -145,7 +147,7 @@ export function BottomPanel() {
                       </td>
                       <td>{item?.price ?? '–'}</td>
                       <td>
-                        {item && (
+                        {item && (p?.shopUrl ?? item.url) && (
                           <a href={p?.shopUrl ?? item.url} target="_blank" rel="noreferrer">
                             megnyitás
                           </a>
