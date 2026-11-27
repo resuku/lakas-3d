@@ -100,6 +100,8 @@ interface State {
   setActive(id: string): void;
   updateVariant(id: string, fn: (v: Variant) => Variant): void;
   duplicateVariant(id: string): void;
+  /** Új (saját) változat hozzáadása a lista végére, aktiválás nélkül. */
+  addVariant(v: Variant): void;
   deleteVariant(id: string): void;
   replaceVariants(vs: Variant[]): void;
   applyScene(id: string): void;
@@ -453,6 +455,7 @@ export const useStore = create<State>()(
         const copy = { ...clone(src), id: `v-${Date.now().toString(36)}`, name: `${src.name} (másolat)` };
         set((s) => ({ variants: [...s.variants, copy], activeId: copy.id }));
       },
+      addVariant: (v) => set((s) => ({ variants: [...s.variants, v] })),
       deleteVariant: (id) =>
         set((s) => {
           if (s.variants.length <= 1) return s;
