@@ -217,14 +217,25 @@ szkriptek fejlécében olvasható.
   - Eszköztár a 3D nézet fölött (`src/ui/Toolbar.tsx`): helyiség, teljes lakás, nézőpont, bejárás, fényjelenet, Nézet menü
     (egy vagy két nézet, termékhű nézet), Rétegek menü (bútor, dekor, ajtók nyitva; tervezői módban adatbiztonság, zónák,
     méretek, villamosság), képernyőkép.
-  - Oldalsáv (`src/ui/Sidebar.tsx`; a fejléc görgetéskor is látszik): fent a javaslat (választó, aljavaslat, kedvenc, másolat,
-    Műveletek menü: átnevezés, törlés, export, import; „Leírás és vélemények”), alatta négy fül: Felületek, Világítás,
+  - Oldalsáv (`src/ui/Sidebar.tsx`; a fejléc görgetéskor is látszik): fent a javaslat (választó, aljavaslat, kedvenc, Hozzáillő…,
+    Műveletek menü: átnevezés, másolat, törlés, export, import; „Leírás és vélemények”), alatta négy fül: Felületek, Világítás,
     Berendezés, Továbbiak. A fülön tömör sorok állnak (címke, színminta, aktuális érték); egy sorra kattintva a szerkesztője a
     katalógussal az oldalsávra úszik (Vissza vagy Esc). A választott fül a böngészőben megmarad.
   - Beállítások menü (fejléc): téma, tervezői mód, fotótextúrák, könnyített megjelenítés.
   - Sötét téma (store v18, néző-szintű `theme`: rendszer / világos / sötét; alapból a rendszer beállítása): a `<html data-theme>`
     attribútum, a színek változók a `styles.css` elején, a sötét készlet a végén. Az `index.html` már betöltéskor beállítja (nincs
     világos villanás). A 3D nézetre nem hat.
+- Hozzáillő változat (2026-11-26; `src/lib/remix.ts`, `src/ui/RemixPanel.tsx`): a javaslat fejlécének „Hozzáillő…” gombja. A
+  kiinduló változat bepipált elemei (falszín, kiemelt falak, padló, járólapos zóna, ajtók, kilincs, szegélyléc, függöny,
+  világítási terv) maradnak, a többihez 4 jelölt készül valós katalógustermékekből. Minden jelölthöz egy „minta” tartozik: az a
+  beépített javaslat, amelyik a megtartott elemekhez a legközelebb áll (OKLab ΔE); a szabad elemek célszíne a mintáé, a kilincs,
+  a szegély módja, az ágytextil és a világítási terv is onnan jön. A termékek pontozása: távolság a célszíntől + a beépített
+  javaslatokban előforduló arányokon (fal világossága és árnyalata, padló–fal, fal–kiemelés, padló–ajtó, fal–függöny, járólap)
+  kívül eső rész + véletlen szórás. Eltérés: kicsi (a minta a kiinduló változathoz is közel áll, rokon árnyalatok), közepes, nagy
+  (a minta távol áll, a kiemelésnek érezhetően el kell térnie; a padló lerakási mintája és a fa falpanel helye is a mintáé).
+  Kis–közepes eltérésnél a kiemelt falak helye és a fa falpanel a kiinduló változaté. A „Megnézem” egyetlen vázlatváltozatba
+  tölti a jelöltet (a bútor és a világítás igazodik), a „Mentés” megtartja, az „Elvetés” törli. A tartományon kívüli arányokat a
+  jelölt figyelmeztetésként mutatja; semmit nem tilt. Gépi összeállítás, nem lakberendezői javaslat.
 - Alaphelyzet (Továbbiak fül): minden beállítás és változat vissza a kezdetire, megerősítéssel.
 - Nyitott lehetőségek (`src/data/choices.ts`): még eldöntetlen műszaki megoldások a színváltozattól
   függetlenül kapcsolva – a háló klímájának három jelölt helye (A ágyfal, B radiátor fölött, C ajtófal)

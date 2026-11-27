@@ -16,7 +16,7 @@
   --info-soft: #e3eefb;
   --notice-bg: #fff6e8;
   --overlay: rgba(255, 255, 255, 0.92);
-  --swatch-border: var(--swatch-border);
+  --swatch-border: rgba(0, 0, 0, 0.15);
   --link: #1a56b0;
   --shadow: rgba(0, 0, 0, 0.18);
   --backdrop: rgba(30, 28, 25, 0.45);
@@ -1409,4 +1409,84 @@ input:not([type]) {
   color: var(--ink);
   border: 1px solid var(--line);
   border-radius: 6px;
+}
+
+/* Hozzáillő változat (RemixPanel) */
+.remix {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.remix-pins {
+  display: flex;
+  flex-direction: column;
+}
+.remix-pin {
+  display: grid;
+  grid-template-columns: auto auto 7.5em 1fr;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+.remix-pin:last-child {
+  border-bottom: none;
+}
+.remix-pin-value {
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nav-swatch.empty {
+  visibility: hidden;
+}
+.remix-cands {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.remix-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+.remix-card.on {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+.remix-card .note {
+  margin: 0;
+}
+.remix-strip {
+  display: flex;
+  height: 22px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--swatch-border);
+}
+.remix-strip span {
+  flex: 1;
+}
+.remix-strip span.kept {
+  flex: 0.6;
+  background-image: repeating-linear-gradient(135deg, transparent 0 5px, rgba(255, 255, 255, 0.35) 5px 7px) !important;
+}
+.remix-parts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.remix-parts .nav-swatch {
+  display: inline-block;
+  vertical-align: -2px;
 }

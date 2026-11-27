@@ -40,7 +40,7 @@ export function HelpOverlay() {
             A <b>Berendezés</b> fül <b>Illő bútorszínek</b> csoportja mutatja, milyen színű kanapé és bútor illik az adott javaslathoz.
           </li>
           <li>
-            Bátran kísérletezz: a <b>Másolat</b> gombbal saját változatot készíthetsz. A <b>Felületek</b> fülön egy sorra (fal, padló, ajtó…) kattintva nyílik a katalógus; a <b>Vissza</b> gomb (vagy Esc) visz vissza a listához.
+            Bátran kísérletezz: a <b>Hozzáillő…</b> gombbal bepipálhatod, ami tetszik (pl. ajtó, padló), és a program ezekhez illő új színösszeállításokat ajánl valós termékekből; a <b>Műveletek → Másolat</b> saját másolatot készít. A <b>Felületek</b> fülön egy sorra (fal, padló, ajtó…) kattintva nyílik a katalógus; a <b>Vissza</b> gomb (vagy Esc) visz vissza a listához.
           </li>
         </ul>
         <h3>Berendezés és dekor</h3>

@@ -20,6 +20,7 @@ import { VariantOptions } from './VariantOptions';
 import { DecorPanel } from './DecorPanel';
 import { useLocalTextureCount } from '../lib/localTextures';
 import { download } from './files';
+import { RemixPanel } from './RemixPanel';
 
 // Oldalsáv (2026-11-26-i átrendezés): fent a javaslat (választás, kedvenc, leírás és vélemények), alatta négy
 // feladat szerinti fül – Felületek, Világítás, Berendezés, Továbbiak. A fülön tömör sorok állnak; egy sorra kattintva
@@ -611,7 +612,7 @@ function useVariantFiles() {
 }
 
 /** A fejléc javaslatblokkja: választó, kedvenc, másolat, további műveletek, aljavaslat, leírás és vélemények. */
-function VariantHeader({ v }: { v: Variant }) {
+function VariantHeader({ v, onRemix }: { v: Variant; onRemix: () => void }) {
   const s = useStore();
   const fileInput = useRef<HTMLInputElement>(null);
   const { exportVariants, importVariants } = useVariantFiles();
@@ -646,14 +647,17 @@ function VariantHeader({ v }: { v: Variant }) {
         <button className={fav ? 'on' : ''} onClick={() => s.setFeedback(v.id, { fav: !fav })} title="Kedvenc (a neveddel együtt mentődik)">
           {fav ? '★ Kedvenc' : '☆ Kedvenc'}
         </button>
-        <button onClick={() => s.duplicateVariant(v.id)} title="Saját másolat a kísérletezéshez – a konfigurációval visszaküldhető">
-          Másolat
+        <button onClick={onRemix} title="Új változat: a bepipált elemek (pl. ajtó, padló) maradnak, a többihez hozzáillő színeket és termékeket keres">
+          Hozzáillő…
         </button>
-        <Popover label="Műveletek ▾" title="Átnevezés, törlés, export, import">
+        <Popover label="Műveletek ▾" title="Átnevezés, másolat, törlés, export, import">
           <Field label="Név">
             <input className="name-input" value={v.name} onChange={(e) => s.updateVariant(v.id, (x) => ({ ...x, name: e.target.value }))} />
           </Field>
           <div className="row">
+            <button onClick={() => s.duplicateVariant(v.id)} title="Saját másolat a kísérletezéshez – a konfigurációval visszaküldhető">
+              Másolat
+            </button>
             <button onClick={() => s.deleteVariant(v.id)} disabled={s.variants.length <= 1}>
               Változat törlése
             </button>
@@ -782,9 +786,10 @@ export function Sidebar() {
     if (!drawer) return null;
     if (drawer.id.startsWith('fixture:')) return <FixtureEditor roomId={s.roomId} fixtureId={drawer.id.slice(8)} onDone={() => setDrawer(null)} />;
     if (drawer.id.startsWith('furn:')) return <FurnitureSlotEditor v={active} roomId={s.roomId} slot={drawer.id.slice(5)} />;
+    if (drawer.id === 'remix') return <RemixPanel />;
     return <SurfaceDrawer id={drawer.id} v={active} roomId={s.roomId} />;
   };
-  const drawerSub = drawer && (drawer.id.startsWith('fixture:') || drawer.id.startsWith('furn:') || drawer.id === 'accent') ? room.name : active.name.split(' – ')[0];
+  const drawerSub = drawer?.id === 'remix' ? undefined : drawer && (drawer.id.startsWith('fixture:') || drawer.id.startsWith('furn:') || drawer.id === 'accent') ? room.name : active.name.split(' – ')[0];
   const fixtureTitle = (id: string) => {
     const f = roomFixtures(plan, room).find((x) => x.id === id);
     return f ? (f.label ?? FIXTURE_LABEL[f.type]) : 'Lámpa';
@@ -802,7 +807,7 @@ export function Sidebar() {
             <SettingsMenu />
           </div>
         </div>
-        <VariantHeader v={active} />
+        <VariantHeader v={active} onRemix={() => open('remix', 'Hozzáillő változat')} />
         <nav className="side-tabs">
           {TABS.map((t) => (
             <button
